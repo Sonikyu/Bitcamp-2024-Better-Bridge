@@ -41,27 +41,30 @@ class Player:
 
     def sortHand(self):
         self.hand.sort
+    #If the player chose the right suit or doesn't have the right suit, the function returns True
+    #Otherwise, the function returns False;
     def playCard(self, card):
         #Checks if Player is first (i.e. the first card is None)
-        isPlayerFirst = Board.currentPrio == None
-        #Checks if Player choose the right suit and the Prio isn't None
-        playerChoosesRightSuit = Board.currentPrio != None and Board.currentPrio == card.suit
-        #Checks if player has hand
-        playerHasPrio = False
+        isPlayerFirst = Board.currentTrickSuit == None
+        #Checks if Player choose the right suit and the Current Trick Suit isn't None
+        playerChoseRightSuit = Board.currentTrickSuit != None and Board.currentTrickSuit == card.suit
+        #Checks if player has Current Trick Suit
+        playerHasSuit = False
         for i in self.hand:
-            if self.hand[i].suit == Board.currentPrio:
-                playerHasPrio = True
-        needsChecking = True
-        while needsChecking:
-            if isPlayerFirst or playerChoosesRightSuit or not playerHasPrio :
-                try:
-                    self.hand.remove(card)
-                    self.update_card_positions()
-                    needsChecking = False
-                except ValueError:
-                    print("illegal move bro")
-            else:
-                print("Input Different Value")
+            if self.hand[i].suit == Board.currentTrickSuit:
+                playerHasSuit = True
+        
+        if isPlayerFirst or playerChoseRightSuit or not playerHasSuit :
+            try:
+                self.hand.remove(card)
+                self.update_card_positions()
+                needsChecking = False
+                return True
+            except ValueError:
+                print("illegal move bro")
+        else:
+            print("Input Different Value")
+            return False
     
     
     def update_card_positions(self):
