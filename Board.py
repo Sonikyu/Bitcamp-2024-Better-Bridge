@@ -20,6 +20,7 @@ class Board():
         self.teamOneScore = 0
         self.teamTwoScore = 0
 
+        self.prioPlayer = None
         self.currentTrick = [None, None, None, None]
         self.pastTricks = []
         self.currentTrickSuit = None
@@ -73,6 +74,10 @@ class Board():
         if counter == 1:
              self.currentTrickSuit = self.currentTrick[index]
 
+    #Game over function prints winner 
+    def gameOver(self, winner):
+        print("Team " + winner + " wins!")
+
     #Looks at the cards in the trick and see who wins! Then sets prioPlayer to the owner of that card
     #Also updates the score
     #Calls isGameOver() if win
@@ -82,6 +87,7 @@ class Board():
             winningTrump = None
             highestCurrent = -1
             winningCurrent = None
+            prioPlayer = None
             for i in self.currentTrick:
                 if self.currentTrick[i].suit == self.currentPrio:
                     if self.currentTrick[i].rank.value > highestTrump:
@@ -92,9 +98,9 @@ class Board():
                         highestCurrent = self.currentTrick[i].rank.value
                         winningCurrent = self.currentTrick[i]
             if winningTrump == None | self.currentPrio == BetSuit.HIGH:
-                return winningCurrent.owner
+                prioPlayer = winningCurrent.owner
             else:
-                return winningTrump.owner
+                prioPlayer = winningTrump.owner
         else:
             lowestCurrent = 15
             winningCurrent = None
@@ -103,4 +109,15 @@ class Board():
                     if self.currentTrick[i].rank.value < lowestCurrent:
                         lowestCurrent = self.currentTrick[i].rank.value
                         winningCurrent = self.currentTrick[i]
-            return winningCurrent.owner        
+            prioPlayer = winningCurrent.owner      
+
+
+        if (prioPlayer.id == 0 | prioPlayer.id == 2):
+            self.teamOneScore += 1
+            if (self.teamOneScore >= self.gamesToWin):
+                self.gameOver(1)
+        elif (prioPlayer.id == 1 | prioPlayer.id == 3):
+            self.teamTwoScore += 1
+            if (self.teamTwoScore >= self.gamesToWin):
+                self.gameOver(2)
+
