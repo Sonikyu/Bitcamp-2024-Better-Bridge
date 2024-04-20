@@ -1,7 +1,13 @@
 from Board import Board
+from Bet import BetFactory
 import pygame
 import Render
 pygame.init()
+
+
+# betFactory = BetFactory()
+# print(betFactory.asIDs())
+# print(betFactory)
     
 print("hello")
 board = Board()
