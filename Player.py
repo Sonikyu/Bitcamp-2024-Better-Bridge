@@ -4,6 +4,10 @@ class Player:
     def __init__(self, id):
         self.hand = []
         self.id = id
+
+    def __init__(self):
+        self.hand = []
+        self.id = 0
     
     def addCard(self, card):
         self.hand.append(card)

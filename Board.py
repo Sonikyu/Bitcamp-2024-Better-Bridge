@@ -9,14 +9,15 @@ class Board():
     #Actions should be defined by 
 
     def __init__(self):
-        self.trumpSuit
-        self.gamesToWin #Make this always NS
+        self.trumpSuit = None
+        self.gamesToWin = 7#Make this always NS
+
+        self.getState = 'BETTING' #This is either 'betting' or 'playing'
 
         self.currentTrick = []
         self.pastTricks = []
-        self.currentTrickSuit
-        self.currentPrio
-
+        self.currentTrickSuit = None
+        self.currentPrio = None
         self.player1 = Player()
         self.player2 = Player()
         self.player3 = Player()
@@ -45,10 +46,3 @@ class Board():
     #Looks at the cards in the trick and see who wins! Then sets prioPlayer to the owner of that card
     #Also updates the score
     #Calls gameOver() if win
-    def evaluateTrick(self):
-
-
-    def gameOver(self):
-    
-
-    

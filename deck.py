@@ -9,14 +9,11 @@ class Deck:
         self.cards = []
         for rank in Rank:
             for suit in Suit:
-                #Ensures that the suit created doesn't involve the High or Low values that will be used for betting
-                if suit != Suit.LOW | suit != Suit.HIGH:
-                    self.cards.append(Card(rank, suit))
-        self.shuffle(self)
+                self.cards.append(Card(rank, suit))
+        self.shuffle()
     #Shuffles Deck
     def shuffle(self):
-        cards = np.array(self.cards)
-        cards.shuffle(cards)
+        random.shuffle(self.cards)
     #Removes and returns the first card out of the deck 
     def draw(self):
         card = self.cards.pop()
