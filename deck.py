@@ -1,8 +1,22 @@
-from enum import Enum
+import random
+import Card
+import Rank
+import Suit
+import numpy as np
 class Deck:
-    cards[54]
-    def __init__ ():
+    def __init__ (self):
+        self.cards = []
         for rank in Rank():
             for suit in Suit():
-                cards.append(Card(rank, suit))
+                self.cards.append(Card(rank, suit))
+        self.shuffle(self)
         
+    def shuffle(self):
+        cards = np.array(self.cards)
+        cards.shuffle(cards)
+
+    def draw(self):
+        self.card = self.cards[0]
+        self.cards.remove(0)
+        return self.card
+
