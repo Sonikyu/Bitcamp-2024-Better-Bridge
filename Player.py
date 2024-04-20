@@ -23,8 +23,11 @@ class Player:
     def playCard(self, card):
         try:
             self.hand.remove(card)
+            self.update_card_positions()
         except ValueError:
             print("illegal move bro")
+    
+    
     def update_card_positions(self):
         loc_offset = 0
         for card in self.hand:

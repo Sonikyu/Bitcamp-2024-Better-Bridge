@@ -22,7 +22,6 @@ while running:
                       if card_rect.collidepoint(event.pos):
                            print("Clicked on " + str(card))
                            board.player1.playCard(card)
-                           board.player1.update_card_positions()
                            break
     #Replace the array of Nones with board.pile!!
     Render.draw(board.player1.hand, board.currentTrick)
