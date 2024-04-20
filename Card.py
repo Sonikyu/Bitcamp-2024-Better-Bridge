@@ -16,6 +16,6 @@ class Card:
     
     def getSuit(self):
         return self.suit
+    def __str__(self):
+        return self.rank.name +  self.suit.name
     
-    def toString(self):
-        return self.rank + " of " + self.suit
