@@ -9,13 +9,14 @@ class Deck:
         for rank in Rank():
             for suit in Suit():
                 self.cards.append(Card(rank, suit))
+        self.shuffle(self)
         
-def shuffle(self):
-    cards = np.array(self.cards)
-    cards.shuffle(cards)
+    def shuffle(self):
+        cards = np.array(self.cards)
+        cards.shuffle(cards)
 
-def draw(self):
-    self.card = self.cards[0]
-    self.cards.remove(0)
-    return self.card
+    def draw(self):
+        self.card = self.cards[0]
+        self.cards.remove(0)
+        return self.card
 
