@@ -67,7 +67,7 @@ class Board():
             for player in self.players:
                 self.addBet(player.chooseBet(self))
                 if self.checkBetting() == True:
-                    self.currentPrio = player
+                    self.prioPlayer = player
                     self.trumpSuit = self.bettingOrder[3].suit
                     self.getState = "PLAYING"
                     break
