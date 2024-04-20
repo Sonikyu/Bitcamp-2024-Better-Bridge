@@ -49,8 +49,14 @@ class Board():
     #Sets currentTrickSuit to the first card in the CurrentTrickSuit
     def addToTrick(self, card):
         self.currentTrick.append(card)
-        if (len(self.currentTrick) == 1):
-            self.currentTrickSuit = self.currentTrick[0]
+        counter = 0
+        
+        for i in self.currentTrickSuit:
+            if i != None:
+                counter += 1
+                index = i
+        if counter == 1:
+             self.currentTrickSuit = self.currentTrick[index]
 
     #Looks at the cards in the trick and see who wins! Then sets prioPlayer to the owner of that card
     #Also updates the score
