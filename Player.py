@@ -1,8 +1,9 @@
 from Deck import Deck
 
 class Player:
-    def __init__(self):
+    def __init__(self, id):
         self.hand = []
+        self.id = id
     
     def addCard(self, card):
         self.hand.append(card)
