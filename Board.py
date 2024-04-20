@@ -36,20 +36,20 @@ class Board():
 
     #Meant to be called in driver/main like board.addToTrick(board.player.playCard())
     #Errors if the currentTrick.len() is 4 or more
-    
+    #Calls startTrick if over 4 cards
     def addToTrick(self, card):
         self.currentTrick.append(card)
+        if (len(self.currentTrick) == 1):
+            self.currentTrickSuit = self.currentTrick[0]
 
     #Looks at the cards in the trick and see who wins! Then sets prioPlayer to the owner of that card
     #Also updates the score
     #Calls gameOver() if win
     def evaluateTrick(self):
 
+        for i in range(currentTrick)
 
+    def gameOver(self):
     
 
     
-
-    
-
-        
