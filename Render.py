@@ -1,4 +1,3 @@
-from Suit import Suit
 import os
 import pygame
 
@@ -22,8 +21,7 @@ def draw(board):
     #Draw the pile
     draw_pile(screen, board.currentTrick)
     #Draw the trump suit
-    # draw_trump(screen, board.trumpSuit)
-    draw_trump(screen, Suit.HEARTS)
+    draw_trump(screen, board.trumpSuit)
     #Draw the score (rounds won)
     draw_scores(screen, board.teamOneScore, board.teamTwoScore)
     
