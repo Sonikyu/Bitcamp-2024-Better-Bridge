@@ -24,10 +24,19 @@ class Board():
         self.player4 = Player()
         deck = Deck()
         for i in range(13):
-            self.player1.addCard(deck.draw())
-            self.player2.addCard(deck.draw())
-            self.player3.addCard(deck.draw())
-            self.player4.addCard(deck.draw())
+            card = deck.draw()
+            card.setOwner(self.player1)
+            self.player1.addCard(card)
+            card = deck.draw()
+            card.setOwner(self.player2)
+            self.player2.addCard(card)
+            card = deck.draw()
+            card.setOwner(self.player3)
+            self.player3.addCard(card)
+            card = deck.draw()
+            card.setOwner(self.player4)
+            self.player4.addCard(card)
+          
 
     #This method clears the old trick and adds it to pastTricks
     def startTrick(self):
