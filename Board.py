@@ -23,6 +23,7 @@ class Board():
         self.player2 = Player()
         self.player3 = Player()
         self.player4 = Player()
+        self.winningPlayer
         deck = Deck()
         for i in range(13):
             card = deck.draw()
@@ -64,12 +65,14 @@ class Board():
     #Calls gameOver() if win
     def evaluateTrick(self):
         copyTrick = copy.deepCopy(self.currentTrick)
-        if self.currentPrio == HIGH:
-           copyTrick.sort
-           #Continue Coding
-        elif self.currentPrio == LOW:
-            copyTrick.sort(True)
-            #Continue Coding
+        if self.currentPrio == HIGH | self.currentPrio == LOW:
+            for i in self.currentTrick:
+               if copyTrick[i] != self.currentTrickSuit:
+                    copyTrick.remove[i]
+            if self.currentPrio == HIGH:
+               copyTrick.sort(key = lambda x : x.id, reverse = False)
+            else:
+               copyTrick.sort(key = lambda x : x.id, reverse = True)
         else:
             #I'm not sure if this works
             prioCount = copyTrick.count(self.currentPrio)
@@ -82,6 +85,9 @@ class Board():
                 
             else:
                  #Find Values with currentSuit and puts it into a list. Then list is sorted
+                 a = NONE #Replace with code
+        self.winningPlayer = copyTrick[0].owner
+        
 
 
 
