@@ -73,9 +73,7 @@ class Board():
         if counter == 1:
              self.currentTrickSuit = self.currentTrick[index]
 
-    #Looks at the cards in the trick and see who wins! Then sets prioPlayer to the owner of that card
-    #Also updates the score
-    #Calls isGameOver() if win
+    #Looks at the cards in the trick and see who wins! Then returns the prioPlayer
     def evaluateTrick(self):
         if self.currentPrio != BetSuit.LOW:
             highestTrump = -1
