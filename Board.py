@@ -77,14 +77,30 @@ class Board():
     #Also updates the score
     #Calls isGameOver() if win
     def evaluateTrick(self):
-        if self.currentPrio == BetSuit.HIGH:
-           self.currentTrick.sort(key = lambda x: x.id, reverse = False)
-        elif self.currentPrio == BetSuit.LOW:
-            self.currentTrick.sort(key = lambda x: x.id, reverse = True)
+        if self.currentPrio != BetSuit.LOW:
+            highestTrump = -1
+            winningTrump = None
+            highestCurrent = -1
+            winningCurrent = None
+            for i in self.currentTrick:
+                if self.currentTrick[i].suit == self.currentPrio:
+                    if self.currentTrick[i].rank.value > highestTrump:
+                        highestTrump = self.currentTrick[i].rank.value
+                        winningTrump = self.currentTrick[i]
+                elif self.currentTrick[i].suit == self.currentTrickSuit:
+                    if self.currentTrick[i].rank.value > highestCurrent:
+                        highestCurrent = self.currentTrick[i].rank.value
+                        winningCurrent = self.currentTrick[i]
+            if winningTrump == None | self.currentPrio == BetSuit.HIGH:
+                return winningCurrent.owner
+            else:
+                return winningTrump.owner
         else:
-            #I'm not sure if this works
-            prioCount = self.currentTrick.count(self.currentPrio)
-            if prioCount > 0:
-                print("to get rid of errors, remove later")
-                #Find Values with Prio and puts it into a list. Then list is sorted
-            #else: #Find Values with currentSuit and puts it into a list. Then list is sorted
+            lowestCurrent = 15
+            winningCurrent = None
+            for i in self.currentTrick:
+                if self.currentTrick[i].suit == self.currentTrickSuit:
+                    if self.currentTrick[i].rank.value < lowestCurrent:
+                        lowestCurrent = self.currentTrick[i].rank.value
+                        winningCurrent = self.currentTrick[i]
+            return winningCurrent.owner        
