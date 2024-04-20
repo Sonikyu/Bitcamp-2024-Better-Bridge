@@ -41,6 +41,7 @@ class Player:
 
     def sortHand(self):
         self.hand.sort
+        
     #If the player chose the right suit or doesn't have the right suit, the function returns True
     #Otherwise, the function returns False;
     def playCard(self, card, Board):

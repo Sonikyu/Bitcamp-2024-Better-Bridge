@@ -74,14 +74,7 @@ class Board():
         for bet in self.bettingOrder:
             print(bet)
         print("done betting")
-        
 
-
-
-    
-
-    # def startBetting(self):
-    #     while 
 
 
 
