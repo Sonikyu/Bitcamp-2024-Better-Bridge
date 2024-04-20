@@ -11,7 +11,7 @@ class Player:
         self.hand.sort
     def playCard(self, card):
         try:
-            self.hand.reverse(card);
+            self.hand.reverse(card)
         except ValueError:
             print("illegal move bro")
 
