@@ -9,7 +9,7 @@ class Deck:
         self.cards = []
         for rank in Rank:
             for suit in Suit:
-                self.cards.append(Card(rank, suit))
+                self.cards.append(Card(rank, suit, None))
         self.shuffle()
     #Shuffles Deck
     def shuffle(self):
