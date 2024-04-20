@@ -12,7 +12,7 @@ class Board():
 
     def __init__(self):
         self.trumpSuit = None #Includes HIGH and LOW
-        self.gamesToWin = 7#Make this always NS
+        self.gamesToWin = 7 #Make this always NS
 
         self.bettingOrder = []
         self.currentBetID = -1 
