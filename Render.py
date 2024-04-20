@@ -9,17 +9,17 @@ HAND_Y = SCREEN_HEIGHT - (CARD_HEIGHT + 20)
 
 screen = pygame.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
 
-def draw(hand, pile):
+def draw(board):
     #Draw the background
     screen.fill((27, 99, 46))
     #Draw the player hand
-    hand_offset = (SCREEN_WIDTH - ((len(hand) + 1) * (CARD_WIDTH * 2 / 3))) / 2
+    hand_offset = (SCREEN_WIDTH - ((len(board.player1.hand) + 1) * (CARD_WIDTH * 2 / 3))) / 2
     loc_offset = 0
-    for card in hand:       
+    for card in board.player1.hand:       
         screen.blit(card.image, (hand_offset + loc_offset*CARD_WIDTH * 2/3, HAND_Y))
         loc_offset += 1
     #Draw the pile
-    draw_pile(screen, pile)
+    draw_pile(screen, board.currentTrick)
     #Draw the trump suit/bet
     #Draw the score (rounds won)
     
@@ -52,3 +52,7 @@ def draw_pile(screen, pile):
     #EAST
     if pile[3] != None:
         screen.blit(pile[3].image, (SCREEN_WIDTH / 2 + CARD_WIDTH * .5, SCREEN_HEIGHT /2 - CARD_HEIGHT * .75))
+
+def draw_trump(screen, suit):
+
+    print("Hello Donald")

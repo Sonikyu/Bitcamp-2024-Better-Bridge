@@ -1,5 +1,6 @@
 from Deck import Deck
 from Player import Player
+import copy
 
 class Board():
     #Globals
@@ -16,7 +17,7 @@ class Board():
         self.getState = 'BETTING' #This is either 'betting' or 'playing'
 
 
-        self.currentTrick = []
+        self.currentTrick = [None, None, None, None]
         self.pastTricks = []
         self.currentTrickSuit = None
         self.currentPrio = None
@@ -73,20 +74,20 @@ class Board():
     #Looks at the cards in the trick and see who wins! Then sets prioPlayer to the owner of that card
     #Also updates the score
     #Calls gameOver() if win
-    # def evaluateTrick(self):
-    #     if self.currentPrio == HIGH:
-    #        self.currentTrick.sort
-    #        #Continue Coding
-    #     elif self.currentPrio == LOW:
-    #         self.currentTrick.sort(True)
-    #         #Continue Coding
-    #     else:
-    #         #I'm not sure if this works
-    #         prioCount = self.currentTrick.count(self.currentPrio)
-    #         if prioCount > 0:
-    #             #Find Values with Prio and puts it into a list. Then list is sorted
-    #         else:
-    #              #Find Values with currentSuit and puts it into a list. Then list is sorted
+    def evaluateTrick(self):
+        if self.currentPrio == HIGH:
+           self.currentTrick.sort
+           #Continue Coding
+        elif self.currentPrio == LOW:
+            self.currentTrick.sort(True)
+            #Continue Coding
+        else:
+            #I'm not sure if this works
+            prioCount = self.currentTrick.count(self.currentPrio)
+            if prioCount > 0:
+                #Find Values with Prio and puts it into a list. Then list is sorted
+            else:
+                 #Find Values with currentSuit and puts it into a list. Then list is sorted
 
 
 
