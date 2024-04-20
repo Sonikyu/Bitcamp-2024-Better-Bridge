@@ -1,0 +1,15 @@
+
+class Card:
+    rank
+    suit
+    def __init__ (rank, suit):
+        self.rank = rank
+        self.suit = suit
+
+    def getRank():
+        return rank
+    def getSuit():
+        return suit
+    def toString():
+        return rank + " of " + suit
+    
