@@ -1,4 +1,5 @@
 from Deck import Deck
+from Board import Board
 import Render
 class Player:
     def __init__(self, id):
@@ -21,11 +22,24 @@ class Player:
     def sortHand(self):
         self.hand.sort
     def playCard(self, card):
-        try:
-            self.hand.remove(card)
-            self.update_card_positions()
-        except ValueError:
-            print("illegal move bro")
+        #Checks if
+        isPlayerFirst = Board.currentPrio == None
+        playerChoosesRightSuit = Board.currentPrio != None and Board.currentPrio == card.suit
+        needsChecking = True
+        playerHasPrio = False
+        for i in self.hand:
+            if self.hand[i].suit == Board.currentPrio:
+                playerHasPrio = True
+        while needsChecking:
+            if playerChoosesRightSuit or isPlayerFirst or not playerHasPrio :
+                try:
+                    self.hand.remove(card)
+                    self.update_card_positions()
+                    needsChecking = False
+                except ValueError:
+                    print("illegal move bro")
+            else:
+                print("Input Different Value")
     
     
     def update_card_positions(self):
