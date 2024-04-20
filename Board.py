@@ -45,6 +45,7 @@ class Board():
     #Calls gameOver() if win
     def evaluateTrick(self):
 
+
     
 
     
@@ -52,4 +53,3 @@ class Board():
     
 
         
-    
