@@ -1,11 +1,17 @@
-import 
+import Deck
 
 class Player:
-    def __init__(self, type: 'human'):
+    def __init__(self):
         self.hand = []
     
     def addCard(self, card):
-        self.hand.append.card
+        self.hand.append(card)
+
+    def printHand(self):
+        result = ""
+        for card in self.hand:
+            result += card.__str__() + " | "
+        print("[" + result + "]")
 
     def sortHand(self):
         self.hand.sort

@@ -16,6 +16,12 @@ class Card:
     
     def getSuit(self):
         return self.suit
+<<<<<<< Updated upstream
     
     def toString(self):
         return self.rank + " of " + self.suit
+=======
+    def __str__(self):
+        return self.rank.name +  self.suit.name
+    
+>>>>>>> Stashed changes
