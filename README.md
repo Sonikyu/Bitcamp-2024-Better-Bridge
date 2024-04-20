@@ -1,2 +1,2 @@
 # Bitcamp 2024
- Bridge with AI
+ Contract Bridge with AI
