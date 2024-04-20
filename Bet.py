@@ -5,20 +5,20 @@ class Bet:
         self.suit = suit
         self.level = level
         if suit == None and level == None:
-            self.id = 42
+            self.ID = 42
         else: 
-            self.id = self.suit.value  + (self.level - 7) * 6
+            self.ID = self.suit.value  + (self.level - 7) * 6
 
     def __str__(self) -> str:
-        if(self.getID == 42):
+        if(self.getID() == 42):
             return "PASS"
         return self.suit.__str__() + str(self.level)
     
-    def getID(self) -> str:
-        return str(self.id)
+    def getID(self) -> int:
+        return self.ID
 
     def __lt__(self, otherBet):
-        return self.id - otherBet.id
+        return self.ID - otherBet.ID
     
 class BetFactory:
     def __init__(self):
@@ -41,6 +41,9 @@ class BetFactory:
         for bet in self.Bets:
             result += bet.getID() + "|"
         return result
+    
+    def getBet(self, ID):
+        return self.Bets[ID]
 
 
 

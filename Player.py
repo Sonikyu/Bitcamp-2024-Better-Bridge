@@ -1,5 +1,7 @@
 from Deck import Deck
 from Board import Board
+from Bet import BetFactory
+import random
 import Render
 class Player:
     def __init__(self, id):
@@ -9,6 +11,25 @@ class Player:
     def __init__(self):
         self.hand = []
         self.id = 0
+
+    def chooseBet(self, Board):
+        currentBetID = Board.currentBetID
+        legalMoves = []
+        betFactory = BetFactory()
+        for bet in betFactory.Bets:
+            if bet.getID() > currentBetID:
+                legalMoves.append(bet)
+        if len(legalMoves) == 0:
+            return betFactory.getBet(42)
+        if currentBetID == -1:
+            return random.choice(legalMoves)
+        elif random.randint(0,100) < 70:
+            return betFactory.getBet(42)
+        else:
+            return random.choice(legalMoves)
+
+
+
     
     def addCard(self, card):
         self.hand.append(card)
