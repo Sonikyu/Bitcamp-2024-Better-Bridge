@@ -12,7 +12,9 @@ class Board():
         self.trumpSuit = None
         self.gamesToWin = 7#Make this always NS
 
+        self.bettingOrder = []
         self.getState = 'BETTING' #This is either 'betting' or 'playing'
+
 
         self.currentTrick = []
         self.pastTricks = []
@@ -22,6 +24,7 @@ class Board():
         self.player2 = Player()
         self.player3 = Player()
         self.player4 = Player()
+        self.players = [self.player1 , self.player2, self.player3, self.player4]
         deck = Deck()
         for i in range(13):
             card = deck.draw()
@@ -36,7 +39,16 @@ class Board():
             card = deck.draw()
             card.setOwner(self.player4)
             self.player4.addCard(card)
-          
+    
+    # def checkBetting(self):
+    #     if self.bettingOrder.len < 4: 
+    #         return False
+    
+
+    # def startBetting(self):
+    #     while 
+
+
 
     #This method clears the old trick and adds it to pastTricks
     def startTrick(self):
@@ -61,20 +73,20 @@ class Board():
     #Looks at the cards in the trick and see who wins! Then sets prioPlayer to the owner of that card
     #Also updates the score
     #Calls gameOver() if win
-    def evaluateTrick(self):
-        if self.currentPrio == HIGH:
-           self.currentTrick.sort
-           #Continue Coding
-        elif self.currentPrio == LOW:
-            self.currentTrick.sort(True)
-            #Continue Coding
-        else:
-            #I'm not sure if this works
-            prioCount = self.currentTrick.count(self.currentPrio)
-            if prioCount > 0:
-                #Find Values with Prio and puts it into a list. Then list is sorted
-            else:
-                 #Find Values with currentSuit and puts it into a list. Then list is sorted
+    # def evaluateTrick(self):
+    #     if self.currentPrio == HIGH:
+    #        self.currentTrick.sort
+    #        #Continue Coding
+    #     elif self.currentPrio == LOW:
+    #         self.currentTrick.sort(True)
+    #         #Continue Coding
+    #     else:
+    #         #I'm not sure if this works
+    #         prioCount = self.currentTrick.count(self.currentPrio)
+    #         if prioCount > 0:
+    #             #Find Values with Prio and puts it into a list. Then list is sorted
+    #         else:
+    #              #Find Values with currentSuit and puts it into a list. Then list is sorted
 
 
 

@@ -4,9 +4,14 @@ class Bet:
     def __init__(self, suit, level):
         self.suit = suit
         self.level = level
-        self.id = self.suit.value  + (self.level - 7) * 6
+        if suit == None and level == None:
+            self.id = 42
+        else: 
+            self.id = self.suit.value  + (self.level - 7) * 6
 
     def __str__(self) -> str:
+        if(self.getID == 42):
+            return "PASS"
         return self.suit.__str__() + str(self.level)
     
     def getID(self) -> str:
@@ -21,6 +26,9 @@ class BetFactory:
         for level in range(7, 14):
             for suit in BetSuit:
                 self.Bets.append(Bet(suit, level))
+        
+        noBet = Bet(None, None)
+        self.Bets.append(noBet)
     
     def __str__(self):
         result = ""
