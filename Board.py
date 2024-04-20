@@ -70,6 +70,10 @@ class Board():
                     self.prioPlayer = player
                     self.trumpSuit = self.bettingOrder[3].suit
                     self.getState = "PLAYING"
+                    if player.id == 0 or player.id == 2:
+                        self.gamesToWin = self.bettingOrder[3].level
+                    elif player.id == 1 or player.id == 3:
+                        self.gamesToWin = 14-self.bettingOrder[3].level
                     break
         for bet in self.bettingOrder:
             print(bet)
@@ -121,7 +125,7 @@ class Board():
                     if self.currentTrick[i].rank.value > highestCurrent:
                         highestCurrent = self.currentTrick[i].rank.value
                         winningCurrent = self.currentTrick[i]
-            if winningTrump == None | self.currentPrio == BetSuit.HIGH:
+            if winningTrump == None or self.currentPrio == BetSuit.HIGH:
                 prioPlayer = winningCurrent.owner
             else:
                 prioPlayer = winningTrump.owner
@@ -136,12 +140,12 @@ class Board():
             prioPlayer = winningCurrent.owner      
 
 
-        if (prioPlayer.id == 0 | prioPlayer.id == 2):
+        if (prioPlayer.id == 0 or prioPlayer.id == 2):
             self.teamOneScore += 1
             if (self.teamOneScore >= self.gamesToWin):
                 self.gameOver(1)
-        elif (prioPlayer.id == 1 | prioPlayer.id == 3):
+        elif (prioPlayer.id == 1 or prioPlayer.id == 3):
             self.teamTwoScore += 1
-            if (self.teamTwoScore >= self.gamesToWin):
+            if (self.teamTwoScore >= 14-self.gamesToWin):
                 self.gameOver(2)
 
