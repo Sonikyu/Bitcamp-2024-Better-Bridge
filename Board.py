@@ -29,6 +29,7 @@ class Board():
         self.player2 = Player()
         self.player3 = Player()
         self.player4 = Player()
+        self.players = [self.player1, self.player2, self.player3, self.player4]
         deck = Deck()
         for i in range(13):
             card = deck.draw()
