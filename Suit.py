@@ -1,5 +1,5 @@
 from enum import Enum
-class suit(Enum):
+class Suit(Enum):
     Clubs = 1
     Diamonds = 2 
     Hearts = 3
