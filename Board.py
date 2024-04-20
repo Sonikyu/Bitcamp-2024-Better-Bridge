@@ -1,5 +1,6 @@
 from Deck import Deck
 from Player import Player
+from BetSuit import BetSuit
 import copy
 
 class Board():
@@ -13,7 +14,9 @@ class Board():
         self.trumpSuit = None
         self.gamesToWin = 7#Make this always NS
 
+        self.bettingOrder = []
         self.getState = 'BETTING' #This is either 'betting' or 'playing'
+
 
         self.currentTrick = [None, None, None, None]
         self.pastTricks = []
@@ -38,7 +41,16 @@ class Board():
             card = deck.draw()
             card.setOwner(self.player4)
             self.player4.addCard(card)
-          
+    
+    # def checkBetting(self):
+    #     if self.bettingOrder.len < 4: 
+    #         return False
+    
+
+    # def startBetting(self):
+    #     while 
+
+
 
     #This method clears the old trick and adds it to pastTricks
     def startTrick(self):
@@ -64,31 +76,14 @@ class Board():
     #Also updates the score
     #Calls gameOver() if win
     def evaluateTrick(self):
-        copyTrick = copy.deepCopy(self.currentTrick)
-        if self.currentPrio == HIGH | self.currentPrio == LOW:
-            for i in self.currentTrick:
-               if copyTrick[i] != self.currentTrickSuit:
-                    copyTrick.remove[i]
-            if self.currentPrio == HIGH:
-               copyTrick.sort(key = lambda x : x.id, reverse = False)
-            else:
-               copyTrick.sort(key = lambda x : x.id, reverse = True)
+        if self.currentPrio == BetSuit.HIGH:
+           self.currentTrick.sort(key = lambda x: x.id, reverse = False)
+        elif self.currentPrio == BetSuit.LOW:
+            self.currentTrick.sort(key = lambda x: x.id, reverse = True)
         else:
             #I'm not sure if this works
-            prioCount = copyTrick.count(self.currentPrio)
+            prioCount = self.currentTrick.count(self.currentPrio)
             if prioCount > 0:
+                print("to get rid of errors, remove later")
                 #Find Values with Prio and puts it into a list. Then list is sorted
-                prioIndexList = []
-                for i in copyTrick:
-                    if i.suit == self.currentPrio:
-                        prioIndexList.append
-                
-            else:
-                 #Find Values with currentSuit and puts it into a list. Then list is sorted
-                 a = NONE #Replace with code
-        self.winningPlayer = copyTrick[0].owner
-        
-
-
-
-
+            #else: #Find Values with currentSuit and puts it into a list. Then list is sorted
