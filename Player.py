@@ -1,10 +1,7 @@
 from Deck import Deck
-<<<<<<< Updated upstream
 from Board import Board
-=======
 from Bet import BetFactory
 import random
->>>>>>> Stashed changes
 import Render
 class Player:
     def __init__(self, id):
