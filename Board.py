@@ -1,5 +1,6 @@
 from Deck import Deck
 from Player import Player
+import copy
 
 class Board():
     #Globals
@@ -62,17 +63,23 @@ class Board():
     #Also updates the score
     #Calls gameOver() if win
     def evaluateTrick(self):
+        copyTrick = copy.deepCopy(self.currentTrick)
         if self.currentPrio == HIGH:
-           self.currentTrick.sort
+           copyTrick.sort
            #Continue Coding
         elif self.currentPrio == LOW:
-            self.currentTrick.sort(True)
+            copyTrick.sort(True)
             #Continue Coding
         else:
             #I'm not sure if this works
-            prioCount = self.currentTrick.count(self.currentPrio)
+            prioCount = copyTrick.count(self.currentPrio)
             if prioCount > 0:
                 #Find Values with Prio and puts it into a list. Then list is sorted
+                prioIndexList = []
+                for i in copyTrick:
+                    if i.suit == self.currentPrio:
+                        prioIndexList.append
+                
             else:
                  #Find Values with currentSuit and puts it into a list. Then list is sorted
 
