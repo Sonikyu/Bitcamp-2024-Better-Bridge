@@ -3,7 +3,7 @@ from Rank import Rank
 from Suit import Suit
 import os
 import pygame
-pygame.init()
+# pygame.init()
 
 SCREEN_WIDTH = 1200
 SCREEN_HEIGHT = 750
@@ -14,27 +14,20 @@ HAND_Y = SCREEN_HEIGHT - (CARD_HEIGHT + 20)
 screen = pygame.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
 
 def draw(hand, pile):
-    running = True
-    while running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-
-        #Draw the background
-        screen.fill((27, 99, 46))
-        #Draw the player hand
-        hand_offset = (SCREEN_WIDTH - ((len(hand) + 1) * (CARD_WIDTH * 2 / 3))) / 2
-        loc_offset = 0
-        for card in hand:
-            draw_card(screen, card, hand_offset + loc_offset*CARD_WIDTH * 2/3, HAND_Y)
-            loc_offset += 1
-        #Draw the pile
-        draw_pile(screen, pile)
-        #Draw the trump suit/bet
-        #Draw the score (rounds won)
-        
-        pygame.display.flip()
-    pygame.quit()
+    #Draw the background
+    screen.fill((27, 99, 46))
+    #Draw the player hand
+    hand_offset = (SCREEN_WIDTH - ((len(hand) + 1) * (CARD_WIDTH * 2 / 3))) / 2
+    loc_offset = 0
+    for card in hand:
+        draw_card(screen, card, hand_offset + loc_offset*CARD_WIDTH * 2/3, HAND_Y)
+        loc_offset += 1
+    #Draw the pile
+    draw_pile(screen, pile)
+    #Draw the trump suit/bet
+    #Draw the score (rounds won)
+    
+    pygame.display.flip()
 
 #Returns the path to the image associated with card
 def get_png_from_card(card):
@@ -55,6 +48,7 @@ def draw_card(screen, card, x, y):
     img = pygame.image.load(img_path)
     screen.blit(img, (x,y))
 
+#Draws the pile in the center of the screen, pile MUST be length 4 with None for any position not yet filled
 def draw_pile(screen, pile):
     #SOUTH
     if pile[0] != None:
