@@ -10,7 +10,7 @@ class Card:
         self.id = suit.value * 13 + rank.value - 2
         self.owner = None
         self.x = 0
-        self.y = 0
+        self.y = Render.HAND_Y
         self.image = pygame.image.load(Render.get_png_from_card(self))
 
     #Checks if the other card is bigger than or less than the current card

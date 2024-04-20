@@ -1,5 +1,5 @@
 from Deck import Deck
-
+import Render
 class Player:
     def __init__(self, id):
         self.hand = []
@@ -25,6 +25,11 @@ class Player:
             self.hand.remove(card)
         except ValueError:
             print("illegal move bro")
+    def update_card_positions(self):
+        loc_offset = 0
+        for card in self.hand:
+            card.x = ((Render.SCREEN_WIDTH - ((len(self.hand) + 1) * (Render.CARD_WIDTH * 2 / 3))) / 2) + loc_offset*Render.CARD_WIDTH * 2/3
+            loc_offset += 1
 
 
     
