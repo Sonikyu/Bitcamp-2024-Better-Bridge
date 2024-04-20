@@ -20,7 +20,7 @@ def draw():
         screen.fill((27, 99, 46))
         #Draw the player hand
         #Draw the pile
-        #Draw the trup suit/bet
+        #Draw the trump suit/bet
         #Draw the score (rounds won)
         
         pygame.display.flip()
