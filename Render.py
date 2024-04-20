@@ -1,3 +1,4 @@
+from Suit import Suit
 import os
 import pygame
 
@@ -21,6 +22,7 @@ def draw(board):
     #Draw the pile
     draw_pile(screen, board.currentTrick)
     #Draw the trump suit/bet
+    draw_trump(screen, board.trumpSuit)
     #Draw the score (rounds won)
     
     pygame.display.flip()
@@ -54,5 +56,22 @@ def draw_pile(screen, pile):
         screen.blit(pile[3].image, (SCREEN_WIDTH / 2 + CARD_WIDTH * .5, SCREEN_HEIGHT /2 - CARD_HEIGHT * .75))
 
 def draw_trump(screen, suit):
-
-    print("Hello Donald")
+    if suit == None:
+        return
+    #Background
+    rectangle = pygame.Rect(0, 0, 210, 120)
+    pygame.draw.rect(screen, (170, 170, 170), rectangle)
+    #Text
+    font = pygame.font.Font('freesansbold.ttf', 20)
+    msg = "Trump: " + suit.name
+    text = font.render(msg, True, (0,0,0))
+    textRect = text.get_rect()
+    textRect.center = (105, 30)
+    screen.blit(text, textRect)
+    #Glyph
+    glyph_name = suit.name.lower() + "_glyph.png"
+    glyph_path = os.path.join("Cards", glyph_name)
+    img = pygame.image.load(glyph_path)
+    img_rect = img.get_rect()
+    img_rect.center = (105, 80)
+    screen.blit(img, img_rect)

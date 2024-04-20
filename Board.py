@@ -11,11 +11,12 @@ class Board():
     #Actions should be defined by 
 
     def __init__(self):
-        self.trumpSuit = None
+        self.trumpSuit = None #Includes HIGH and LOW
         self.gamesToWin = 7#Make this always NS
 
         self.bettingOrder = []
-        self.getState = 'BETTING' #This is either 'betting' or 'playing'
+        self.currentBetID = -1 
+        self.getState = "BETTING" #This is either 'betting' or 'playing'
 
         self.teamOneScore = 0
         self.teamTwoScore = 0
@@ -44,9 +45,38 @@ class Board():
             card.setOwner(self.player4)
             self.player4.addCard(card)
     
-    # def checkBetting(self):
-    #     if self.bettingOrder.len < 4: 
-    #         return False
+    def checkBetting(self):
+        if len(self.bettingOrder) < 4: 
+            return False
+        #ID for pass is 42
+        elif self.bettingOrder[0].getID() == 42 and self.bettingOrder[1].getID() == 42 and self.bettingOrder[2].getID() == 42 and self.bettingOrder[3].getID() != 42:
+            return True
+        return False
+    
+    def addBet(self, bet):
+        if bet.getID() > self.currentBetID:
+            self.bettingOrder.insert(0, bet)
+            if(bet.getID() != 42):
+                self.currentBetID = bet.getID()
+            return
+        print("Illegal Bet")
+
+    def startBetting(self):
+        while self.checkBetting() == False:
+            for player in self.players:
+                self.addBet(player.chooseBet(self))
+                if self.checkBetting() == True:
+                    self.currentPrio = player
+                    self.trumpSuit = self.bettingOrder[3].suit
+                    self.getState = "PLAYING"
+                    break
+        for bet in self.bettingOrder:
+            print(bet)
+        print("done betting")
+        
+
+
+
     
 
     # def startBetting(self):
@@ -68,7 +98,7 @@ class Board():
         counter = 0
         
         for i in self.currentTrickSuit:
-            if i != None:
+            if self.currentTrick[i] != None:
                 counter += 1
                 index = i
         if counter == 1:
