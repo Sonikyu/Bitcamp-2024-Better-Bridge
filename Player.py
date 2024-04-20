@@ -22,16 +22,18 @@ class Player:
     def sortHand(self):
         self.hand.sort
     def playCard(self, card):
-        #Checks if
+        #Checks if Player is first (i.e. the first card is None)
         isPlayerFirst = Board.currentPrio == None
+        #Checks if Player choose the right suit and the Prio isn't None
         playerChoosesRightSuit = Board.currentPrio != None and Board.currentPrio == card.suit
-        needsChecking = True
+        #Checks if player has hand
         playerHasPrio = False
         for i in self.hand:
             if self.hand[i].suit == Board.currentPrio:
                 playerHasPrio = True
+        needsChecking = True
         while needsChecking:
-            if playerChoosesRightSuit or isPlayerFirst or not playerHasPrio :
+            if isPlayerFirst or playerChoosesRightSuit or not playerHasPrio :
                 try:
                     self.hand.remove(card)
                     self.update_card_positions()
