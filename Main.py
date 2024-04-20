@@ -23,6 +23,6 @@ while running:
                            print("Clicked on " + str(card))
                            board.player1.playCard(card)
                            break
-    #Replace the array of Nones with board.pile!!
-    Render.draw(board.player1.hand, board.currentTrick)
+    #Replace the array of Nones with board.currentTrick!!
+    Render.draw(board.player1.hand, [None, None, None, None])
 pygame.quit()
