@@ -17,6 +17,8 @@ class Board():
         self.bettingOrder = []
         self.getState = 'BETTING' #This is either 'betting' or 'playing'
 
+        self.teamOneScore = 0
+        self.teamTwoScore = 0
 
         self.currentTrick = [None, None, None, None]
         self.pastTricks = []
@@ -26,7 +28,6 @@ class Board():
         self.player2 = Player()
         self.player3 = Player()
         self.player4 = Player()
-        self.winningPlayer
         deck = Deck()
         for i in range(13):
             card = deck.draw()
@@ -74,7 +75,7 @@ class Board():
 
     #Looks at the cards in the trick and see who wins! Then sets prioPlayer to the owner of that card
     #Also updates the score
-    #Calls gameOver() if win
+    #Calls isGameOver() if win
     def evaluateTrick(self):
         if self.currentPrio == BetSuit.HIGH:
            self.currentTrick.sort(key = lambda x: x.id, reverse = False)
