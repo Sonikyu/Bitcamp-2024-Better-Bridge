@@ -1,5 +1,7 @@
 
 class Card:
+    #Cards have a rank, suit, and id
+    #id is used for comparing
     def __init__ (self, rank, suit):
         self.rank = rank
         self.suit = suit
