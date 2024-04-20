@@ -2,7 +2,7 @@ import random
 from Card import Card
 from Rank import Rank
 from Suit import Suit
-import numpy as np
+
 class Deck:
     #Deck initializes list of cards and shuffles it
     def __init__ (self):
