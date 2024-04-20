@@ -1,5 +1,6 @@
 from Deck import Deck
 from Player import Player
+from BetSuit import BetSuit
 import copy
 
 class Board():
@@ -75,20 +76,16 @@ class Board():
     #Also updates the score
     #Calls gameOver() if win
     def evaluateTrick(self):
-        if self.currentPrio == HIGH:
+        if self.currentPrio == BetSuit.HIGH:
            self.currentTrick.sort
            #Continue Coding
-        elif self.currentPrio == LOW:
+        elif self.currentPrio == BetSuit.LOW:
             self.currentTrick.sort(True)
             #Continue Coding
         else:
             #I'm not sure if this works
             prioCount = self.currentTrick.count(self.currentPrio)
             if prioCount > 0:
+                print("to get rid of errors, remove later")
                 #Find Values with Prio and puts it into a list. Then list is sorted
-            else:
-                 #Find Values with currentSuit and puts it into a list. Then list is sorted
-
-
-
-
+            #else: #Find Values with currentSuit and puts it into a list. Then list is sorted
