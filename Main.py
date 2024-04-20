@@ -1,7 +1,13 @@
 from Board import Board
+from Bet import BetFactory
 import pygame
 import Render
 pygame.init()
+
+
+# betFactory = BetFactory()
+# print(betFactory.asIDs())
+# print(betFactory)
     
 print("hello")
 board = Board()
@@ -23,6 +29,5 @@ while running:
                            print("Clicked on " + str(card))
                            board.player1.playCard(card)
                            break
-    #Replace the array of Nones with board.currentTrick!!
-    Render.draw(board.player1.hand, [None, None, None, None])
+    Render.draw(board)
 pygame.quit()

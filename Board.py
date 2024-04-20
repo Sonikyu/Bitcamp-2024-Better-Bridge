@@ -15,7 +15,7 @@ class Board():
 
         self.getState = 'BETTING' #This is either 'betting' or 'playing'
 
-        self.currentTrick = []
+        self.currentTrick = [None, None, None, None]
         self.pastTricks = []
         self.currentTrickSuit = None
         self.currentPrio = None
