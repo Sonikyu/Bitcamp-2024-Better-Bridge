@@ -1,4 +1,4 @@
-import Deck
+from deck import Deck
 
 class Player:
     def __init__(self):
@@ -17,7 +17,7 @@ class Player:
         self.hand.sort
     def playCard(self, card):
         try:
-            self.hand.reverse(card)
+            self.hand.remove(card)
         except ValueError:
             print("illegal move bro")
 
