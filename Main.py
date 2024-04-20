@@ -1,5 +1,7 @@
 from Board import Board
 
+class Main(self):
+    
 print("hello")
 board = Board()
 board.player1.printHand()
