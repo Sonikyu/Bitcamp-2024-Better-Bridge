@@ -2,6 +2,8 @@ from Board import Board
 import pygame
 import Render
 pygame.init()
+class Main(self):
+    
 print("hello")
 board = Board()
 board.player1.printHand()
