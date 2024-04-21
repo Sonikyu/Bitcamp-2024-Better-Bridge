@@ -21,6 +21,7 @@ class Board():
         self.teamOneScore = 0
         self.teamTwoScore = 0
 
+        self.activePlayer = 0
         self.prioPlayer = None
         self.currentTrick = [None, None, None, None]
         self.pastTricks = []
@@ -61,6 +62,7 @@ class Board():
             self.bettingOrder.insert(0, bet)
             if(bet.getID() != 42):
                 self.currentBetID = bet.getID()
+            self.inc_player()
             return True
         print("Illegal Bet")
         return False
@@ -163,4 +165,7 @@ class Board():
 
         print("1:", self.teamOneScore, " 2:", self.teamTwoScore, "\n")
         
-
+    def inc_player(self):
+        self.activePlayer += 1
+        if self.activePlayer > 3:
+            self.activePlayer = 0
