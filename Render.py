@@ -123,11 +123,13 @@ def draw_scores(screen, score_1, score_2):
     screen.blit(text1, text1_rect)
     screen.blit(text2, text2_rect)
 
-def draw_game_over_screen():
+def draw_game_over_screen(winningTeam):
    screen.fill((210, 180, 140))
    font = pygame.font.SysFont('georgia', 40)
    title = font.render('Game Over', True, (255, 255, 255))
    screen.blit(title, (SCREEN_WIDTH/2 - title.get_width()/2, SCREEN_HEIGHT/2 - title.get_height()/3))
+   msg = font.render("Team "+ str(winningTeam) + " wins", True, (255, 255, 255))
+   screen.blit(msg, (SCREEN_WIDTH/2 - title.get_width()/2, SCREEN_HEIGHT/2 - title.get_height()/3+60))
    pygame.display.update()
    time.sleep(5)
 

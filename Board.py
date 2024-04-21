@@ -23,6 +23,7 @@ class Board():
 
         self.teamOneScore = 0
         self.teamTwoScore = 0
+        self.winningTeam = 0
 
         self.activePlayer = 0
         self.prioPlayer = None
@@ -146,7 +147,7 @@ class Board():
             self.evaluateTrick()
 
         self.getState = "GAME_OVER"
-        Render.draw_game_over_screen()
+        Render.draw_game_over_screen(self.winningTeam)
         print("Ended player Game")
 
     #This method clears the old trick and adds it to pastTricks
@@ -204,10 +205,12 @@ class Board():
             self.teamOneScore += 1
             if (self.teamOneScore >= self.gamesToWin):
                 self.gameOver(1)
+                self.winningTeam = 1
         elif (self.prioPlayer.id == 1 or self.prioPlayer.id == 3):
             self.teamTwoScore += 1
             if (self.teamTwoScore >= 14-self.gamesToWin):
                 self.gameOver(2)
+                self.winningTeam = 2
         print("Player", self.prioPlayer.id, "wins the trick")
         print("1:", self.teamOneScore, " 2:", self.teamTwoScore, "\n")
         
