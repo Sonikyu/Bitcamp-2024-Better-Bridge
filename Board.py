@@ -92,7 +92,10 @@ class Board():
                 self.players[j].playCard(tempCard, self)
                 self.addToTrick(tempCard)
             self.evaluateTrick()
+
+        self.getState = "GAME_OVER"
         print("Ended Game")
+
 
     #This method clears the old trick and adds it to pastTricks
     def startTrick(self):

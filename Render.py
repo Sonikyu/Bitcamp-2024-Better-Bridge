@@ -25,6 +25,9 @@ def draw(board):
     #Draw the score (rounds won)
     draw_scores(screen, board.teamOneScore, board.teamTwoScore)
     
+    if(board.game_state == "GAME_OVER"):
+        draw_game_over_screen()
+
     pygame.display.flip()
 
 #Returns the path to the image associated with card
@@ -101,4 +104,9 @@ def draw_scores(screen, score_1, score_2):
     screen.blit(text1, text1_rect)
     screen.blit(text2, text2_rect)
 
-   
+def draw_game_over_screen():
+   screen.fill((210, 180, 140))
+   font = pygame.font.SysFont('georgia', 40)
+   title = font.render('Game Over', True, (255, 255, 255))
+   screen.blit(title, (SCREEN_WIDTH/2 - title.get_width()/2, SCREEN_HEIGHT/2 - title.get_height()/3))
+   pygame.display.update()
