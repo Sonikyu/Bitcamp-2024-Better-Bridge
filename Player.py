@@ -40,7 +40,7 @@ class Player:
         print("[" + result + "]")
 
     def sortHand(self):
-        self.hand.sort
+        self.hand.sort(key = lambda x: x.id)
         
     #If the player chose the right suit or doesn't have the right suit, the function returns True
     #Otherwise, the function returns False;
@@ -52,7 +52,7 @@ class Player:
         #Checks if player has Current Trick Suit
         playerHasSuit = False
         for i in self.hand:
-            if self.hand[i].suit == Board.currentTrickSuit:
+            if i.suit == Board.currentTrickSuit:
                 playerHasSuit = True
         
         if isPlayerFirst or playerChoseRightSuit or not playerHasSuit :

@@ -96,7 +96,7 @@ class Board():
         counter = 0
         
         for i in self.currentTrickSuit:
-            if self.currentTrick[i] != None:
+            if i != None:
                 counter += 1
                 index = i
         if counter == 1:

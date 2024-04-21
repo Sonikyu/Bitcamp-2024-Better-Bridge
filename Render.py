@@ -91,7 +91,7 @@ def draw_scores(screen, score_1, score_2):
     pygame.draw.rect(screen, (0, 0, 0), border_b)
     pygame.draw.rect(screen, (0, 0, 0), border_m)
     #Text
-    font = pygame.font.Font('freesansbold.ttf', 40)
+    font = pygame.font.Font('freesansbold.ttf', 20)
     text1 = font.render(str(score_1), True, (0,0,0))
     text2 = font.render(str(score_2), True, (0,0,0))
     text1_rect = text1.get_rect()
