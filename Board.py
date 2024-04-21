@@ -4,6 +4,7 @@ from BetSuit import BetSuit
 import copy
 import pygame
 import Render
+import time
 
 class Board():
     #Globals
@@ -130,10 +131,11 @@ class Board():
                                         tempCard = card
                                         running = False
                         Render.draw(self)
-                print(j, " ", self.currentTrick)        
-                print("Card", index, tempCard)
+
                 self.players[index].playCard(tempCard, self)
                 self.addToTrick(tempCard, self.players[index]) 
+                Render.draw(self)
+                time.sleep(1)
             self.evaluateTrick()
 
         self.getState = "GAME_OVER"
