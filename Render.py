@@ -1,5 +1,9 @@
 import os
 import pygame
+import math
+from BetSuit import BetSuit
+from Suit import Suit
+from BetButton import BetButton
 
 SCREEN_WIDTH = 1200
 SCREEN_HEIGHT = 750
@@ -8,6 +12,11 @@ CARD_HEIGHT = 145
 HAND_Y = SCREEN_HEIGHT - (CARD_HEIGHT + 20)
 
 screen = pygame.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
+
+size_bet_rects = []
+suit_bet_rects = []
+pass_rect = pygame.Rect(820, 315, 100, 100)
+submit_rect = pygame.Rect(730, 405, 190, 75)
 
 def draw(board):
     #Draw the background
@@ -23,11 +32,15 @@ def draw(board):
     #Draw the trump suit
     draw_trump(screen, board.trumpSuit)
     #Draw the score (rounds won)
-    draw_scores(screen, board.teamOneScore, board.teamTwoScore)
     
     if(board.game_state == "GAME_OVER"):
         draw_game_over_screen()
 
+    if board.getState == "PLAYING":
+        draw_scores(screen, board.teamOneScore, board.teamTwoScore)
+    #Draw betting UI, if applicable
+    if board.getState == "BETTING":
+        draw_bets(screen, board)
     pygame.display.flip()
 
 #Returns the path to the image associated with card
@@ -58,6 +71,12 @@ def draw_pile(screen, pile):
     if pile[3] != None:
         screen.blit(pile[3].image, (SCREEN_WIDTH / 2 + CARD_WIDTH * .5, SCREEN_HEIGHT /2 - CARD_HEIGHT * .75))
 
+def get_glyph_from_suit(suit):
+    glyph_name = suit.name.lower() + "_glyph.png"
+    glyph_path = os.path.join("Cards", glyph_name)
+    img = pygame.image.load(glyph_path)
+    return img
+
 def draw_trump(screen, suit):
     if suit == None:
         return
@@ -76,9 +95,7 @@ def draw_trump(screen, suit):
     textRect.center = (105, 30)
     screen.blit(text, textRect)
     #Glyph
-    glyph_name = suit.name.lower() + "_glyph.png"
-    glyph_path = os.path.join("Cards", glyph_name)
-    img = pygame.image.load(glyph_path)
+    img = get_glyph_from_suit(suit)
     img_rect = img.get_rect()
     img_rect.center = (105, 80)
     screen.blit(img, img_rect)
@@ -94,7 +111,7 @@ def draw_scores(screen, score_1, score_2):
     pygame.draw.rect(screen, (0, 0, 0), border_b)
     pygame.draw.rect(screen, (0, 0, 0), border_m)
     #Text
-    font = pygame.font.Font('freesansbold.ttf', 20)
+    font = pygame.font.Font('freesansbold.ttf', 40)
     text1 = font.render(str(score_1), True, (0,0,0))
     text2 = font.render(str(score_2), True, (0,0,0))
     text1_rect = text1.get_rect()
@@ -110,3 +127,80 @@ def draw_game_over_screen():
    title = font.render('Game Over', True, (255, 255, 255))
    screen.blit(title, (SCREEN_WIDTH/2 - title.get_width()/2, SCREEN_HEIGHT/2 - title.get_height()/3))
    pygame.display.update()
+def draw_bets(screen, board):
+    global size_bet_rects
+    global suit_bet_rects
+    size_bet_rects = []
+    suit_bet_rects = []
+    #Calculate how many numbers are valid
+    bet_id = board.currentBetID
+    lowest_bet_size = math.floor(math.fabs(bet_id) / 6) + 7
+    #Draw size boxes
+    for i in range(lowest_bet_size, 14):
+        rect = draw_size_bet_box(screen, i, 280 + 90*(i - lowest_bet_size), 225)
+        size_bet_rects.append(rect)
+    #Draw suit boxes
+    for betsuit in BetSuit:
+        rect = draw_suit_bet_box(screen, betsuit, 280 + 90*(betsuit.value), 315)
+        suit_bet_rects.append(rect)
+    #Draw pass button
+    border = pass_rect
+    bgnd = pygame.Rect(830, 325, 80, 80)
+    pygame.draw.rect(screen, (0,0,0), border)
+    pygame.draw.rect(screen, (179,202,141), bgnd)
+    #Text
+    font = pygame.font.Font('freesansbold.ttf', 30)
+    text = font.render("PASS", True, (0,0,0))
+    text_rect = text.get_rect()
+    text_rect.center = (870,365)
+    screen.blit(text, text_rect)
+    #Draw submit button
+    border = submit_rect
+    bgnd = pygame.Rect(740, 415, 170, 55)
+    pygame.draw.rect(screen, (0,0,0), border)
+    pygame.draw.rect(screen, (156, 33, 61), bgnd)
+    #Text
+    font = pygame.font.Font('freesansbold.ttf', 30)
+    text = font.render("SUBMIT", True, (0,0,0))
+    text_rect = text.get_rect()
+    text_rect.center = (825,442.5)
+    screen.blit(text, text_rect)
+
+def draw_size_bet_box(screen, size, x, y):
+    #Background
+    border = pygame.Rect(x, y, 100, 100)
+    bgnd = pygame.Rect(x + 10, y + 10, 80, 80)
+    pygame.draw.rect(screen, (0,0,0), border)
+    pygame.draw.rect(screen, (170, 170, 170), bgnd)
+    #Text
+    font = pygame.font.Font('freesansbold.ttf', 40)
+    text = font.render(str(size), True, (0,0,0))
+    text_rect = text.get_rect()
+    text_rect.center = (x+50,y+50)
+    screen.blit(text, text_rect)
+    return BetButton(border, size, None)
+
+def draw_suit_bet_box(screen, betsuit, x, y):
+    #Background
+    border = pygame.Rect(x, y, 100, 100)
+    bgnd = pygame.Rect(x + 10, y + 10, 80, 80)
+    pygame.draw.rect(screen, (0,0,0), border)
+    pygame.draw.rect(screen, (170, 170, 170), bgnd)
+    #Contents
+    font = pygame.font.Font('freesansbold.ttf', 30)
+    if betsuit.value == 0:
+        text = font.render("LOW", True, (0,0,0))
+        text_rect = text.get_rect()
+        text_rect.center = (x+50,y+50)
+        screen.blit(text, text_rect)
+    elif betsuit.value == 5:
+        text = font.render("HIGH", True, (0,0,0))
+        text_rect = text.get_rect()
+        text_rect.center = (x+50,y+50)
+        screen.blit(text, text_rect)
+    else:
+        img = get_glyph_from_suit(Suit(betsuit.value))
+        img_rect = img.get_rect()
+        img_rect.center = (x+50, y+50)
+        screen.blit(img, img_rect)
+    return BetButton(border, None, betsuit)

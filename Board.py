@@ -61,8 +61,9 @@ class Board():
             self.bettingOrder.insert(0, bet)
             if(bet.getID() != 42):
                 self.currentBetID = bet.getID()
-            return
+            return True
         print("Illegal Bet")
+        return False
 
     def startBetting(self):
         while self.checkBetting() == False:
