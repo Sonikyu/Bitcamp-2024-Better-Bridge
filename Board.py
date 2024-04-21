@@ -87,11 +87,13 @@ class Board():
         for i in range(13):
             self.startTrick()
             for j in range(4):
-                tempCard = self.players[j].chooseCard(self)
-                print("Card", tempCard)
-                self.players[j].playCard(tempCard, self)
+                index = (j + self.prioPlayer.id) % 4
+                tempCard = self.players[index].chooseCard(self)
+                print("Card", index, tempCard)
+                self.players[index].playCard(tempCard, self)
                 self.addToTrick(tempCard)
             self.evaluateTrick()
+            #print("prio:", self.prioPlayer.id)
 
         self.getState = "GAME_OVER"
         print("Ended Game")
@@ -147,44 +149,13 @@ class Board():
             self.evalCurSuit.sort(key= lambda x: x.rank.value)
             winner = self.evalCurSuit[0]
 
-        prioPlayer = winner.owner
+        self.prioPlayer = winner.owner
 
-        #alternate code for the above 
-        # if self.currentPrioSuitSuit != BetSuit.LOW:
-        #     highestTrump = -1
-        #     winningTrump = None
-        #     highestCurrent = -1
-        #     winningCurrent = None
-        #     prioPlayer = None
-        #     for i in self.currentTrick:
-        #         if self.currentTrick[i].suit == self.currentPrioSuit:
-        #             if self.currentTrick[i].rank.value > highestTrump:
-        #                 highestTrump = self.currentTrick[i].rank.value
-        #                 winningTrump = self.currentTrick[i]
-        #         elif self.currentTrick[i].suit == self.currentTrickSuit:
-        #             if self.currentTrick[i].rank.value > highestCurrent:
-        #                 highestCurrent = self.currentTrick[i].rank.value
-        #                 winningCurrent = self.currentTrick[i]
-        #     if winningTrump == None or self.currentPrioSuit == BetSuit.HIGH:
-        #         prioPlayer = winningCurrent.owner
-        #     else:
-        #         prioPlayer = winningTrump.owner
-        # else:
-        #     lowestCurrent = 15
-        #     winningCurrent = None
-        #     for i in self.currentTrick:
-        #         if self.currentTrick[i].suit == self.currentTrickSuit:
-        #             if self.currentTrick[i].rank.value < lowestCurrent:
-        #                 lowestCurrent = self.currentTrick[i].rank.value
-        #                 winningCurrent = self.currentTrick[i]
-        #     prioPlayer = winningCurrent.owner      
-
-
-        if (prioPlayer.id == 0 or prioPlayer.id == 2):
+        if (self.prioPlayer.id == 0 or self.prioPlayer.id == 2):
             self.teamOneScore += 1
             if (self.teamOneScore >= self.gamesToWin):
                 self.gameOver(1)
-        elif (prioPlayer.id == 1 or prioPlayer.id == 3):
+        elif (self.prioPlayer.id == 1 or self.prioPlayer.id == 3):
             self.teamTwoScore += 1
             if (self.teamTwoScore >= 14-self.gamesToWin):
                 self.gameOver(2)

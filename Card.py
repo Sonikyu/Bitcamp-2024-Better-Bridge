@@ -4,7 +4,7 @@ class Card:
     #Cards have a rank, suit, and id
     #id is used for comparing
     #Cards also have x and y coordinates for drawing, and and image
-    def __init__ (self, rank, suit, owner):
+    def __init__ (self, rank, suit):
         self.rank = rank
         self.suit = suit
         self.id = suit.value * 13 + rank.value - 2
@@ -16,15 +16,6 @@ class Card:
     #Checks if the other card is bigger than or less than the current card
     def __lt__ (self, otherCard):
         return self.id - otherCard.id
-    
-    def getRank(self):
-        return self.rank
-    
-    def getSuit(self):
-        return self.suit
-    
-    def getOwner(self):
-        return self.owner
     
     def setOwner(self, owner):
         self.owner = owner
