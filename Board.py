@@ -13,7 +13,6 @@ class Board():
     def __init__(self):
         self.trumpSuit = None #Includes HIGH and LOW
         self.gamesToWin = 7 #Make this always NS
-        self.gameWon = False
 
         self.bettingOrder = []
         self.currentBetID = -1 
@@ -88,7 +87,10 @@ class Board():
         for i in range(13):
             self.startTrick()
             for j in range(4):
-                self.players[j].playCard(self.players[j].chooseCard(self), self)
+                tempCard = self.players[j].chooseCard(self)
+                self.players[j].playCard(tempCard, self)
+                self.addToTrick(tempCard)
+            self.evaluateTrick()
         print("Ended Game")
 
         
@@ -96,6 +98,7 @@ class Board():
 
     #This method clears the old trick and adds it to pastTricks
     def startTrick(self):
+        
         #save old trick
         if len(self.currentTrick) != 0:
             self.pastTricks.append(self.currentTrick)
@@ -130,17 +133,23 @@ class Board():
     #Also updates the score
     #Calls isGameOver() if win
     def evaluateTrick(self):
-
+        winner = None
         if self.currentPrioSuit != BetSuit.LOW:
             if (len(self.evalTrumpSuit) != 0):
                 self.evalTrumpSuit.sort(reverse=True, key= lambda x: x.rank)
-                prioPlayer = self.evalTrumpSuit[0].owner
+                winner = self.evalTrumpSuit[0]
+                
             else:
                 self.evalCurSuit.sort(reverse=True, key= lambda x: x.rank)
-                prioPlayer = self.evalCurSuit[0].owner
+                winner = self.evalCurSuit[0]
         else:
             self.evalCurSuit.sort(key= lambda x: x.rank)
-            prioPlayer = self.evalCurSuit[0].owner
+            winner = self.evalCurSuit[0]
+
+        prioPlayer = winner.owner
+        for i in self.currentTrick:
+            print(i)
+        print(winner)
 
         #alternate code for the above 
         # if self.currentPrioSuitSuit != BetSuit.LOW:
@@ -181,4 +190,7 @@ class Board():
             self.teamTwoScore += 1
             if (self.teamTwoScore >= 14-self.gamesToWin):
                 self.gameOver(2)
+
+        print("1:", self.teamOneScore, " 2:", self.teamTwoScore)
+        
 

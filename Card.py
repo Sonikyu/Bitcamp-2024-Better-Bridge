@@ -30,5 +30,5 @@ class Card:
         self.owner = owner
 
     def __str__(self):
-        return self.rank.name +  self.suit.name
+        return self.rank .name+  self.suit.name
     

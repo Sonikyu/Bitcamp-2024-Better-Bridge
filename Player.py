@@ -29,17 +29,18 @@ class Player:
     
     #Chooses the best move out of the legal moves available
     def chooseCard(self, board):
-        board.currentTrick
         legalCards = []
         for i in self.hand:
             if self.isValidCardMove(i, board) == True:
                 legalCards.append(i)
-        return random.choice(legalCards)
-                
+        print("\n")
+        for i in legalCards:
+            print(i)
+        chosenCard = random.choice(legalCards)
+        print("Here is the Chosen Card:", chosenCard)
+        return chosenCard
 
-
-
-    #Could probably implement this into the playCard method for code efficiency
+    #Checks if the players card is legal for the current trick suit
     def isValidCardMove(self, card, Board):
         isPlayerFirst = Board.currentTrickSuit == None
         #Checks if Player choose the right suit and the Current Trick Suit isn't None
@@ -71,21 +72,11 @@ class Player:
     #If the player chose the right suit or doesn't have the right suit, the function returns True
     #Otherwise, the function returns False;
     def playCard(self, card, Board):
-        #Checks if Player is first (i.e. the first card is None)
-        isPlayerFirst = Board.currentTrickSuit == None
-        #Checks if Player choose the right suit and the Current Trick Suit isn't None
-        playerChoseRightSuit = Board.currentTrickSuit != None and Board.currentTrickSuit == card.suit
-        #Checks if player has Current Trick Suit
-        playerHasSuit = False
-        for i in self.hand:
-            if i.suit == Board.currentTrickSuit:
-                playerHasSuit = True
-        
-        if isPlayerFirst or playerChoseRightSuit or not playerHasSuit :
+        check = self.isValidCardMove(card, Board)
+        if check:
             try:
                 self.hand.remove(card)
                 self.update_card_positions()
-                needsChecking = False
                 return True
             except ValueError:
                 print("illegal move bro")

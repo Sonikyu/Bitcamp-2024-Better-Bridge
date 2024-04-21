@@ -100,3 +100,5 @@ def draw_scores(screen, score_1, score_2):
     text2_rect.center = (378, 60)
     screen.blit(text1, text1_rect)
     screen.blit(text2, text2_rect)
+
+   
