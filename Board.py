@@ -186,6 +186,6 @@ class Board():
             if (self.teamTwoScore >= 14-self.gamesToWin):
                 self.gameOver(2)
 
-        print("1:", self.teamOneScore, " 2:", self.teamTwoScore +"\n")
+        print("1:", self.teamOneScore, " 2:", self.teamTwoScore, "\n")
         
 
