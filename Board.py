@@ -75,17 +75,24 @@ class Board():
             for player in self.players:
                 self.addBet(player.chooseBet(self))
                 if self.checkBetting() == True:
-                    self.prioPlayer = player
+                    index = (player.id + 1) % 4
+                    self.prioPlayer = self.players[index]
                     self.trumpSuit = self.bettingOrder[3].suit
-                    self.getState = "PLAYING"
-                    if player.id == 0 or player.id == 2:
+                    if (player.id+1) % 2 == 0:
                         self.gamesToWin = self.bettingOrder[3].level
-                    elif player.id == 1 or player.id == 3:
+                    elif (player.id+1) % 2 == 1:
                         self.gamesToWin = 14-self.bettingOrder[3].level
                     break
+        counter = 0
+        self.bettingOrder.reverse()
+        lastBet = None
         for bet in self.bettingOrder:
-            print(bet)
-        print("done betting")
+            print(counter % 4, bet)
+            counter += 1
+            if (bet.getID() != 42):
+                lastBet = bet
+        print("done betting, final bet:", lastBet)
+        self.getState = "PLAYING"
 
 
     def startGame(self):
@@ -139,6 +146,7 @@ class Board():
             self.evaluateTrick()
 
         self.getState = "GAME_OVER"
+        Render.draw_game_over_screen()
         print("Ended player Game")
 
     #This method clears the old trick and adds it to pastTricks
@@ -176,7 +184,6 @@ class Board():
 
     #Looks at the cards in the trick and see who wins! Then sets prioPlayer to the owner of that card
     #Also updates the score
-    #Calls isGameOver() if win
     def evaluateTrick(self):
         winner = None
         if self.currentPrioSuit != BetSuit.LOW:
@@ -201,7 +208,7 @@ class Board():
             self.teamTwoScore += 1
             if (self.teamTwoScore >= 14-self.gamesToWin):
                 self.gameOver(2)
-
+        print("Player", self.prioPlayer.id, "wins the trick")
         print("1:", self.teamOneScore, " 2:", self.teamTwoScore, "\n")
         
     def inc_player(self):

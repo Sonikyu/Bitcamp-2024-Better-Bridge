@@ -10,7 +10,7 @@ pygame.init()
 board = Board()
 board.startBetting()
 board.startPlayerGame()
-# board.startGame()
+#board.startGame()
 
 # betFactory = BetFactory()
 # print(betFactory.asIDs())
@@ -21,11 +21,12 @@ board.startPlayerGame()
 # board.player2.printHand()
 # board.player3.printHand()
 # board.player4.printHand()
-
+"""
 board.player1.sortHand()
 board.player1.update_card_positions()
 running = True
 active_bet = Bet(BetSuit.LOW, 0)
+
 while running:
     for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -65,3 +66,4 @@ while running:
                             
     Render.draw(board)
 pygame.quit()
+"""

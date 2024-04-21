@@ -1,6 +1,7 @@
 import os
 import pygame
 import math
+import time
 from BetSuit import BetSuit
 from Suit import Suit
 from BetButton import BetButton
@@ -128,6 +129,8 @@ def draw_game_over_screen():
    title = font.render('Game Over', True, (255, 255, 255))
    screen.blit(title, (SCREEN_WIDTH/2 - title.get_width()/2, SCREEN_HEIGHT/2 - title.get_height()/3))
    pygame.display.update()
+   time.sleep(5)
+
 def draw_bets(screen, board):
     global size_bet_rects
     global suit_bet_rects

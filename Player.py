@@ -65,13 +65,12 @@ class Player:
         
     #If the player chose the right suit or doesn't have the right suit, the function returns True
     #Otherwise, the function returns False;
-    def playCard(self, card, board):
-        check = self.isValidCardMove(card, board)
+    def playCard(self, card, Board):
+        check = self.isValidCardMove(card, Board)
         if check:
             try:
                 self.hand.remove(card)
                 self.update_card_positions()
-                board.inc_player()
                 return True
             except ValueError:
                 print("illegal move bro")
