@@ -104,23 +104,12 @@ class Board():
             self.currentTrickSuit == card.suit
 
         self.currentTrick.append(card)
-<<<<<<< Updated upstream
-        counter = 0
-        
-        for i in self.currentTrickSuit:
-            if i != None:
-                counter += 1
-                index = i
-        if counter == 1:
-             self.currentTrickSuit = self.currentTrick[index]
-=======
 
         #add cards to corresponding lists for evaluating winner 
         if (card.suit == self.currentPrioSuit):
             self.evalTrumpSuit.add(card)
         if (card.suit == self.currentTrickSuit):
             self.evalCurSuit.add(card)
->>>>>>> Stashed changes
 
     #Game over function prints winner 
     def gameOver(self, winner):
