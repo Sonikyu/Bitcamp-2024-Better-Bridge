@@ -24,8 +24,10 @@ class Board():
         self.prioPlayer = None
         self.currentTrick = [None, None, None, None]
         self.pastTricks = []
+        self.evalTrumpSuit = []
+        self.evalCurSuit = []
         self.currentTrickSuit = None
-        self.currentPrio = None
+        self.currentPrioSuit = None
         self.player1 = Player()
         self.player2 = Player()
         self.player3 = Player()
@@ -84,15 +86,25 @@ class Board():
 
     #This method clears the old trick and adds it to pastTricks
     def startTrick(self):
+        #save old trick
         if self.currentTrick.len() != 0:
             self.pastTricks.append(self.currentTrick)
+        # reset variables for new trick
         self.currentTrick = []
+        self.evalTrumpSuit = []
+        self.evalCurSuit = []
+        self.currentTrickSuit = None
 
     #Meant to be called in driver/main like board.addToTrick(board.player.playCard())
     #Errors if the currentTrick.len() is 4 or more
     #Sets currentTrickSuit to the first card in the CurrentTrickSuit
     def addToTrick(self, card):
+        #set current trick suit if card is the first played
+        if (self.currentTrickSuit == None):
+            self.currentTrickSuit == card.suit
+
         self.currentTrick.append(card)
+<<<<<<< Updated upstream
         counter = 0
         
         for i in self.currentTrickSuit:
@@ -101,6 +113,14 @@ class Board():
                 index = i
         if counter == 1:
              self.currentTrickSuit = self.currentTrick[index]
+=======
+
+        #add cards to corresponding lists for evaluating winner 
+        if (card.suit == self.currentPrioSuit):
+            self.evalTrumpSuit.add(card)
+        if (card.suit == self.currentTrickSuit):
+            self.evalCurSuit.add(card)
+>>>>>>> Stashed changes
 
     #Game over function prints winner 
     def gameOver(self, winner):
@@ -110,34 +130,47 @@ class Board():
     #Also updates the score
     #Calls isGameOver() if win
     def evaluateTrick(self):
-        if self.currentPrio != BetSuit.LOW:
-            highestTrump = -1
-            winningTrump = None
-            highestCurrent = -1
-            winningCurrent = None
-            prioPlayer = None
-            for i in self.currentTrick:
-                if self.currentTrick[i].suit == self.currentPrio:
-                    if self.currentTrick[i].rank.value > highestTrump:
-                        highestTrump = self.currentTrick[i].rank.value
-                        winningTrump = self.currentTrick[i]
-                elif self.currentTrick[i].suit == self.currentTrickSuit:
-                    if self.currentTrick[i].rank.value > highestCurrent:
-                        highestCurrent = self.currentTrick[i].rank.value
-                        winningCurrent = self.currentTrick[i]
-            if winningTrump == None or self.currentPrio == BetSuit.HIGH:
-                prioPlayer = winningCurrent.owner
+
+        if self.currentPrioSuit != BetSuit.LOW:
+            if (len(self.evalTrumpSuit) != 0):
+                self.evalTrumpSuit.sort(reverse=True, key= lambda x: x.rank)
+                prioPlayer = self.evalTrumpSuit[0].owner
             else:
-                prioPlayer = winningTrump.owner
+                self.evalCurSuit.sort(reverse=True, key= lambda x: x.rank)
+                prioPlayer = self.evalCurSuit[0].owner
         else:
-            lowestCurrent = 15
-            winningCurrent = None
-            for i in self.currentTrick:
-                if self.currentTrick[i].suit == self.currentTrickSuit:
-                    if self.currentTrick[i].rank.value < lowestCurrent:
-                        lowestCurrent = self.currentTrick[i].rank.value
-                        winningCurrent = self.currentTrick[i]
-            prioPlayer = winningCurrent.owner      
+            self.evalCurSuit.sort(key= lambda x: x.rank)
+            prioPlayer = self.evalCurSuit[0].owner
+
+        #alternate code for the above 
+        # if self.currentPrioSuitSuit != BetSuit.LOW:
+        #     highestTrump = -1
+        #     winningTrump = None
+        #     highestCurrent = -1
+        #     winningCurrent = None
+        #     prioPlayer = None
+        #     for i in self.currentTrick:
+        #         if self.currentTrick[i].suit == self.currentPrioSuit:
+        #             if self.currentTrick[i].rank.value > highestTrump:
+        #                 highestTrump = self.currentTrick[i].rank.value
+        #                 winningTrump = self.currentTrick[i]
+        #         elif self.currentTrick[i].suit == self.currentTrickSuit:
+        #             if self.currentTrick[i].rank.value > highestCurrent:
+        #                 highestCurrent = self.currentTrick[i].rank.value
+        #                 winningCurrent = self.currentTrick[i]
+        #     if winningTrump == None or self.currentPrioSuit == BetSuit.HIGH:
+        #         prioPlayer = winningCurrent.owner
+        #     else:
+        #         prioPlayer = winningTrump.owner
+        # else:
+        #     lowestCurrent = 15
+        #     winningCurrent = None
+        #     for i in self.currentTrick:
+        #         if self.currentTrick[i].suit == self.currentTrickSuit:
+        #             if self.currentTrick[i].rank.value < lowestCurrent:
+        #                 lowestCurrent = self.currentTrick[i].rank.value
+        #                 winningCurrent = self.currentTrick[i]
+        #     prioPlayer = winningCurrent.owner      
 
 
         if (prioPlayer.id == 0 or prioPlayer.id == 2):
