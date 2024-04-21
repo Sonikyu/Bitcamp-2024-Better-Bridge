@@ -1,2 +1,2 @@
 # Bitcamp 2024
- Contract Bridge with AI
+ Modified Bridge Card Game with AI
