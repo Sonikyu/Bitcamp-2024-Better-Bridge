@@ -39,7 +39,7 @@ class BetFactory:
     def asIDs(self):
         result = ""
         for bet in self.Bets:
-            result += bet.getID() + "|"
+            result += str(bet.getID()) + "|"
         return result
     
     def getBet(self, ID):

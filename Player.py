@@ -26,8 +26,33 @@ class Player:
             return betFactory.getBet(42)
         else:
             return random.choice(legalMoves)
+    
+    #Chooses the best move out of the legal moves available
+    def chooseCard(self, board):
+        board.currentTrick
+        legalCards = []
+        for i in self.hand:
+            if self.isValidCardMove(i, board) == True:
+                legalCards.append(i)
+        return random.choice(legalCards)
+                
 
 
+
+    #Could probably implement this into the playCard method for code efficiency
+    def isValidCardMove(self, card, Board):
+        isPlayerFirst = Board.currentTrickSuit == None
+        #Checks if Player choose the right suit and the Current Trick Suit isn't None
+        playerChoseRightSuit = Board.currentTrickSuit != None and Board.currentTrickSuit == card.suit
+        #Checks if player has Current Trick Suit
+        playerHasSuit = False
+        for i in self.hand:
+            if i.suit == Board.currentTrickSuit:
+                playerHasSuit = True
+        if isPlayerFirst or playerChoseRightSuit or not playerHasSuit :
+            return True
+        else:
+            return False
 
     
     def addCard(self, card):
@@ -39,6 +64,7 @@ class Player:
             result += card.__str__() + " | "
         print("[" + result + "]")
 
+    #Sorts hand based on id (suit * 13 + suit )
     def sortHand(self):
         self.hand.sort(key = lambda x: x.id)
         

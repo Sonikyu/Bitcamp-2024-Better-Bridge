@@ -13,6 +13,7 @@ class Board():
     def __init__(self):
         self.trumpSuit = None #Includes HIGH and LOW
         self.gamesToWin = 7 #Make this always NS
+        self.gameWon = False
 
         self.bettingOrder = []
         self.currentBetID = -1 
@@ -82,12 +83,21 @@ class Board():
         print("done betting")
 
 
+    def startGame(self):
+        print("Started Game")
+        for i in range(13):
+            self.startTrick()
+            for j in range(4):
+                self.players[j].playCard(self.players[j].chooseCard(self), self)
+        print("Ended Game")
+
+        
 
 
     #This method clears the old trick and adds it to pastTricks
     def startTrick(self):
         #save old trick
-        if self.currentTrick.len() != 0:
+        if len(self.currentTrick) != 0:
             self.pastTricks.append(self.currentTrick)
         # reset variables for new trick
         self.currentTrick = []
@@ -113,6 +123,7 @@ class Board():
 
     #Game over function prints winner 
     def gameOver(self, winner):
+        self.gameWon = True
         print("Team " + winner + " wins!")
 
     #Looks at the cards in the trick and see who wins! Then sets prioPlayer to the owner of that card

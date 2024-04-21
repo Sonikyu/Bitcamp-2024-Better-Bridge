@@ -7,13 +7,13 @@ pygame.init()
 
 board = Board()
 board.startBetting()
+board.startGame()
 
 
-# betFactory = BetFactory()
-# print(betFactory.asIDs())
-# print(betFactory)
-    
-print("hello")
+betFactory = BetFactory()
+print(betFactory.asIDs())
+print(betFactory)
+
 board = Board()
 board.player1.printHand()
 board.player2.printHand()
@@ -28,11 +28,11 @@ while running:
             if event.type == pygame.QUIT:
                 running = False
             if event.type == pygame.MOUSEBUTTONDOWN:
-                 for card in board.player1.hand:
-                      card_rect = pygame.Rect(card.x, Render.HAND_Y, Render.CARD_WIDTH *2 / 3, Render.CARD_HEIGHT)
-                      if card_rect.collidepoint(event.pos):
-                           print("Clicked on " + str(card))
-                           board.player1.playCard(card, board)
-                           break
+                  for card in board.player1.hand:
+                       card_rect = pygame.Rect(card.x, Render.HAND_Y, Render.CARD_WIDTH *2 / 3, Render.CARD_HEIGHT)
+                       if card_rect.collidepoint(event.pos):
+                            print("Clicked on " + str(card))
+                            board.player1.playCard(card, board)
+                            break
     Render.draw(board)
 pygame.quit()
