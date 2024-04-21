@@ -8,8 +8,8 @@ pygame.init()
 
 
 board = Board()
-board.startBetting()
-board.startGame()
+# board.startBetting()
+# board.startGame()
 
 
 # betFactory = BetFactory()

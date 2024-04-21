@@ -33,8 +33,8 @@ def draw(board):
     draw_trump(screen, board.trumpSuit)
     #Draw the score (rounds won)
     
-    if(board.game_state == "GAME_OVER"):
-        draw_game_over_screen()
+    # if(board.getState == "GAME_OVER"):
+    #     draw_game_over_screen()
 
     if board.getState == "PLAYING":
         draw_scores(screen, board.teamOneScore, board.teamTwoScore)
