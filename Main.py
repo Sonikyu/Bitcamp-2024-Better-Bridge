@@ -8,9 +8,9 @@ pygame.init()
 
 
 board = Board()
-# board.startBetting()
+board.startBetting()
+board.startPlayerGame()
 # board.startGame()
-
 
 # betFactory = BetFactory()
 # print(betFactory.asIDs())

@@ -95,10 +95,11 @@ def draw_trump(screen, suit):
     textRect.center = (105, 30)
     screen.blit(text, textRect)
     #Glyph
-    img = get_glyph_from_suit(suit)
-    img_rect = img.get_rect()
-    img_rect.center = (105, 80)
-    screen.blit(img, img_rect)
+    if (suit != BetSuit.LOW and suit != BetSuit.HIGH):
+        img = get_glyph_from_suit(suit)
+        img_rect = img.get_rect()
+        img_rect.center = (105, 80)
+        screen.blit(img, img_rect)
 
 def draw_scores(screen, score_1, score_2):
     #Background

@@ -2,6 +2,8 @@ from Deck import Deck
 from Player import Player
 from BetSuit import BetSuit
 import copy
+import pygame
+import Render
 
 class Board():
     #Globals
@@ -94,13 +96,48 @@ class Board():
                 tempCard = self.players[index].chooseCard(self)
                 print("Card", index, tempCard)
                 self.players[index].playCard(tempCard, self)
-                self.addToTrick(tempCard)
+                self.addToTrick(tempCard, self.players[index])
             self.evaluateTrick()
             #print("prio:", self.prioPlayer.id)
 
         self.getState = "GAME_OVER"
         print("Ended Game")
 
+    def startPlayerGame(self):
+        self.player1.sortHand()
+        self.player1.update_card_positions()
+        print("Started Player Game")
+        for i in range(13):
+            self.startTrick()
+            for j in range(4):
+                index = (j + self.prioPlayer.id) % 4
+                tempCard = None
+                if index != 0:
+                    tempCard = self.players[index].chooseCard(self)
+                else:
+                    running = True
+                    while running:
+                        for event in pygame.event.get():
+                            if event.type == pygame.QUIT:
+                                running = False
+                            if event.type == pygame.MOUSEBUTTONDOWN:
+                                #if board.getState == "PLAYING":
+                                for card in self.players[0].hand:
+                                    card_rect = pygame.Rect(card.x, Render.HAND_Y, Render.CARD_WIDTH *2 / 3, Render.CARD_HEIGHT)
+                                    if card_rect.collidepoint(event.pos) and self.player1.isValidCardMove(card, self):
+                                        print("Clicked on " + str(card))
+                                        #self.player1.playCard(card, self)
+                                        tempCard = card
+                                        running = False
+                        Render.draw(self)
+                print(j, " ", self.currentTrick)        
+                print("Card", index, tempCard)
+                self.players[index].playCard(tempCard, self)
+                self.addToTrick(tempCard, self.players[index]) 
+            self.evaluateTrick()
+
+        self.getState = "GAME_OVER"
+        print("Ended player Game")
 
     #This method clears the old trick and adds it to pastTricks
     def startTrick(self):
@@ -109,7 +146,7 @@ class Board():
         if len(self.currentTrick) != 0:
             self.pastTricks.append(self.currentTrick)
         # reset variables for new trick
-        self.currentTrick = []
+        self.currentTrick = [None, None, None, None]
         self.evalTrumpSuit = []
         self.evalCurSuit = []
         self.currentTrickSuit = None
@@ -117,12 +154,12 @@ class Board():
     #Meant to be called in driver/main like board.addToTrick(board.player.playCard())
     #Errors if the currentTrick.len() is 4 or more
     #Sets currentTrickSuit to the first card in the CurrentTrickSuit
-    def addToTrick(self, card):
+    def addToTrick(self, card, player):
         #set current trick suit if card is the first played
         if (self.currentTrickSuit == None):
             self.currentTrickSuit = card.suit
 
-        self.currentTrick.append(card)
+        self.currentTrick[player.id] = card
 
         #add cards to corresponding lists for evaluating winner 
         if (card.suit == self.currentPrioSuit):
