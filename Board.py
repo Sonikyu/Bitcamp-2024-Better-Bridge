@@ -28,10 +28,10 @@ class Board():
         self.evalCurSuit = []
         self.currentTrickSuit = None
         self.currentPrioSuit = None
-        self.player1 = Player()
-        self.player2 = Player()
-        self.player3 = Player()
-        self.player4 = Player()
+        self.player1 = Player(0)
+        self.player2 = Player(1)
+        self.player3 = Player(2)
+        self.player4 = Player(3)
         self.players = [self.player1, self.player2, self.player3, self.player4]
         deck = Deck()
         for i in range(13):
@@ -88,13 +88,11 @@ class Board():
             self.startTrick()
             for j in range(4):
                 tempCard = self.players[j].chooseCard(self)
+                print("Card", tempCard)
                 self.players[j].playCard(tempCard, self)
                 self.addToTrick(tempCard)
             self.evaluateTrick()
         print("Ended Game")
-
-        
-
 
     #This method clears the old trick and adds it to pastTricks
     def startTrick(self):
@@ -114,20 +112,20 @@ class Board():
     def addToTrick(self, card):
         #set current trick suit if card is the first played
         if (self.currentTrickSuit == None):
-            self.currentTrickSuit == card.suit
+            self.currentTrickSuit = card.suit
 
         self.currentTrick.append(card)
 
         #add cards to corresponding lists for evaluating winner 
         if (card.suit == self.currentPrioSuit):
-            self.evalTrumpSuit.add(card)
+            self.evalTrumpSuit.append(card)
         if (card.suit == self.currentTrickSuit):
-            self.evalCurSuit.add(card)
+            self.evalCurSuit.append(card)
 
     #Game over function prints winner 
     def gameOver(self, winner):
         self.gameWon = True
-        print("Team " + winner + " wins!")
+        print("Team", winner, "wins!")
 
     #Looks at the cards in the trick and see who wins! Then sets prioPlayer to the owner of that card
     #Also updates the score
@@ -136,20 +134,17 @@ class Board():
         winner = None
         if self.currentPrioSuit != BetSuit.LOW:
             if (len(self.evalTrumpSuit) != 0):
-                self.evalTrumpSuit.sort(reverse=True, key= lambda x: x.rank)
+                self.evalTrumpSuit.sort(reverse=True, key= lambda x: x.rank.value)
                 winner = self.evalTrumpSuit[0]
                 
             else:
-                self.evalCurSuit.sort(reverse=True, key= lambda x: x.rank)
+                self.evalCurSuit.sort(reverse=True, key= lambda x: x.rank.value)
                 winner = self.evalCurSuit[0]
         else:
-            self.evalCurSuit.sort(key= lambda x: x.rank)
+            self.evalCurSuit.sort(key= lambda x: x.rank.value)
             winner = self.evalCurSuit[0]
 
         prioPlayer = winner.owner
-        for i in self.currentTrick:
-            print(i)
-        print(winner)
 
         #alternate code for the above 
         # if self.currentPrioSuitSuit != BetSuit.LOW:
@@ -191,6 +186,6 @@ class Board():
             if (self.teamTwoScore >= 14-self.gamesToWin):
                 self.gameOver(2)
 
-        print("1:", self.teamOneScore, " 2:", self.teamTwoScore)
+        print("1:", self.teamOneScore, " 2:", self.teamTwoScore +"\n")
         
 

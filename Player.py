@@ -7,10 +7,6 @@ class Player:
         self.hand = []
         self.id = id
 
-    def __init__(self):
-        self.hand = []
-        self.id = 0
-
     def chooseBet(self, Board):
         currentBetID = Board.currentBetID
         legalMoves = []
@@ -33,11 +29,9 @@ class Player:
         for i in self.hand:
             if self.isValidCardMove(i, board) == True:
                 legalCards.append(i)
-        print("\n")
-        for i in legalCards:
-            print(i)
+      
         chosenCard = random.choice(legalCards)
-        print("Here is the Chosen Card:", chosenCard)
+        
         return chosenCard
 
     #Checks if the players card is legal for the current trick suit
