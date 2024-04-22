@@ -32,7 +32,6 @@ class Board():
         self.evalTrumpSuit = []
         self.evalCurSuit = []
         self.currentTrickSuit = None
-        self.currentPrioSuit = None
         self.player1 = Player(0)
         self.player2 = Player(1)
         self.player3 = Player(2)
@@ -173,8 +172,9 @@ class Board():
         self.currentTrick[player.id] = card
 
         #add cards to corresponding lists for evaluating winner 
-        if (card.suit == self.currentPrioSuit):
+        if (card.suit.name == self.trumpSuit.name):
             self.evalTrumpSuit.append(card)
+            print("TRUMP SUIT PLAYED", card)
         if (card.suit == self.currentTrickSuit):
             self.evalCurSuit.append(card)
 
@@ -187,7 +187,7 @@ class Board():
     #Also updates the score
     def evaluateTrick(self):
         winner = None
-        if self.currentPrioSuit != BetSuit.LOW:
+        if self.trumpSuit != BetSuit.LOW:
             if (len(self.evalTrumpSuit) != 0):
                 self.evalTrumpSuit.sort(reverse=True, key= lambda x: x.rank.value)
                 winner = self.evalTrumpSuit[0]
