@@ -34,14 +34,15 @@ def draw(board):
     draw_trump(screen, board.trumpSuit)
     #Draw the score (rounds won)
     
-    # if(board.getState == "GAME_OVER"):
-    #     draw_game_over_screen()
-
     if board.getState == "PLAYING":
         draw_scores(screen, board.teamOneScore, board.teamTwoScore)
+    if board.yourTurn == True:
+        draw_your_turn()
     #Draw betting UI, if applicable
     if board.getState == "BETTING":
         draw_bets(screen, board)
+    if(board.getState == "GAME_OVER"):
+        draw_game_over_screen(board.winningTeam)
     pygame.display.flip()
 
 #Returns the path to the image associated with card
@@ -129,9 +130,14 @@ def draw_game_over_screen(winningTeam):
    title = font.render('Game Over', True, (255, 255, 255))
    screen.blit(title, (SCREEN_WIDTH/2 - title.get_width()/2, SCREEN_HEIGHT/2 - title.get_height()/3))
    msg = font.render("Team "+ str(winningTeam) + " wins", True, (255, 255, 255))
-   screen.blit(msg, (SCREEN_WIDTH/2 - title.get_width()/2, SCREEN_HEIGHT/2 - title.get_height()/3+60))
+   screen.blit(msg, (SCREEN_WIDTH/2 - msg.get_width()/2, SCREEN_HEIGHT/2 - msg.get_height()/3+60))
    pygame.display.update()
    time.sleep(5)
+
+def draw_your_turn():
+    font = pygame.font.SysFont('georgia', 40)
+    text = font.render('Your turn', True, (255, 255, 255))
+    screen.blit(text, (SCREEN_WIDTH-200, 50))
 
 def draw_bets(screen, board):
     global size_bet_rects

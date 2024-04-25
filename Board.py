@@ -25,6 +25,8 @@ class Board():
         self.teamTwoScore = 0
         self.winningTeam = 0
 
+        self.yourTurn = False
+
         self.activePlayer = 0
         self.prioPlayer = None
         self.currentTrick = [None, None, None, None]
@@ -125,6 +127,7 @@ class Board():
                 else:
                     running = True
                     while running:
+                        self.yourTurn = True
                         for event in pygame.event.get():
                             if event.type == pygame.QUIT:
                                 running = False
@@ -136,8 +139,9 @@ class Board():
                                         print("Clicked on " + str(card))
                                         #self.player1.playCard(card, self)
                                         tempCard = card
-                                        running = False
+                                        running = False  
                         Render.draw(self)
+                        self.yourTurn = False
 
                 self.players[index].playCard(tempCard, self)
                 self.addToTrick(tempCard, self.players[index]) 
@@ -146,7 +150,9 @@ class Board():
             self.evaluateTrick()
 
         self.getState = "GAME_OVER"
-        Render.draw_game_over_screen(self.winningTeam)
+        Render.draw(self)
+        
+        #Render.draw_game_over_screen(self.winningTeam)
         print("Ended player Game")
 
     #This method clears the old trick and adds it to pastTricks
