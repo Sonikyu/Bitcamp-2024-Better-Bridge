@@ -14,8 +14,10 @@ The game is split into 2 parts
 1. The Auction
 2. The Game
 ### The Auction
-**Goal:** To bet on the amount of wins that you and your partner can fulfill during the game.
+**Goal:** To bet on the amount of wins that you and your partner can fulfill during the game. 
+
 **Order of Suits:** Low -> Clubs -> Diamonds -> Hearts -> Spades -> High (Lowest to highest)
+
 1. A random person is picked to start the auction. They need to choose the trump suit and the number of wins they can fulfill with their partner.
   - Players can only bet their number of wins between 7-13
   - Low and High means there are no trump suits and that either the lowest or highest card of the round that is the same suit as the first card placed down will win)
