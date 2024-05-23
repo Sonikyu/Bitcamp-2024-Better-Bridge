@@ -1,5 +1,5 @@
 # Modified Bridge Card Game
- A Python implementation of the popular card game [bridge]([url](https://en.wikipedia.org/wiki/Contract_bridge)) with a few modifications to the rules. 
+ A Python implementation of the popular card game [Bridge](https://en.wikipedia.org/wiki/Contract_bridge) with a few modifications to the rules. 
  Originally, built during the hackathon Bitcamp to make it easier for our team to play our version of bridge virtually during the Summer Break when we would be separated.
 
 ## How It's Made
@@ -57,10 +57,10 @@ The game is split into 2 parts
 
 ## Credit
 ### Authors
-1. [Alex Tsai]([url](https://github.com/Sonikyu)) (Backend)
-2. [Andy Liao]([url](https://github.com/AndyLiao1)) (Backend & Front-end)
-3. [John Riganati]([url](https://github.com/JPR3)) (Front-end)
-5. [Max Park]([url](https://github.com/Parkm465)) (Backend)
+1. [Alex Tsai](https://github.com/Sonikyu) (Backend)
+2. [Andy Liao](https://github.com/AndyLiao1) (Backend & Front-end)
+3. [John Riganati](https://github.com/JPR3) (Front-end)
+5. [Max Park](https://github.com/Parkm465) (Backend)
 
 ### Acknowledgements
-[RLCard]([url](https://rlcard.org/index.html))
+[RLCard](https://rlcard.org/index.html)
