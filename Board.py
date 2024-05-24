@@ -41,18 +41,10 @@ class Board():
         self.players = [self.player1, self.player2, self.player3, self.player4]
         deck = Deck()
         for i in range(13):
-            card = deck.draw()
-            card.setOwner(self.player1)
-            self.player1.addCard(card)
-            card = deck.draw()
-            card.setOwner(self.player2)
-            self.player2.addCard(card)
-            card = deck.draw()
-            card.setOwner(self.player3)
-            self.player3.addCard(card)
-            card = deck.draw()
-            card.setOwner(self.player4)
-            self.player4.addCard(card)
+            for player in self.players:
+                card = deck.draw()
+                card.setOwner(player)
+                player.addCard(card)
     
     def checkBetting(self):
         if len(self.bettingOrder) < 4: 
