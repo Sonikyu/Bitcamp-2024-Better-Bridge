@@ -6,7 +6,7 @@ class Player:
     def __init__(self, id):
         self.hand = []
         self.id = id
-
+    #Will replace for user or abstract method
     def chooseBet(self, Board):
         currentBetID = Board.currentBetID
         legalMoves = []

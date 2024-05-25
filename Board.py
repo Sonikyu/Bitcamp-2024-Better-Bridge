@@ -88,7 +88,7 @@ class Board():
         print("done betting, final bet:", lastBet)
         self.getState = "PLAYING"
 
-
+    """""
     def startGame(self):
         print("Started Game")
         for i in range(13):
@@ -104,7 +104,7 @@ class Board():
 
         self.getState = "GAME_OVER"
         print("Ended Game")
-
+    """""
     def startPlayerGame(self):
         self.player1.sortHand()
         self.player1.update_card_positions()

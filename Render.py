@@ -19,9 +19,32 @@ suit_bet_rects = []
 pass_rect = pygame.Rect(820, 315, 100, 100)
 submit_rect = pygame.Rect(730, 405, 190, 75)
 
+#Colors
+black = (0,0,0)
+white = (255,255,255)
+gray = (170,170,170)
+green = (27, 99, 46)
+light_green = (179,202,141)
+tan = (210, 180, 140)
+dark_red = (156, 33, 61)
+
+def draw_menu_screen():
+    pygame.display.set_caption("Bridge Game Main Menu")
+    font = pygame.font.Font('freesansbold.ttf', 100)
+    run = True
+    while run:
+        screen.fill(green)
+        draw_centered_Text('Better Bridge Game!', font, white, (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 10))
+        mouse_Pos = pygame.mouse.get_pos
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+            pygame.display.update()
+    pygame.quit()
+
 def draw(board):
     #Draw the background
-    screen.fill((27, 99, 46))
+    screen.fill(green)
     #Draw the player hand
     hand_offset = (SCREEN_WIDTH - ((len(board.player1.hand) + 1) * (CARD_WIDTH * 2 / 3))) / 2
     loc_offset = 0
@@ -36,8 +59,7 @@ def draw(board):
     
     if board.getState == "PLAYING":
         draw_scores(screen, board.teamOneScore, board.teamTwoScore)
-    if board.yourTurn == True:
-        draw_your_turn()
+    draw_your_turn(board.yourTurn)
     #Draw betting UI, if applicable
     if board.getState == "BETTING":
         draw_bets(screen, board)
@@ -86,22 +108,17 @@ def draw_trump(screen, suit):
     bgnd = pygame.Rect(0, 0, 210, 120)
     border_r = pygame.Rect(210, 0, 10, 130)
     border_b = pygame.Rect(0, 120, 210, 10)
-    pygame.draw.rect(screen, (170, 170, 170), bgnd)
-    pygame.draw.rect(screen, (0, 0, 0), border_r)
-    pygame.draw.rect(screen, (0, 0, 0), border_b)
+    pygame.draw.rect(screen, gray, bgnd)
+    pygame.draw.rect(screen, black, border_r)
+    pygame.draw.rect(screen, black, border_b)
     #Text
     font = pygame.font.Font('freesansbold.ttf', 20)
-    msg = "Trump: " + suit.name
-    text = font.render(msg, True, (0,0,0))
-    textRect = text.get_rect()
-    textRect.center = (105, 30)
-    screen.blit(text, textRect)
+    draw_centered_Text("Trump: " + suit.name, font, black, (105, 30))
     #Glyph
     if (suit != BetSuit.LOW and suit != BetSuit.HIGH):
         img = get_glyph_from_suit(suit)
-        img_rect = img.get_rect()
-        img_rect.center = (105, 80)
-        screen.blit(img, img_rect)
+        draw_centered_Element(img, (105, 80))
+        
 
 def draw_scores(screen, score_1, score_2):
     #Background
@@ -109,35 +126,30 @@ def draw_scores(screen, score_1, score_2):
     border_r = pygame.Rect(430, 0, 10, 130)
     border_b = pygame.Rect(220, 120, 210, 10)
     border_m = pygame.Rect(320, 0, 10, 130)
-    pygame.draw.rect(screen, (170, 170, 170), bgnd)
-    pygame.draw.rect(screen, (0, 0, 0), border_r)
-    pygame.draw.rect(screen, (0, 0, 0), border_b)
-    pygame.draw.rect(screen, (0, 0, 0), border_m)
+    pygame.draw.rect(screen, gray, bgnd)
+    pygame.draw.rect(screen, black, border_r)
+    pygame.draw.rect(screen, black, border_b)
+    pygame.draw.rect(screen, black, border_m)
     #Text
     font = pygame.font.Font('freesansbold.ttf', 40)
-    text1 = font.render(str(score_1), True, (0,0,0))
-    text2 = font.render(str(score_2), True, (0,0,0))
-    text1_rect = text1.get_rect()
-    text2_rect = text2.get_rect()
-    text1_rect.center = (272, 60)
-    text2_rect.center = (378, 60)
-    screen.blit(text1, text1_rect)
-    screen.blit(text2, text2_rect)
+    draw_centered_Text(str(score_1), font, black, (272, 60)) #Text1
+    draw_centered_Text(str(score_2), font, black, (378, 60)) #Text2
 
 def draw_game_over_screen(winningTeam):
-   screen.fill((210, 180, 140))
+   screen.fill(tan)
    font = pygame.font.SysFont('georgia', 40)
-   title = font.render('Game Over', True, (255, 255, 255))
-   screen.blit(title, (SCREEN_WIDTH/2 - title.get_width()/2, SCREEN_HEIGHT/2 - title.get_height()/3))
-   msg = font.render("Team "+ str(winningTeam) + " wins", True, (255, 255, 255))
-   screen.blit(msg, (SCREEN_WIDTH/2 - msg.get_width()/2, SCREEN_HEIGHT/2 - msg.get_height()/3+60))
-   pygame.display.update()
-   time.sleep(5)
+   draw_centered_Text("Game Over", font, white, (SCREEN_WIDTH/2, SCREEN_HEIGHT/2))
+   draw_centered_Text("Team " + str(winningTeam) + " Wins!", font, white, (SCREEN_WIDTH/2, SCREEN_HEIGHT/2 + 40))
 
-def draw_your_turn():
+   pygame.display.update()
+   time.sleep(10)
+
+def draw_your_turn(isYourTurn: bool):
     font = pygame.font.SysFont('georgia', 40)
-    text = font.render('Your turn', True, (255, 255, 255))
-    screen.blit(text, (SCREEN_WIDTH-200, 50))
+    if isYourTurn:
+         draw_centered_Text("Your Turn!", font, white, (SCREEN_WIDTH-115, 30))
+    else:
+         draw_centered_Text("Waiting!", font, white, (SCREEN_WIDTH-115, 30))
 
 def draw_bets(screen, board):
     global size_bet_rects
@@ -158,61 +170,54 @@ def draw_bets(screen, board):
     #Draw pass button
     border = pass_rect
     bgnd = pygame.Rect(830, 325, 80, 80)
-    pygame.draw.rect(screen, (0,0,0), border)
-    pygame.draw.rect(screen, (179,202,141), bgnd)
+    pygame.draw.rect(screen, black, border)
+    pygame.draw.rect(screen, light_green, bgnd)
     #Text
     font = pygame.font.Font('freesansbold.ttf', 30)
-    text = font.render("PASS", True, (0,0,0))
-    text_rect = text.get_rect()
-    text_rect.center = (870,365)
-    screen.blit(text, text_rect)
+    draw_centered_Text("PASS", font, black, (870,365))
     #Draw submit button
     border = submit_rect
     bgnd = pygame.Rect(740, 415, 170, 55)
-    pygame.draw.rect(screen, (0,0,0), border)
-    pygame.draw.rect(screen, (156, 33, 61), bgnd)
+    pygame.draw.rect(screen, black, border)
+    pygame.draw.rect(screen, dark_red, bgnd)
     #Text
     font = pygame.font.Font('freesansbold.ttf', 30)
-    text = font.render("SUBMIT", True, (0,0,0))
-    text_rect = text.get_rect()
-    text_rect.center = (825,442.5)
-    screen.blit(text, text_rect)
+    draw_centered_Text("SUBMIT", font, black, (825,442.5))
 
 def draw_size_bet_box(screen, size, x, y):
     #Background
     border = pygame.Rect(x, y, 100, 100)
     bgnd = pygame.Rect(x + 10, y + 10, 80, 80)
-    pygame.draw.rect(screen, (0,0,0), border)
-    pygame.draw.rect(screen, (170, 170, 170), bgnd)
+    pygame.draw.rect(screen, black, border)
+    pygame.draw.rect(screen, gray, bgnd)
     #Text
     font = pygame.font.Font('freesansbold.ttf', 40)
-    text = font.render(str(size), True, (0,0,0))
-    text_rect = text.get_rect()
-    text_rect.center = (x+50,y+50)
-    screen.blit(text, text_rect)
+    draw_centered_Text(str(size), font, black, (x+50,y+50))
     return BetButton(border, size, None)
 
 def draw_suit_bet_box(screen, betsuit, x, y):
     #Background
     border = pygame.Rect(x, y, 100, 100)
     bgnd = pygame.Rect(x + 10, y + 10, 80, 80)
-    pygame.draw.rect(screen, (0,0,0), border)
-    pygame.draw.rect(screen, (170, 170, 170), bgnd)
+    pygame.draw.rect(screen, black, border)
+    pygame.draw.rect(screen, gray, bgnd)
     #Contents
     font = pygame.font.Font('freesansbold.ttf', 30)
     if betsuit.value == 0:
-        text = font.render("LOW", True, (0,0,0))
-        text_rect = text.get_rect()
-        text_rect.center = (x+50,y+50)
-        screen.blit(text, text_rect)
+        draw_centered_Text("LOW", font, black, (x+50,y+50))
     elif betsuit.value == 5:
-        text = font.render("HIGH", True, (0,0,0))
-        text_rect = text.get_rect()
-        text_rect.center = (x+50,y+50)
-        screen.blit(text, text_rect)
+        draw_centered_Text("HIGH", font, black,(x+50,y+50))
     else:
         img = get_glyph_from_suit(Suit(betsuit.value))
-        img_rect = img.get_rect()
-        img_rect.center = (x+50, y+50)
-        screen.blit(img, img_rect)
+        draw_centered_Element(img, (x+50, y+50))
     return BetButton(border, None, betsuit)
+#Helper Functions
+def draw_centered_Text(text: str, font, text_col: tuple, center: tuple):
+    img = font.render(text, True, text_col)
+    img_rect = img.get_rect()
+    img_rect.center = center
+    screen.blit(img, img_rect)
+def draw_centered_Element(img, center: tuple):
+    img_rect = img.get_rect()
+    img_rect.center = center
+    screen.blit(img, img_rect)

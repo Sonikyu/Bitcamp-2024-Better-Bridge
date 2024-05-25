@@ -10,17 +10,19 @@ pygame.init()
 board = Board()
 board.startBetting()
 board.startPlayerGame()
-#board.startGame()
+'''
+board.startGame()
 
-# betFactory = BetFactory()
-# print(betFactory.asIDs())
-# print(betFactory)
+betFactory = BetFactory()
+print(betFactory.asIDs())
+print(betFactory)
 
-# board = Board()
-# board.player1.printHand()
-# board.player2.printHand()
-# board.player3.printHand()
-# board.player4.printHand()
+board = Board()
+board.player1.printHand()
+board.player2.printHand()
+board.player3.printHand()
+board.player4.printHand()
+'''
 """
 board.player1.sortHand()
 board.player1.update_card_positions()
