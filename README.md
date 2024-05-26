@@ -4,6 +4,7 @@
 
 ## How It's Made
 **Tech Used:** Python, Pygame
+
 We chose python, because we wanted to implement a Reinforcement Learning algorithm interface from RLCard to improve our bot players.
 
 ## How to play
