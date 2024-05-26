@@ -198,7 +198,8 @@ class Board():
             winner = self.evalCurSuit[0]
 
         self.prioPlayer = winner.owner
-
+        self.prioPlayer.inc_wins()
+        
         if (self.prioPlayer.id == 0 or self.prioPlayer.id == 2):
             self.teamOneScore += 1
             if (self.teamOneScore >= self.gamesToWin):

@@ -94,7 +94,7 @@ def draw(board):
         draw_bets(screen, board)
     if(board.getState == "GAME_OVER"):
         pygame.display.set_caption("Bridge Game [LeaderBoard]")
-        draw_game_over_screen(board.winningTeam)
+        draw_game_over_screen(board)
     pygame.display.flip()
 
 #Returns the path to the image associated with card
@@ -165,14 +165,35 @@ def draw_scores(screen, score_1, score_2):
     draw_centered_Text(str(score_1), font, black, (272, 60)) #Text1
     draw_centered_Text(str(score_2), font, black, (378, 60)) #Text2
 
-def draw_game_over_screen(winningTeam):
+def draw_game_over_screen(board):
    screen.fill(tan)
-   font = pygame.font.SysFont('georgia', 40)
-   draw_centered_Text("Game Over", font, white, (SCREEN_WIDTH/2, SCREEN_HEIGHT/2))
-   draw_centered_Text("Team " + str(winningTeam) + " Wins!", font, white, (SCREEN_WIDTH/2, SCREEN_HEIGHT/2 + 40))
-
-   pygame.display.update()
-   time.sleep(5)
+   font = pygame.font.SysFont('georgia', 100)
+   draw_centered_Text("Game Over", font, white, (SCREEN_WIDTH/2, SCREEN_HEIGHT//11))
+   font = pygame.font.SysFont('georgia', 70)
+   draw_centered_Text("Team " + str(board.winningTeam) + " Wins!", font, white, (SCREEN_WIDTH/2, SCREEN_HEIGHT//5))
+   draw_centered_Text("LeaderBoard:", font, white, (SCREEN_WIDTH/2, SCREEN_HEIGHT//3))
+   font = pygame.font.SysFont('georgia', 50)
+   leaderboard = sorted(board.players,key=lambda x: x.wins, reverse=True)
+   space:int = 80
+   num = 1
+   for player in leaderboard:
+       draw_centered_Text(str(num) + ". " + str(player) + " SCORE: " + str(player.wins), font, white, (SCREEN_WIDTH/2, SCREEN_HEIGHT//3 + space))
+       pygame.display.update()
+       space += 50
+       num += 1
+       time.sleep(1)
+   running = True
+   while running:
+       try_again_button = MenuButton("TRY AGAIN", font, (SCREEN_WIDTH-160, SCREEN_HEIGHT-170), True)
+       menu_button = MenuButton("MENU", font, (SCREEN_WIDTH-160, SCREEN_HEIGHT-80), True)
+       pygame.display.update()
+       for event in pygame.event.get():
+        if try_again_button.check_click(): #Work on later
+            pass
+        if menu_button.check_click():
+            running = False
+        if event == pygame.QUIT:
+            running = False
 
 def draw_your_turn(isYourTurn: bool):
     font = pygame.font.SysFont('georgia', 40)
