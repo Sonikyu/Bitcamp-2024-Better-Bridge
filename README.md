@@ -40,8 +40,8 @@ The game is split into 2 parts
 ## RoadMap
 - [X] Game Stage
 - [ ] Auction Stage
-- [ ] Start Screen
-  - [ ] Multiplayer, Single Player, Settings, and Quit Button
+- [X] Start Screen
+  - [X] Multiplayer, Single Player, Settings, and Quit Button
 - [ ] Proper End Screen
   - [ ] Leaderboard
   - [ ] Quit and Try Again Buttons
@@ -55,7 +55,6 @@ The game is split into 2 parts
   - [ ] An error box in response to the user clicking on a move they can't make
   - [ ] Music
   - [ ] Sound effects
-  - [ ] Logo + Title
 
 ## Credit
 ### Authors
