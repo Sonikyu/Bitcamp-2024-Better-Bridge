@@ -42,9 +42,9 @@ The game is split into 2 parts
 - [ ] Auction Stage
 - [X] Start Screen
   - [X] Multiplayer, Single Player, Settings, and Quit Button
-- [ ] Proper End Screen
-  - [ ] Leaderboard
-  - [ ] Quit and Try Again Buttons
+- [X] Proper End Screen
+  - [X] Leaderboard
+  - [X] Quit and Try Again Buttons
 - [ ] Multiplayer
   - [ ] 4-2 player mode
 - [ ] Proper Reinforcement Learning Interface Implementation 
