@@ -49,7 +49,7 @@ The game is split into 2 parts
   - [ ] 4-2 player mode
 - [ ] Proper Reinforcement Learning Interface Implementation 
 - [ ]  Quality of Life Improvements
-  - [ ] Show how many wins each team has to fulfill
+  - [X] Show how many wins each team has to fulfill
   - [ ] Show which team the player is on
   - [ ] Animations
   - [ ] An error box in response to the user clicking on a move they can't make
