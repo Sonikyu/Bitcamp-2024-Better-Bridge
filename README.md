@@ -61,7 +61,7 @@ The game is split into 2 parts
 1. [Alex Tsai](https://github.com/Sonikyu) (Backend)
 2. [Andy Liao](https://github.com/AndyLiao1) (Backend & Front-end)
 3. [John Riganati](https://github.com/JPR3) (Front-end)
-5. [Max Park](https://github.com/Parkm465) (Backend)
+5. [Max Park](https://github.com/Parkm465) (Backend & Front-end)
 
 ### Acknowledgements
 [RLCard](https://rlcard.org/index.html)
