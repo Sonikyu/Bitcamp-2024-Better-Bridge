@@ -19,8 +19,8 @@ class Board():
 
         self.bettingOrder = []
         self.currentBetID = -1 
-        self.getState = "BETTING" #This is either 'betting' or 'playing'
-
+        #self.getState = "BETTING" #This is either 'betting' or 'playing'
+        self.getState = "MENU"
         self.teamOneScore = 0
         self.teamTwoScore = 0
         self.winningTeam = 0

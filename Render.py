@@ -5,6 +5,7 @@ import time
 from BetSuit import BetSuit
 from Suit import Suit
 from BetButton import BetButton
+from Board import Board
 
 SCREEN_WIDTH = 1200
 SCREEN_HEIGHT = 750
@@ -25,21 +26,47 @@ white = (255,255,255)
 gray = (170,170,170)
 green = (27, 99, 46)
 light_green = (179,202,141)
+dark_green = (27, 45, 46)
 tan = (210, 180, 140)
 dark_red = (156, 33, 61)
+light_red = (200, 33, 61)
 
 def draw_menu_screen():
+    pygame.init()
     pygame.display.set_caption("Bridge Game Main Menu")
-    font = pygame.font.Font('freesansbold.ttf', 100)
     run = True
     while run:
         screen.fill(green)
+        font = pygame.font.Font('freesansbold.ttf', 100)
         draw_centered_Text('Better Bridge Game!', font, white, (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 10))
+        border = submit_rect        
+        #Text
+        font = pygame.font.Font('freesansbold.ttf', 80)
+        #draw_menu_button("MULTIPLAYER", font, white, (SCREEN_WIDTH//2, SCREEN_HEIGHT//3))
+        multi_button = MenuButton("MULTIPLAYER", font, (SCREEN_WIDTH//2, SCREEN_HEIGHT//3), True)
+        #draw_menu_button("SINGLE PLAYER", font, white, (SCREEN_WIDTH//2, SCREEN_HEIGHT//2))
+        single_button = MenuButton("SINGLE PLAYER", font, (SCREEN_WIDTH//2, SCREEN_HEIGHT//2), True)
+        #draw_menu_button("SETTINGS", font, white, (SCREEN_WIDTH//2, SCREEN_HEIGHT//2 + SCREEN_HEIGHT//6))
+        setting_button = MenuButton("SETTINGS", font, (SCREEN_WIDTH//2, SCREEN_HEIGHT//2 + SCREEN_HEIGHT//6), True)
+        #draw_menu_button("QUIT", font, white, (SCREEN_WIDTH//2, SCREEN_HEIGHT//2 + SCREEN_HEIGHT//3))
+        quit_button = MenuButton("QUIT", font, (SCREEN_WIDTH//2, SCREEN_HEIGHT//2 + SCREEN_HEIGHT//3), True)
         mouse_Pos = pygame.mouse.get_pos
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-            pygame.display.update()
+            if multi_button.check_click():
+                pass
+            if single_button.check_click():
+                board = Board()
+                board.getState = "BETTING"
+                board.startBetting()
+                board.startPlayerGame()
+            if setting_button.check_click():
+                pass
+            if quit_button.check_click():
+                run = False
+            pygame.display.flip()
+    pygame.display.quit()
     pygame.quit()
 
 def draw(board):
@@ -58,12 +85,15 @@ def draw(board):
     #Draw the score (rounds won)
     
     if board.getState == "PLAYING":
+        pygame.display.set_caption("Bridge Game [Playing...]")
         draw_scores(screen, board.teamOneScore, board.teamTwoScore)
     draw_your_turn(board.yourTurn)
     #Draw betting UI, if applicable
     if board.getState == "BETTING":
+        pygame.display.set_caption("Bridge Game [Betting...]")
         draw_bets(screen, board)
     if(board.getState == "GAME_OVER"):
+        pygame.display.set_caption("Bridge Game [LeaderBoard]")
         draw_game_over_screen(board.winningTeam)
     pygame.display.flip()
 
@@ -142,14 +172,14 @@ def draw_game_over_screen(winningTeam):
    draw_centered_Text("Team " + str(winningTeam) + " Wins!", font, white, (SCREEN_WIDTH/2, SCREEN_HEIGHT/2 + 40))
 
    pygame.display.update()
-   time.sleep(10)
+   time.sleep(5)
 
 def draw_your_turn(isYourTurn: bool):
     font = pygame.font.SysFont('georgia', 40)
     if isYourTurn:
          draw_centered_Text("Your Turn!", font, white, (SCREEN_WIDTH-115, 30))
     else:
-         draw_centered_Text("Waiting!", font, white, (SCREEN_WIDTH-115, 30))
+         draw_centered_Text("Waiting...", font, white, (SCREEN_WIDTH-115, 30))
 
 def draw_bets(screen, board):
     global size_bet_rects
@@ -221,3 +251,59 @@ def draw_centered_Element(img, center: tuple):
     img_rect = img.get_rect()
     img_rect.center = center
     screen.blit(img, img_rect)
+'''
+def draw_menu_button(text: str, font, text_col: tuple, center: tuple):
+    (width, height) = font.size(text)
+    inner_button = pygame.Rect(0,0, width + 20, height + 20)
+    shade_button = pygame.Rect(0, 0, width + 10, height + 10)
+    outline = pygame.Rect(0,0, width + 22, height + 22)
+    inner_button.center = center
+    outline.center = center
+    shade_button.center = center
+    #shading background
+    backgrnd_shade = pygame.Rect(0, 0, width + 22, height + 22)
+    (x,y) = center
+    backgrnd_shade.center = (x+5, y+ 5)
+    pygame.draw.rect(screen, dark_green, backgrnd_shade, 0, 15, 15, 15, 15, 15)
+    pygame.draw.rect(screen, dark_red, inner_button, 0, 15, 15, 15, 15, 15)
+    pygame.draw.rect(screen, light_red, shade_button, 0, 15, 15, 15, 15, 15)
+    pygame.draw.rect(screen, black, outline, 2, 15, 15, 15, 15, 15)
+    draw_centered_Text(text, font, text_col, center)
+'''
+class MenuButton:
+    def __init__(self, text: str, font, center: tuple, enabled: bool) -> None:
+        self.text = text
+        self.font = font
+        self.center = center
+        self.enabled = enabled
+        self.rect = self.draw(False)
+    def draw(self, clicked: bool):
+        (width, height) = self.font.size(self.text)
+        self.inner_button = pygame.Rect(0,0, width + 20, height + 20)
+        self.shade_button = pygame.Rect(0, 0, width + 10, height + 10)
+        self.outline = pygame.Rect(0,0, width + 22, height + 22)
+        self.inner_button.center = self.center
+        self.outline.center = self.center
+        (self.xpos, self.ypos) = self.outline.topleft
+        self.shade_button.center = self.center
+        #shading background
+        backgrnd_shade = pygame.Rect(0, 0, width + 22, height + 22)
+        (x,y) = self.center
+        backgrnd_shade.center = (x+5, y+ 5)
+        pygame.draw.rect(screen, dark_green, backgrnd_shade, 0, 15, 15, 15, 15, 15)
+        pygame.draw.rect(screen, dark_red, self.inner_button, 0, 15, 15, 15, 15, 15)
+        if not clicked:
+            pygame.draw.rect(screen, light_red, self.shade_button, 0, 15, 15, 15, 15, 15)
+        pygame.draw.rect(screen, black, self.outline, 2, 15, 15, 15, 15, 15)
+        draw_centered_Text(self.text, self.font, white, self.center)
+    def check_click(self):
+        mouse_pos = pygame.mouse.get_pos
+        left_click = pygame.mouse.get_pressed()[0]
+        buttonrect = self.outline
+        if left_click and buttonrect.collidepoint(mouse_pos()[0], mouse_pos()[1]) and self.enabled:
+            self.draw(True)
+            return True
+        else:
+            self.draw(False)
+            return False
+        
