@@ -86,7 +86,7 @@ def draw(board):
     
     if board.getState == "PLAYING":
         pygame.display.set_caption("Bridge Game [Playing...]")
-        draw_scores(screen, board.teamOneScore, board.teamTwoScore)
+        draw_scores(screen, board.teamOneScore, board.teamTwoScore, board.gamesToWin)
     draw_your_turn(board.yourTurn)
     #Draw betting UI, if applicable
     if board.getState == "BETTING":
@@ -150,7 +150,14 @@ def draw_trump(screen, suit):
         draw_centered_Element(img, (105, 80))
         
 
-def draw_scores(screen, score_1, score_2):
+def draw_scores(screen, score_1, score_2, team_1_to_win):
+    if team_1_to_win == 13:
+        team_2_to_win = 1
+    elif team_1_to_win == 0:
+        team_1_to_win = 1
+        team_2_to_win = 13
+    else:
+        team_2_to_win = 13 - team_1_to_win + 1
     #Background
     bgnd = pygame.Rect(220, 0, 210, 120)
     border_r = pygame.Rect(430, 0, 10, 130)
@@ -158,26 +165,27 @@ def draw_scores(screen, score_1, score_2):
     border_m = pygame.Rect(320, 0, 10, 130)
     pygame.draw.rect(screen, gray, bgnd)
     pygame.draw.rect(screen, black, border_r)
-    pygame.draw.rect(screen, black, border_b)
-    pygame.draw.rect(screen, black, border_m)
+    pygame.draw.rect(screen, black, border_b, 5)
+    pygame.draw.rect(screen, black, border_m, 5)
     #Text
     font = pygame.font.Font('freesansbold.ttf', 40)
-    draw_centered_Text(str(score_1), font, black, (272, 60)) #Text1
-    draw_centered_Text(str(score_2), font, black, (378, 60)) #Text2
+    draw_centered_Text(str(score_1) + " / " + str(team_1_to_win) , font, black, (272, 60)) #Text1
+    draw_centered_Text(str(score_2) + " / " + str(team_2_to_win), font, black, (378, 60)) #Text2
 
 def draw_game_over_screen(board):
    screen.fill(tan)
    font = pygame.font.SysFont('georgia', 100)
-   draw_centered_Text("Game Over", font, white, (SCREEN_WIDTH/2, SCREEN_HEIGHT//11))
+   draw_centered_Text("Game Over", font, white, (SCREEN_WIDTH/2, SCREEN_HEIGHT//14))
    font = pygame.font.SysFont('georgia', 70)
    draw_centered_Text("Team " + str(board.winningTeam) + " Wins!", font, white, (SCREEN_WIDTH/2, SCREEN_HEIGHT//5))
+   font = pygame.font.SysFont('georgia', 60)
    draw_centered_Text("LeaderBoard:", font, white, (SCREEN_WIDTH/2, SCREEN_HEIGHT//3))
    font = pygame.font.SysFont('georgia', 50)
    leaderboard = sorted(board.players,key=lambda x: x.wins, reverse=True)
    space:int = 80
    num = 1
    for player in leaderboard:
-       draw_centered_Text(str(num) + ". " + str(player) + " SCORE: " + str(player.wins), font, white, (SCREEN_WIDTH/2, SCREEN_HEIGHT//3 + space))
+       draw_centered_Text(str(num) + ". " + str(player) + ", SCORE: " + str(player.wins), font, white, (SCREEN_WIDTH/2, SCREEN_HEIGHT//3 + space))
        pygame.display.update()
        space += 50
        num += 1
