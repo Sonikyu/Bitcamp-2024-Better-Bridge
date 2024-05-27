@@ -58,7 +58,7 @@ class Player:
         result = ""
         for card in self.hand:
             result += card.__str__() + " | "
-        print("[" + result + "]")
+        print(f"[{result}]")
 
     #Sorts hand based on id (suit * 13 + suit )
     def sortHand(self):
@@ -87,7 +87,7 @@ class Player:
             loc_offset += 1
 
     def __str__(self) -> str:
-        return "PLAYER " + str(1+self.id)
+        return f"PLAYER {str(1+self.id)}"
     def __lt__ (self, otherPlayer):
         return self.wins - otherPlayer.wins
     

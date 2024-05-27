@@ -13,14 +13,32 @@ class Board():
     #Bet of the Game
     #Actions should be defined by 
 
-    def __init__(self):
+    def __init__(self) -> None:
+        #self.getState = "BETTING" #This is either 'betting' or 'playing'
+        self.getState = "MENU"
+
+        
+    
+    def set_up_players(self) -> None:
+        self.player1 = Player(0)
+        self.player2 = Player(1)
+        self.player3 = Player(2)
+        self.player4 = Player(3)
+        self.players = [self.player1, self.player2, self.player3, self.player4]
+
+    def cards_to_players(self) -> None:
+        deck = Deck()
+        for i in range(13):
+            for player in self.players:
+                card = deck.draw()
+                card.setOwner(player)
+                player.addCard(card)
+    def reset_values(self) -> None:
         self.trumpSuit = None #Includes HIGH and LOW
         self.gamesToWin = 7 #Make this always NS
 
         self.bettingOrder = []
         self.currentBetID = -1 
-        #self.getState = "BETTING" #This is either 'betting' or 'playing'
-        self.getState = "MENU"
         self.teamOneScore = 0
         self.teamTwoScore = 0
         self.winningTeam = 0
@@ -34,19 +52,10 @@ class Board():
         self.evalTrumpSuit = []
         self.evalCurSuit = []
         self.currentTrickSuit = None
-        self.player1 = Player(0)
-        self.player2 = Player(1)
-        self.player3 = Player(2)
-        self.player4 = Player(3)
-        self.players = [self.player1, self.player2, self.player3, self.player4]
-        deck = Deck()
-        for i in range(13):
-            for player in self.players:
-                card = deck.draw()
-                card.setOwner(player)
-                player.addCard(card)
-    
-    def checkBetting(self):
+        self.set_up_players()
+        self.cards_to_players()
+
+    def checkBetting(self) -> bool:
         if len(self.bettingOrder) < 4: 
             return False
         #ID for pass is 42
@@ -54,7 +63,7 @@ class Board():
             return True
         return False
     
-    def addBet(self, bet):
+    def addBet(self, bet) -> bool:
         if bet.getID() > self.currentBetID:
             self.bettingOrder.insert(0, bet)
             if(bet.getID() != 42):
@@ -65,10 +74,12 @@ class Board():
         return False
 
     def startBetting(self):
+        self.player1.sortHand()
+        self.player1.update_card_positions()
         while self.checkBetting() == False:
             for player in self.players:
                 self.addBet(player.chooseBet(self))
-                if self.checkBetting() == True:
+                if self.checkBetting() == True: # == True is unnecessary
                     index = (player.id + 1) % 4
                     self.prioPlayer = self.players[index]
                     self.trumpSuit = self.bettingOrder[3].suit
@@ -128,21 +139,21 @@ class Board():
                                 for card in self.players[0].hand:
                                     card_rect = pygame.Rect(card.x, Render.HAND_Y, Render.CARD_WIDTH *2 / 3, Render.CARD_HEIGHT)
                                     if card_rect.collidepoint(event.pos) and self.player1.isValidCardMove(card, self):
-                                        print("Clicked on " + str(card))
+                                        print(f"Clicked on  {str(card)}")
                                         #self.player1.playCard(card, self)
                                         tempCard = card
                                         running = False  
-                        Render.draw(self)
+                        Render.draw_gameplay(self)
                         self.yourTurn = False
 
                 self.players[index].playCard(tempCard, self)
                 self.addToTrick(tempCard, self.players[index]) 
-                Render.draw(self)
+                Render.draw_gameplay(self)
                 time.sleep(1)
             self.evaluateTrick()
 
         self.getState = "GAME_OVER"
-        Render.draw(self)
+        Render.draw_gameplay(self)
         
         #Render.draw_game_over_screen(self.winningTeam)
         print("Ended player Game")
@@ -177,7 +188,7 @@ class Board():
             self.evalCurSuit.append(card)
 
     #Game over function prints winner 
-    def gameOver(self, winner):
+    def gameOver(self, winner) -> None:
         self.gameWon = True
         print("Team", winner, "wins!")
 
@@ -199,7 +210,7 @@ class Board():
 
         self.prioPlayer = winner.owner
         self.prioPlayer.inc_wins()
-        
+
         if (self.prioPlayer.id == 0 or self.prioPlayer.id == 2):
             self.teamOneScore += 1
             if (self.teamOneScore >= self.gamesToWin):

@@ -33,13 +33,13 @@ class BetFactory:
     def __str__(self):
         result = ""
         for bet in self.Bets:
-            result += bet.__str__() + "|"
+            result += f"{bet.__str__()}|"
         return result
     
     def asIDs(self):
         result = ""
         for bet in self.Bets:
-            result += str(bet.getID()) + "|"
+            result += f"{str(bet.getID())}|"
         return result
     
     def getBet(self, ID):

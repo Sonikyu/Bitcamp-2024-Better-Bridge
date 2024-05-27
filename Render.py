@@ -1,11 +1,7 @@
-import os
-import pygame
-import math
-import time
+import os, pygame, math, time
 from BetSuit import BetSuit
 from Suit import Suit
 from BetButton import BetButton
-from Board import Board
 
 SCREEN_WIDTH = 1200
 SCREEN_HEIGHT = 750
@@ -31,13 +27,22 @@ tan = (210, 180, 140)
 dark_red = (156, 33, 61)
 light_red = (200, 33, 61)
 
-def draw_menu_screen():
-    pygame.init()
-    pygame.display.set_caption("Bridge Game Main Menu")
+pygame.mixer.init()
+button_sound = pygame.mixer.Sound("Sounds/menu-button.mp3")
+
+
+def draw_menu_screen(board) -> None:
+    """
+    Creates a menu window with a MULTIPLAYER, SINGLEPLAYER, SETTING, & QUIT buttons
+    Each button changes the board's getState
+    :return: None
+    """
     run = True
     while run:
+        pygame.display.set_caption("Bridge Game Main Menu")
         screen.fill(green)
         font = pygame.font.Font('freesansbold.ttf', 100)
+        font.set_underline(True)
         draw_centered_Text('Better Bridge Game!', font, white, (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 10))
         border = submit_rect        
         #Text
@@ -53,23 +58,36 @@ def draw_menu_screen():
         mouse_Pos = pygame.mouse.get_pos
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                print("QUIT")
+                board.getState = "QUIT"
                 run = False
             if multi_button.check_click():
+                print("MULTIPLAYER CLICKED")
+                #board.getState = "MULTIPLAYER"
                 pass
             if single_button.check_click():
-                board = Board()
-                board.getState = "BETTING"
-                board.startBetting()
-                board.startPlayerGame()
+                print("SINGLE PLAYER CLICKED")
+                board.getState="BETTING"
+                run = False
+                pass #Create method that will create a board
             if setting_button.check_click():
+                print("SETTINGS CLICKED")
                 pass
             if quit_button.check_click():
+                print("QUIT CLICKED")
+                board.getState = "QUIT"
                 run = False
             pygame.display.flip()
-    pygame.display.quit()
-    pygame.quit()
+    if board.getState == "QUIT":
+        pygame.display.quit()
+        pygame.quit()
 
-def draw(board):
+def draw_out_of_game(board):
+    screen.fill(green)
+    if board.getState == "MENU":
+        draw_menu_screen()
+
+def draw_gameplay(board):
     #Draw the background
     screen.fill(green)
     #Draw the player hand
@@ -143,7 +161,7 @@ def draw_trump(screen, suit):
     pygame.draw.rect(screen, black, border_b)
     #Text
     font = pygame.font.Font('freesansbold.ttf', 20)
-    draw_centered_Text("Trump: " + suit.name, font, black, (105, 30))
+    draw_centered_Text(f"Trump: {suit.name}", font, black, (105, 30))
     #Glyph
     if (suit != BetSuit.LOW and suit != BetSuit.HIGH):
         img = get_glyph_from_suit(suit)
@@ -168,24 +186,26 @@ def draw_scores(screen, score_1, score_2, team_1_to_win):
     pygame.draw.rect(screen, black, border_b, 5)
     pygame.draw.rect(screen, black, border_m, 5)
     #Text
-    font = pygame.font.Font('freesansbold.ttf', 40)
-    draw_centered_Text(str(score_1) + " / " + str(team_1_to_win) , font, black, (272, 60)) #Text1
-    draw_centered_Text(str(score_2) + " / " + str(team_2_to_win), font, black, (378, 60)) #Text2
+    font = pygame.font.Font('freesansbold.ttf', 30)
+    draw_centered_Text(f"{str(score_1)} / {str(team_1_to_win)}" , font, black, (272, 60)) #Text1
+    draw_centered_Text(f"{str(score_2)} / {str(team_2_to_win)}", font, black, (378, 60)) #Text2
 
 def draw_game_over_screen(board):
    screen.fill(tan)
    font = pygame.font.SysFont('georgia', 100)
+   font.set_underline(True)
    draw_centered_Text("Game Over", font, white, (SCREEN_WIDTH/2, SCREEN_HEIGHT//14))
    font = pygame.font.SysFont('georgia', 70)
-   draw_centered_Text("Team " + str(board.winningTeam) + " Wins!", font, white, (SCREEN_WIDTH/2, SCREEN_HEIGHT//5))
+   draw_centered_Text(f"Team {str(board.winningTeam)} Wins!", font, white, (SCREEN_WIDTH/2, SCREEN_HEIGHT//5))
    font = pygame.font.SysFont('georgia', 60)
+   font.set_underline(True)
    draw_centered_Text("LeaderBoard:", font, white, (SCREEN_WIDTH/2, SCREEN_HEIGHT//3))
    font = pygame.font.SysFont('georgia', 50)
    leaderboard = sorted(board.players,key=lambda x: x.wins, reverse=True)
    space:int = 80
    num = 1
    for player in leaderboard:
-       draw_centered_Text(str(num) + ". " + str(player) + ", SCORE: " + str(player.wins), font, white, (SCREEN_WIDTH/2, SCREEN_HEIGHT//3 + space))
+       draw_centered_Text(f"{str(num)}. {str(player)}, SCORE: {str(player.wins)}", font, white, (SCREEN_WIDTH/2, SCREEN_HEIGHT//3 + space))
        pygame.display.update()
        space += 50
        num += 1
@@ -196,12 +216,20 @@ def draw_game_over_screen(board):
        menu_button = MenuButton("MENU", font, (SCREEN_WIDTH-160, SCREEN_HEIGHT-80), True)
        pygame.display.update()
        for event in pygame.event.get():
-        if try_again_button.check_click(): #Work on later
-            pass
-        if menu_button.check_click():
-            running = False
-        if event == pygame.QUIT:
-            running = False
+            if try_again_button.check_click():
+                print("TRY AGAIN PRESSED")
+                board.getState = "BETTING"
+                board.reset_values()
+                running = False
+            if menu_button.check_click():
+                print("MENU CLICKED")
+                board.getState = "MENU"
+                running = False
+            if event == pygame.QUIT:
+                #Problem where it doesn't quit when you press the X button
+                board.getState = "QUIT"
+                print("QUIT")
+                running = False
 
 def draw_your_turn(isYourTurn: bool):
     font = pygame.font.SysFont('georgia', 40)
@@ -331,6 +359,7 @@ class MenuButton:
         buttonrect = self.outline
         if left_click and buttonrect.collidepoint(mouse_pos()[0], mouse_pos()[1]) and self.enabled:
             self.draw(True)
+            button_sound.play()
             return True
         else:
             self.draw(False)
