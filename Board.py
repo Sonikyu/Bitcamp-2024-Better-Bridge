@@ -128,29 +128,15 @@ class Board():
                 if index != 0:
                     tempCard = self.players[index].chooseCard(self)
                 else:
-                    running = True
-                    while running:
-                        self.yourTurn = True
-                        for event in pygame.event.get():
-                            if event.type == pygame.QUIT:
-                                running = False
-                            if event.type == pygame.MOUSEBUTTONDOWN:
-                                #if board.getState == "PLAYING":
-                                for card in self.players[0].hand:
-                                    card_rect = pygame.Rect(card.x, Render.HAND_Y, Render.CARD_WIDTH *2 / 3, Render.CARD_HEIGHT)
-                                    if card_rect.collidepoint(event.pos) and self.player1.isValidCardMove(card, self):
-                                        print(f"Clicked on  {str(card)}")
-                                        #self.player1.playCard(card, self)
-                                        tempCard = card
-                                        running = False  
-                        Render.draw_gameplay(self)
-                        self.yourTurn = False
+                    tempCard = Render.player_choosing_cards(self)
 
                 self.players[index].playCard(tempCard, self)
                 self.addToTrick(tempCard, self.players[index]) 
                 Render.draw_gameplay(self)
-                time.sleep(1)
-            self.evaluateTrick()
+                if j != 3:
+                    Render.card_sound.play()
+                    time.sleep(1)
+            self.evaluateTrick(index)
 
         self.getState = "GAME_OVER"
         Render.draw_gameplay(self)
@@ -194,7 +180,7 @@ class Board():
 
     #Looks at the cards in the trick and see who wins! Then sets prioPlayer to the owner of that card
     #Also updates the score
-    def evaluateTrick(self):
+    def evaluateTrick(self, index):
         winner = None
         if self.trumpSuit != BetSuit.LOW:
             if (len(self.evalTrumpSuit) != 0):
@@ -210,7 +196,13 @@ class Board():
 
         self.prioPlayer = winner.owner
         self.prioPlayer.inc_wins()
-
+        
+        if self.prioPlayer == self.players[index]:
+            sound = Render.vine_boom
+        else:
+            sound = Render.card_sound
+        sound.play()
+        time.sleep(1)
         if (self.prioPlayer.id == 0 or self.prioPlayer.id == 2):
             self.teamOneScore += 1
             if (self.teamOneScore >= self.gamesToWin):

@@ -29,7 +29,12 @@ light_red = (200, 33, 61)
 
 pygame.mixer.init()
 button_sound = pygame.mixer.Sound("Sounds/menu-button.mp3")
-
+card_sound = pygame.mixer.Sound("Sounds/card.mp3")
+vine_boom = pygame.mixer.Sound("Sounds/boom.mp3")
+punch_sound = pygame.mixer.Sound("Sounds/Punch.wav")
+pygame.mixer.music.load("Music/Tobu - Candyland.mp3")
+pygame.mixer.music.set_volume(0.1)
+pygame.mixer.music.play(-1)
 
 def draw_menu_screen(board) -> None:
     """
@@ -202,14 +207,16 @@ def draw_game_over_screen(board):
    draw_centered_Text("LeaderBoard:", font, white, (SCREEN_WIDTH/2, SCREEN_HEIGHT//3))
    font = pygame.font.SysFont('georgia', 50)
    leaderboard = sorted(board.players,key=lambda x: x.wins, reverse=True)
+   time.sleep(0.5)
    space:int = 80
    num = 1
    for player in leaderboard:
        draw_centered_Text(f"{str(num)}. {str(player)}, SCORE: {str(player.wins)}", font, white, (SCREEN_WIDTH/2, SCREEN_HEIGHT//3 + space))
+       punch_sound.play()
        pygame.display.update()
        space += 50
        num += 1
-       time.sleep(1)
+       time.sleep(0.2)
    running = True
    while running:
        try_again_button = MenuButton("TRY AGAIN", font, (SCREEN_WIDTH-160, SCREEN_HEIGHT-170), True)
@@ -298,6 +305,25 @@ def draw_suit_bet_box(screen, betsuit, x, y):
         img = get_glyph_from_suit(Suit(betsuit.value))
         draw_centered_Element(img, (x+50, y+50))
     return BetButton(border, None, betsuit)
+def player_choosing_cards(board):
+    running = True
+    while running:
+        board.yourTurn = True
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                #if board.getState == "PLAYING":
+                for card in board.players[0].hand:
+                    card_rect = pygame.Rect(card.x, HAND_Y, CARD_WIDTH *2 / 3, CARD_HEIGHT)
+                    if card_rect.collidepoint(event.pos) and board.player1.isValidCardMove(card, board):
+                        print(f"Clicked on  {str(card)}")
+                        #self.player1.playCard(card, self)
+                        tempCard = card
+                        running = False  
+        draw_gameplay(board)
+        board.yourTurn = False
+    return tempCard
 #Helper Functions
 def draw_centered_Text(text: str, font, text_col: tuple, center: tuple):
     img = font.render(text, True, text_col)
