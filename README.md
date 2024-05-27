@@ -57,8 +57,8 @@ The game is split into 2 parts
   - [ ] Show which team the player is on
   - [ ] Animations
   - [ ] An error box in response to the user clicking on a move they can't make
-  - [ ] Music
-  - [ ] Sound effects
+  - [X] Music
+  - [X] Sound effects
 
 ## Credit
 ### Authors
