@@ -48,7 +48,6 @@ The game is split into 2 parts
   - [X] Quit and Try Again Buttons
 - [ ] Setting
   - [ ] Option to change music volume
-  - [ ] Option to change sound effect volume
 - [ ] Multiplayer
   - [ ] 4-2 player mode
 - [ ] Proper Reinforcement Learning Interface Implementation 
