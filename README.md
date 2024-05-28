@@ -46,8 +46,8 @@ The game is split into 2 parts
 - [X] Proper End Screen
   - [X] Leaderboard
   - [X] Quit and Try Again Buttons
-- [ ] Setting
-  - [ ] Option to change music volume
+- [X] Setting
+  - [X] Option to change music volume
 - [ ] Multiplayer
   - [ ] 4-2 player mode
 - [ ] Proper Reinforcement Learning Interface Implementation 
