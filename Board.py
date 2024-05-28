@@ -1,6 +1,7 @@
 from Deck import Deck
 from Player import Player
 from BetSuit import BetSuit
+from os import path
 import copy
 import pygame
 import Render
@@ -16,15 +17,32 @@ class Board():
     def __init__(self) -> None:
         #self.getState = "BETTING" #This is either 'betting' or 'playing'
         self.getState = "MENU"
+        self.gameMode: str = None
 
-        
+    def check_profile_name(self) -> str:
+        profile_name_file = 'profile_name.txt'
+        name = ''
+        try:
+            with open(profile_name_file) as file:
+                name = file.read()
+        except FileNotFoundError:
+            with open(profile_name_file, 'w') as file:
+                name = Render.draw_get_name()
+                file.write(name)
+        self.name = name
+
+
+
     
     def set_up_players(self) -> None:
-        self.player1 = Player(0)
-        self.player2 = Player(1)
-        self.player3 = Player(2)
-        self.player4 = Player(3)
+        #ADD MULTIPLAYER LATER
+        if self.gameMode == "SINGLE":
+            self.player1 = Player(0, self.name)
+            self.player2 = Player(1, "BOT")
+            self.player3 = Player(2, "TEAM BOT")
+            self.player4 = Player(3, "BOT")
         self.players = [self.player1, self.player2, self.player3, self.player4]
+        self.getState = "BETTING"
 
     def cards_to_players(self) -> None:
         deck = Deck()
@@ -53,7 +71,9 @@ class Board():
         self.evalCurSuit = []
         self.currentTrickSuit = None
         self.set_up_players()
+        print("SET UP PLAYERS CALLED")
         self.cards_to_players()
+        print("CARDS TO PLAYERS CALLED")
 
     def checkBetting(self) -> bool:
         if len(self.bettingOrder) < 4: 
@@ -74,6 +94,7 @@ class Board():
         return False
 
     def startBetting(self):
+        print("START BETTING CALLED")
         self.player1.sortHand()
         self.player1.update_card_positions()
         while self.checkBetting() == False:
@@ -139,9 +160,9 @@ class Board():
             self.evaluateTrick(index)
 
         self.getState = "GAME_OVER"
-        Render.draw_gameplay(self)
+
         
-        #Render.draw_game_over_screen(self.winningTeam)
+        Render.draw_game_over_screen(self)
         print("Ended player Game")
 
     #This method clears the old trick and adds it to pastTricks

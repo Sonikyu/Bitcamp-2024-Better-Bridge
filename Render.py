@@ -32,23 +32,107 @@ button_sound = pygame.mixer.Sound("Sounds/menu-button.mp3")
 card_sound = pygame.mixer.Sound("Sounds/card.mp3")
 vine_boom = pygame.mixer.Sound("Sounds/boom.mp3")
 punch_sound = pygame.mixer.Sound("Sounds/Punch.wav")
-pygame.mixer.music.load("Music/Tobu - Candyland.mp3")
-pygame.mixer.music.set_volume(0.1)
-pygame.mixer.music.play(-1)
+list_of_songs = ("Jazzy Vibes #36 - Loop.mp3", "backup_plan.wav", "Casino Man.ogg", 
+        "pixel_sprinter_loop.wav", "short_A New World Order!!.mp3")
+#Zane Little Music = backup_plan, pixel_sprinter_loop
+#Spring Spring = Casino Man
+#Tri Tachyon = Jazzy Vibes #36 ("Music by Tri-Tachyon - https://soundcloud.com/tri-tachyon/albums".)
+#SOUND AIRYLUVS by ISAo https://airyluvs.com/ = short_A_New World Order!! OGA License
+
+DEFAULT_MUSIC_VOLUME = 0.1
+
+def set_music(index: int) -> None:
+    '''
+    Plays music
+    :para index: input to find and play song
+    :return: None
+    '''
+    pygame.mixer.music.load(f"Music/{list_of_songs[index]}")
+    pygame.mixer.music.play(-1) 
+def set_music_vol(level: int) -> None:
+    '''
+    Sets the volume of the music
+    :para level: used to set volume of music
+    :return: None
+    '''
+    pygame.mixer.music.set_volume(level)
+    
+
+def draw_setting(board) -> None:
+    raise NotImplementedError()
+
+def draw_get_name() -> str:
+    pygame.display.set_caption("Bridge Game [Input a Profile Name]")
+    text_box_x = SCREEN_WIDTH//2
+    text_box_y = SCREEN_HEIGHT//2 * 1.5
+    color_active = white
+    color_passive = black
+    color = color_passive
+    active = False
+    user_name = ''
+    input_rectangle = pygame.Rect(0,0, 90, 90)
+    run = True
+    while run:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                run = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if input_rectangle.collidepoint(event.pos):
+                    active = True
+                    color = color_active
+                else:
+                    active = False
+                    color = color_passive
+            if event.type == pygame.KEYDOWN and not event.key == pygame.K_SPACE and active:
+                isBackSpace = event.key == pygame.K_DELETE or event.key == pygame.K_BACKSPACE
+                isReturn = event.key == pygame.K_RETURN
+                isWithinRange = len(user_name) <= 8
+                if isBackSpace:
+                    user_name = user_name[0:-1]
+                if isReturn:
+                    run = False
+                if isWithinRange and not isBackSpace and not isReturn:
+                    user_name += event.unicode
+        
+        screen.fill(green)
+        font = pygame.font.Font('freesansbold.ttf', 100)
+        font.set_underline(True)
+        draw_centered_Text("Input a Profile Name", font, white, (SCREEN_WIDTH//2, SCREEN_HEIGHT // 10))
+        font = pygame.font.Font('freesansbold.ttf', 80)
+        draw_centered_Text("Requirements:", font, white, (SCREEN_WIDTH//2, SCREEN_HEIGHT // 5 + 50))
+        font = pygame.font.Font('freesansbold.ttf', 50)
+        draw_centered_Text("- Less than or equal to 8 characters", font, white, (SCREEN_WIDTH//2, SCREEN_HEIGHT // 5 + 130))
+        draw_centered_Text("- No Spaces", font, white, (SCREEN_WIDTH//2, SCREEN_HEIGHT // 5 + 180))
+        font = pygame.font.Font('freesansbold.ttf', 100)
+        input_rectangle.center = (text_box_x,text_box_y)
+        text_surface = font.render(user_name, True, white)
+        pygame.draw.rect(screen, color, input_rectangle, 2)
+        input_rectangle.w = text_surface.get_width() + 5
+ 
+        screen.blit(text_surface, input_rectangle)
+        pygame.display.flip()
+    return user_name
+
+
 
 def draw_menu_screen(board) -> None:
     """
     Creates a menu window with a MULTIPLAYER, SINGLEPLAYER, SETTING, & QUIT buttons
     Each button changes the board's getState
+    :param board: used to change board's state
     :return: None
     """
+    set_music_vol(DEFAULT_MUSIC_VOLUME)
+    set_music(0) 
+    pygame.display.set_caption("Bridge Game Main Menu")
     run = True
     while run:
-        pygame.display.set_caption("Bridge Game Main Menu")
         screen.fill(green)
         font = pygame.font.Font('freesansbold.ttf', 100)
         font.set_underline(True)
-        draw_centered_Text('Better Bridge Game!', font, white, (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 10))
+        #draw_centered_Text('Better Bridge Game!', font, white, (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 10))
+        draw_title_text('Better Bridge Game!', font, white, (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 10))
         border = submit_rect        
         #Text
         font = pygame.font.Font('freesansbold.ttf', 80)
@@ -66,27 +150,31 @@ def draw_menu_screen(board) -> None:
                 print("QUIT")
                 board.getState = "QUIT"
                 run = False
-            if multi_button.check_click():
+            elif multi_button.check_click():
                 print("MULTIPLAYER CLICKED")
                 #board.getState = "MULTIPLAYER"
-                pass
-            if single_button.check_click():
+                raise NotImplementedError()
+            elif single_button.check_click():
                 print("SINGLE PLAYER CLICKED")
-                board.getState="BETTING"
+                board.gameMode = "SINGLE"
+                board.getState = None
+                print(f"{board.getState}")
                 run = False
-                pass #Create method that will create a board
-            if setting_button.check_click():
+            elif setting_button.check_click():
                 print("SETTINGS CLICKED")
-                pass
-            if quit_button.check_click():
+                raise NotImplementedError()
+            elif quit_button.check_click():
                 print("QUIT CLICKED")
                 board.getState = "QUIT"
                 run = False
             pygame.display.flip()
     if board.getState == "QUIT":
+        print("pygame quitted")
         pygame.display.quit()
         pygame.quit()
+    print("MENU CLOSED")
 
+#Might delete
 def draw_out_of_game(board):
     screen.fill(green)
     if board.getState == "MENU":
@@ -110,14 +198,19 @@ def draw_gameplay(board):
     if board.getState == "PLAYING":
         pygame.display.set_caption("Bridge Game [Playing...]")
         draw_scores(screen, board.teamOneScore, board.teamTwoScore, board.gamesToWin)
-    draw_your_turn(board.yourTurn)
+        draw_your_turn(board.yourTurn)
     #Draw betting UI, if applicable
-    if board.getState == "BETTING":
+    elif board.getState == "BETTING":
         pygame.display.set_caption("Bridge Game [Betting...]")
         draw_bets(screen, board)
-    if(board.getState == "GAME_OVER"):
+    elif board.getState == "GAME_OVER":
         pygame.display.set_caption("Bridge Game [LeaderBoard]")
         draw_game_over_screen(board)
+    elif board.gameMode == "MULTI":
+        pygame.display.set_caption("Bridge Game [Setting Team...]")
+        #SETUP TEAM IN BOARD
+    elif board.gameMode == "SINGLE":
+        board.set_up_players()
     pygame.display.flip()
 
 #Returns the path to the image associated with card
@@ -196,25 +289,29 @@ def draw_scores(screen, score_1, score_2, team_1_to_win):
     draw_centered_Text(f"{str(score_2)} / {str(team_2_to_win)}", font, black, (378, 60)) #Text2
 
 def draw_game_over_screen(board):
-   screen.fill(tan)
+   screen.fill(dark_red)
    font = pygame.font.SysFont('georgia', 100)
    font.set_underline(True)
-   draw_centered_Text("Game Over", font, white, (SCREEN_WIDTH/2, SCREEN_HEIGHT//14))
+   #draw_centered_Text("Game Over", font, white, (SCREEN_WIDTH/2, SCREEN_HEIGHT//14))
+   draw_title_text("Game Over", font, white, (SCREEN_WIDTH/2, SCREEN_HEIGHT//14))
    font = pygame.font.SysFont('georgia', 70)
-   draw_centered_Text(f"Team {str(board.winningTeam)} Wins!", font, white, (SCREEN_WIDTH/2, SCREEN_HEIGHT//5))
+   #draw_centered_Text(f"Team {str(board.winningTeam)} Wins!", font, white, (SCREEN_WIDTH/2, SCREEN_HEIGHT//5))
+   draw_title_text(f"Team {str(board.winningTeam)} Wins!", font, white, (SCREEN_WIDTH/2, SCREEN_HEIGHT//5))
    font = pygame.font.SysFont('georgia', 60)
    font.set_underline(True)
-   draw_centered_Text("LeaderBoard:", font, white, (SCREEN_WIDTH/2, SCREEN_HEIGHT//3))
+   #draw_centered_Text("LeaderBoard:", font, white, (SCREEN_WIDTH/2, SCREEN_HEIGHT//3))
+   draw_title_text("LeaderBoard:", font, white, (SCREEN_WIDTH/2, SCREEN_HEIGHT//3))
    font = pygame.font.SysFont('georgia', 50)
    leaderboard = sorted(board.players,key=lambda x: x.wins, reverse=True)
    time.sleep(0.5)
    space:int = 80
    num = 1
    for player in leaderboard:
-       draw_centered_Text(f"{str(num)}. {str(player)}, SCORE: {str(player.wins)}", font, white, (SCREEN_WIDTH/2, SCREEN_HEIGHT//3 + space))
+       #draw_centered_Text(f"{str(num)}. {str(player)}, SCORE: {str(player.wins)}", font, white, (SCREEN_WIDTH/2, SCREEN_HEIGHT//3 + space))
+       draw_title_text(f"{str(num)}. {str(player)}, SCORE: {str(player.wins)}", font, white, (SCREEN_WIDTH/2, SCREEN_HEIGHT//3 + space))
        punch_sound.play()
        pygame.display.update()
-       space += 50
+       space += 80
        num += 1
        time.sleep(0.2)
    running = True
@@ -225,14 +322,13 @@ def draw_game_over_screen(board):
        for event in pygame.event.get():
             if try_again_button.check_click():
                 print("TRY AGAIN PRESSED")
-                board.getState = "BETTING"
-                board.reset_values()
+                #board.reset_values()
                 running = False
-            if menu_button.check_click():
+            elif menu_button.check_click():
                 print("MENU CLICKED")
                 board.getState = "MENU"
                 running = False
-            if event == pygame.QUIT:
+            elif event == pygame.QUIT:
                 #Problem where it doesn't quit when you press the X button
                 board.getState = "QUIT"
                 print("QUIT")
@@ -241,9 +337,9 @@ def draw_game_over_screen(board):
 def draw_your_turn(isYourTurn: bool):
     font = pygame.font.SysFont('georgia', 40)
     if isYourTurn:
-         draw_centered_Text("Your Turn!", font, white, (SCREEN_WIDTH-115, 30))
+         draw_title_text("Your Turn!", font, white, (SCREEN_WIDTH-115, 30))
     else:
-         draw_centered_Text("Waiting...", font, white, (SCREEN_WIDTH-115, 30))
+         draw_title_text("Waiting...", font, white, (SCREEN_WIDTH-115, 30))
 
 def draw_bets(screen, board):
     global size_bet_rects
@@ -334,6 +430,10 @@ def draw_centered_Element(img, center: tuple):
     img_rect = img.get_rect()
     img_rect.center = center
     screen.blit(img, img_rect)
+def draw_title_text(text: str, font, text_col: tuple, center: tuple):
+    draw_centered_Text(text, font, black, (center[0] + 4, center[1] + 4))
+    draw_centered_Text(text, font, gray, (center[0] + 2, center[1] + 2))
+    draw_centered_Text(text, font, text_col, center)
 '''
 def draw_menu_button(text: str, font, text_col: tuple, center: tuple):
     (width, height) = font.size(text)
@@ -378,7 +478,7 @@ class MenuButton:
         if not clicked:
             pygame.draw.rect(screen, light_red, self.shade_button, 0, 15, 15, 15, 15, 15)
         pygame.draw.rect(screen, black, self.outline, 2, 15, 15, 15, 15, 15)
-        draw_centered_Text(self.text, self.font, white, self.center)
+        draw_title_text(self.text, self.font, white, self.center)
     def check_click(self):
         mouse_pos = pygame.mouse.get_pos
         left_click = pygame.mouse.get_pressed()[0]
@@ -386,6 +486,7 @@ class MenuButton:
         if left_click and buttonrect.collidepoint(mouse_pos()[0], mouse_pos()[1]) and self.enabled:
             self.draw(True)
             button_sound.play()
+            time.sleep(1)
             return True
         else:
             self.draw(False)

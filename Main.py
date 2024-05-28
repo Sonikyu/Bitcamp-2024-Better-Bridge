@@ -1,27 +1,30 @@
 from Bet import BetFactory
-import pygame
-import Render
+import pygame, Render
 from Bet import Bet
 from BetSuit import BetSuit
 from Board import Board
 def main() -> None:
     pygame.init()
     board = Board()
+
+    board.check_profile_name()
     run = True
     while run:
      for event in pygame.event.get():
           if board.getState == "MENU":
                Render.draw_menu_screen(board)
-          if board.getState == "BETTING":
+               print("Exited menu")
+          elif board.getState == "QUIT" or event.type == pygame.QUIT:
+               run = False
+          elif (board.gameMode == "SINGLE" or board.gameMode == "MULTI"):
                board.reset_values()
                board.startBetting()
                board.startPlayerGame()
-          if board.getState == "QUIT" or event.type == pygame.QUIT:
-               run = False
-               board.getState = "QUIT"
-          #pygame.display.flip()
+               print("Try AGAIN?")
+               print(f"{board.getState}")
     pygame.display.quit()
     pygame.quit()
+    print("You quit")
 if __name__ == '__main__':
    main()
 '''
