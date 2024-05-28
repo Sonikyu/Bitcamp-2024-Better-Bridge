@@ -2,6 +2,7 @@ from Deck import Deck
 from Player import Player
 from BetSuit import BetSuit
 from os import path
+import os
 import copy
 import pygame
 import Render
@@ -20,13 +21,17 @@ class Board():
         self.gameMode: str = None
 
     def check_profile_name(self) -> str:
-        profile_name_file = 'profile_name.txt'
+        self.NAME_FILE = 'profile_name.txt'
         name = ''
+
         try:
-            with open(profile_name_file) as file:
+            if os.stat(self.NAME_FILE).st_size == 0:
+                os.remove(self.NAME_FILE)
+            with open(self.NAME_FILE) as file:
                 name = file.read()
         except FileNotFoundError:
-            with open(profile_name_file, 'w') as file:
+            with open(self.NAME_FILE, 'w') as file:
+                pygame.display.set_caption("Bridge Game [Input a Profile Name]")
                 name = Render.draw_get_name()
                 file.write(name)
         self.name = name

@@ -5,6 +5,8 @@ from BetSuit import BetSuit
 from Board import Board
 def main() -> None:
     pygame.init()
+    Render.set_music_vol(Render.DEFAULT_MUSIC_VOLUME)
+    Render.set_music(0) 
     board = Board()
 
     board.check_profile_name()
@@ -12,6 +14,7 @@ def main() -> None:
     while run:
      for event in pygame.event.get():
           if board.getState == "MENU":
+               pygame.display.set_caption("Bridge Game [Main Menu]")
                Render.draw_menu_screen(board)
                print("Exited menu")
           elif board.getState == "QUIT" or event.type == pygame.QUIT:

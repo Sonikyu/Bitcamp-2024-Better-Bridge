@@ -26,6 +26,10 @@ dark_green = (27, 45, 46)
 tan = (210, 180, 140)
 dark_red = (156, 33, 61)
 light_red = (200, 33, 61)
+rich_black = (1, 22, 39)
+
+icon = pygame.image.load("Misc_Images/poker-hand.png") #Lorc [https://lorcblog.blogspot.com/]
+pygame.display.set_icon(icon)
 
 pygame.mixer.init()
 button_sound = pygame.mixer.Sound("Sounds/menu-button.mp3")
@@ -59,10 +63,61 @@ def set_music_vol(level: int) -> None:
     
 
 def draw_setting(board) -> None:
-    raise NotImplementedError()
+    run = True
+    isMusicPlaying = True
+    while run:
+        screen.fill(rich_black)
+        font = pygame.font.Font('freesansbold.ttf', 80)
+        font.set_underline(True)
+        draw_title_text("SETTINGS", font, white, (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 10))
+        font = pygame.font.Font('freesansbold.ttf', 50)
+        draw_title_text("Music", font, white, (SCREEN_WIDTH//10, SCREEN_HEIGHT//5))
+        
+        back_button = MenuButton("Back", font, (SCREEN_WIDTH//3, SCREEN_HEIGHT//10 * 9), True)
+        reset_name_button = MenuButton("Reset Name", font, (SCREEN_WIDTH//3 * 2, SCREEN_HEIGHT//10 * 9), True)
+        isMusicPlaying = pygame.mixer.music.get_busy()
+        text = "Stop Music"  if isMusicPlaying else "Play Music"
+        play_or_stop_button = MenuButton(text, font, (SCREEN_WIDTH//10 * 3 - 50, SCREEN_HEIGHT // 5 + 70 ), True)
+        
+        draw_title_text("Load Songs:", font, white, (SCREEN_WIDTH//10 * 2 - 50, SCREEN_HEIGHT//5 * 2))
+
+        song1_button = MenuButton("1", font, (SCREEN_WIDTH//10 * 2 - 50, SCREEN_HEIGHT // 5 * 3 ), True)
+        song2_button = MenuButton("2", font, (SCREEN_WIDTH//10 * 3 - 50, SCREEN_HEIGHT // 5 * 3 ), True)
+        song3_button = MenuButton("3", font, (SCREEN_WIDTH//10 * 4 - 50, SCREEN_HEIGHT // 5 * 3 ), True)
+        song4_button = MenuButton("4", font, (SCREEN_WIDTH//10 * 5 - 50, SCREEN_HEIGHT // 5 * 3 ), True)
+        song5_button = MenuButton("5", font, (SCREEN_WIDTH//10 * 6 - 50, SCREEN_HEIGHT // 5 * 3 ), True)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                board.getType = "QUIT"
+                pygame.quit()
+                run = False
+            elif back_button.check_click():
+                run = False
+            elif reset_name_button.check_click():
+                os.remove(board.NAME_FILE)
+                board.check_profile_name()
+                time.sleep(1)
+                screen.fill(rich_black)
+            elif play_or_stop_button.check_click():
+                if isMusicPlaying:
+                    pygame.mixer.music.fadeout(1000)
+                else:
+                    pygame.mixer.music.play(-1)
+            elif song1_button.check_click():
+                set_music(0)
+            elif song2_button.check_click():
+                set_music(1)
+            elif song3_button.check_click():
+                set_music(2)
+            elif song4_button.check_click():
+                set_music(3)
+            elif song5_button.check_click():
+                set_music(4)
+
+
+        pygame.display.flip()
 
 def draw_get_name() -> str:
-    pygame.display.set_caption("Bridge Game [Input a Profile Name]")
     text_box_x = SCREEN_WIDTH//2
     text_box_y = SCREEN_HEIGHT//2 * 1.5
     color_active = white
@@ -98,9 +153,9 @@ def draw_get_name() -> str:
         screen.fill(green)
         font = pygame.font.Font('freesansbold.ttf', 100)
         font.set_underline(True)
-        draw_centered_Text("Input a Profile Name", font, white, (SCREEN_WIDTH//2, SCREEN_HEIGHT // 10))
+        draw_title_text("Input a Profile Name", font, white, (SCREEN_WIDTH//2, SCREEN_HEIGHT // 10))
         font = pygame.font.Font('freesansbold.ttf', 80)
-        draw_centered_Text("Requirements:", font, white, (SCREEN_WIDTH//2, SCREEN_HEIGHT // 5 + 50))
+        draw_title_text("Requirements:", font, white, (SCREEN_WIDTH//2, SCREEN_HEIGHT // 5 + 50))
         font = pygame.font.Font('freesansbold.ttf', 50)
         draw_centered_Text("- Less than or equal to 8 characters", font, white, (SCREEN_WIDTH//2, SCREEN_HEIGHT // 5 + 130))
         draw_centered_Text("- No Spaces", font, white, (SCREEN_WIDTH//2, SCREEN_HEIGHT // 5 + 180))
@@ -123,9 +178,6 @@ def draw_menu_screen(board) -> None:
     :param board: used to change board's state
     :return: None
     """
-    set_music_vol(DEFAULT_MUSIC_VOLUME)
-    set_music(0) 
-    pygame.display.set_caption("Bridge Game Main Menu")
     run = True
     while run:
         screen.fill(green)
@@ -162,7 +214,8 @@ def draw_menu_screen(board) -> None:
                 run = False
             elif setting_button.check_click():
                 print("SETTINGS CLICKED")
-                raise NotImplementedError()
+                pygame.display.set_caption("Bridge Game [Settings]")
+                draw_setting(board)
             elif quit_button.check_click():
                 print("QUIT CLICKED")
                 board.getState = "QUIT"
