@@ -59,6 +59,7 @@ The game is split into 2 parts
   - [ ] An error box in response to the user clicking on a move they can't make
   - [X] Music
   - [X] Sound effects
+  - [ ] Profile pictures
 
 ## Credit
 ### Authors
