@@ -48,12 +48,13 @@ The game is split into 2 parts
   - [X] Quit and Try Again Buttons
 - [X] Setting
   - [X] Option to change music volume
+  - [X] Option to change sound volume
+  - [X] Option to change user name 
 - [ ] Multiplayer
   - [ ] 4-2 player mode
 - [ ] Proper Reinforcement Learning Interface Implementation 
 - [ ]  Quality of Life Improvements
   - [X] Show how many wins each team has to fulfill
-  - [ ] Show which team the player is on
   - [ ] Animations
   - [ ] An error box in response to the user clicking on a move they can't make
   - [X] Music
