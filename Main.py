@@ -14,7 +14,6 @@ def main() -> None:
     while run:
      for event in pygame.event.get():
           if board.getState == "MENU":
-               pygame.display.set_caption("Bridge Game [Main Menu]")
                Render.draw_menu_screen(board)
                print("Exited menu")
           elif board.getState == "QUIT" or event.type == pygame.QUIT:

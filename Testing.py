@@ -1,5 +1,9 @@
-import Render, pygame
+import tkinter as tk
+import tkinter.filedialog
 
-pygame.init()
+root = tk.Tk("Input Image")
+root.withdraw()
 
-Render.draw_setting()
+
+filename = tkinter.filedialog.askopenfilename()
+print(filename)

@@ -32,10 +32,12 @@ icon = pygame.image.load("Misc_Images/poker-hand.png") #Lorc [https://lorcblog.b
 pygame.display.set_icon(icon)
 
 pygame.mixer.init()
+
 button_sound = pygame.mixer.Sound("Sounds/menu-button.mp3")
 card_sound = pygame.mixer.Sound("Sounds/card.mp3")
 vine_boom = pygame.mixer.Sound("Sounds/boom.mp3")
 punch_sound = pygame.mixer.Sound("Sounds/Punch.wav")
+sound_list = (button_sound, card_sound, vine_boom, punch_sound)
 list_of_songs = ("Jazzy Vibes #36 - Loop.mp3", "backup_plan.wav", "Casino Man.ogg", 
         "pixel_sprinter_loop.wav", "short_A New World Order!!.mp3")
 #Zane Little Music = backup_plan, pixel_sprinter_loop
@@ -53,39 +55,61 @@ def set_music(index: int) -> None:
     '''
     pygame.mixer.music.load(f"Music/{list_of_songs[index]}")
     pygame.mixer.music.play(-1) 
-def set_music_vol(level: int) -> None:
+def set_music_vol(change: int) -> None:
     '''
     Sets the volume of the music
-    :para level: used to set volume of music
+    :para change: used to change volume of music
     :return: None
     '''
-    pygame.mixer.music.set_volume(level)
-    
+    volume = pygame.mixer.music.get_volume() + change
+    if (volume < 0.05):
+        volume = 0
+    pygame.mixer.music.set_volume(volume)
+
+def set_sound_vol(change: int):
+    volume = button_sound.get_volume() + change
+    if (volume < 0.05):
+        volume = 0
+    for sound in sound_list:
+        sound.set_volume(volume)
 
 def draw_setting(board) -> None:
+    pygame.display.set_caption("Bridge Game [Settings]")
     run = True
     isMusicPlaying = True
+    song_index = 0
     while run:
         screen.fill(rich_black)
         font = pygame.font.Font('freesansbold.ttf', 80)
         font.set_underline(True)
-        draw_title_text("SETTINGS", font, white, (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 10))
+        draw_title_text("SETTINGS", font, white, (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 15))
         font = pygame.font.Font('freesansbold.ttf', 50)
-        draw_title_text("Music", font, white, (SCREEN_WIDTH//10, SCREEN_HEIGHT//5))
         
         back_button = MenuButton("Back", font, (SCREEN_WIDTH//3, SCREEN_HEIGHT//10 * 9), True)
         reset_name_button = MenuButton("Reset Name", font, (SCREEN_WIDTH//3 * 2, SCREEN_HEIGHT//10 * 9), True)
+        #Music Setting Buttons
+        draw_title_text("Music:", font, white, (SCREEN_WIDTH//10, SCREEN_HEIGHT//5))
         isMusicPlaying = pygame.mixer.music.get_busy()
         text = "Stop Music"  if isMusicPlaying else "Play Music"
-        play_or_stop_button = MenuButton(text, font, (SCREEN_WIDTH//10 * 3 - 50, SCREEN_HEIGHT // 5 + 70 ), True)
-        
-        draw_title_text("Load Songs:", font, white, (SCREEN_WIDTH//10 * 2 - 50, SCREEN_HEIGHT//5 * 2))
-
-        song1_button = MenuButton("1", font, (SCREEN_WIDTH//10 * 2 - 50, SCREEN_HEIGHT // 5 * 3 ), True)
-        song2_button = MenuButton("2", font, (SCREEN_WIDTH//10 * 3 - 50, SCREEN_HEIGHT // 5 * 3 ), True)
-        song3_button = MenuButton("3", font, (SCREEN_WIDTH//10 * 4 - 50, SCREEN_HEIGHT // 5 * 3 ), True)
-        song4_button = MenuButton("4", font, (SCREEN_WIDTH//10 * 5 - 50, SCREEN_HEIGHT // 5 * 3 ), True)
-        song5_button = MenuButton("5", font, (SCREEN_WIDTH//10 * 6 - 50, SCREEN_HEIGHT // 5 * 3 ), True)
+        play_or_stop_button = MenuButton(text, font, (SCREEN_WIDTH//10 * 4 - 50, SCREEN_HEIGHT // 5), True)
+        draw_title_text(f"Volume: {int(pygame.mixer.music.get_volume() * 100)}", font, white, (SCREEN_WIDTH//10 * 7 - 50, SCREEN_HEIGHT // 5) )
+        increase_music_volume_button = MenuButton("+", font, (SCREEN_WIDTH//10 * 9 + 50, SCREEN_HEIGHT // 5), True)
+        decrease_music_volume_button = MenuButton("-", font, (SCREEN_WIDTH//10 * 9 - 50, SCREEN_HEIGHT // 5), True)
+        #Sound Settinig Buttons
+        draw_title_text("Sound Effects:", font, white, (SCREEN_WIDTH//10 * 2 - 20, SCREEN_HEIGHT//10 * 4 - 50))
+        draw_title_text(f"Volume: {int(button_sound.get_volume() * 100)}", font, white, (SCREEN_WIDTH//10 * 7 - 50, SCREEN_HEIGHT // 10 * 4 - 50))
+        increase_sound_volume_button = MenuButton("+", font, (SCREEN_WIDTH//10 * 9 + 50, SCREEN_HEIGHT // 10 * 4 - 50), True)
+        decrease_sound_volume_button = MenuButton("-", font, (SCREEN_WIDTH//10 * 9 - 50, SCREEN_HEIGHT // 10 * 4 - 50), True)
+        #Loading Songs Settings
+        draw_title_text("Load Songs:", font, white, (SCREEN_WIDTH//10 * 2 - 40, SCREEN_HEIGHT//10 * 4 + 50))
+        song1_button = MenuButton("1", font, (SCREEN_WIDTH//10 * 4 - 50, SCREEN_HEIGHT // 10 * 4 + 50), True)
+        song2_button = MenuButton("2", font, (SCREEN_WIDTH//10 * 5 - 50, SCREEN_HEIGHT // 10 * 4 + 50), True)
+        song3_button = MenuButton("3", font, (SCREEN_WIDTH//10 * 6 - 50, SCREEN_HEIGHT // 10 * 4 + 50), True)
+        song4_button = MenuButton("4", font, (SCREEN_WIDTH//10 * 7 - 50, SCREEN_HEIGHT // 10 * 4 + 50), True)
+        song5_button = MenuButton("5", font, (SCREEN_WIDTH//10 * 8 - 50, SCREEN_HEIGHT // 10 * 4 + 50), True)
+        song_name_font = pygame.font.Font('freesansbold.ttf', 30)
+        draw_title_text(f"Current Song: {list_of_songs[song_index]}", song_name_font, white, (SCREEN_WIDTH//2, SCREEN_HEIGHT//10 * 6))
+        draw_title_text(f"Your Name Is: {board.name}", font, white, (SCREEN_WIDTH//2, SCREEN_HEIGHT // 10 * 8 - 50))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 board.getType = "QUIT"
@@ -104,17 +128,28 @@ def draw_setting(board) -> None:
                 else:
                     pygame.mixer.music.play(-1)
             elif song1_button.check_click():
-                set_music(0)
+                song_index = 0
+                set_music(song_index)
             elif song2_button.check_click():
-                set_music(1)
+                song_index = 1
+                set_music(song_index)
             elif song3_button.check_click():
-                set_music(2)
+                song_index = 2
+                set_music(song_index)
             elif song4_button.check_click():
-                set_music(3)
+                song_index = 3
+                set_music(song_index)
             elif song5_button.check_click():
-                set_music(4)
-
-
+                song_index = 4
+                set_music(song_index)
+            elif increase_music_volume_button.check_click():
+                set_music_vol(0.05)
+            elif decrease_music_volume_button.check_click():
+                set_music_vol(-0.05)
+            elif increase_sound_volume_button.check_click():
+                set_sound_vol(0.05)
+            elif decrease_sound_volume_button.check_click():
+                set_sound_vol(-0.05)
         pygame.display.flip()
 
 def draw_get_name() -> str:
@@ -178,6 +213,7 @@ def draw_menu_screen(board) -> None:
     :param board: used to change board's state
     :return: None
     """
+    pygame.display.set_caption("Bridge Game [Main Menu]")
     run = True
     while run:
         screen.fill(green)
@@ -214,7 +250,6 @@ def draw_menu_screen(board) -> None:
                 run = False
             elif setting_button.check_click():
                 print("SETTINGS CLICKED")
-                pygame.display.set_caption("Bridge Game [Settings]")
                 draw_setting(board)
             elif quit_button.check_click():
                 print("QUIT CLICKED")
@@ -381,8 +416,7 @@ def draw_game_over_screen(board):
                 print("MENU CLICKED")
                 board.getState = "MENU"
                 running = False
-            elif event == pygame.QUIT:
-                #Problem where it doesn't quit when you press the X button
+            elif event.type == pygame.QUIT:
                 board.getState = "QUIT"
                 print("QUIT")
                 running = False
@@ -539,7 +573,7 @@ class MenuButton:
         if left_click and buttonrect.collidepoint(mouse_pos()[0], mouse_pos()[1]) and self.enabled:
             self.draw(True)
             button_sound.play()
-            time.sleep(1)
+            time.sleep(0.5)
             return True
         else:
             self.draw(False)

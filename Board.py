@@ -2,11 +2,7 @@ from Deck import Deck
 from Player import Player
 from BetSuit import BetSuit
 from os import path
-import os
-import copy
-import pygame
-import Render
-import time
+import os, copy, pygame, Render, time
 
 class Board():
     #Globals
@@ -44,7 +40,7 @@ class Board():
         if self.gameMode == "SINGLE":
             self.player1 = Player(0, self.name)
             self.player2 = Player(1, "BOT")
-            self.player3 = Player(2, "TEAM BOT")
+            self.player3 = Player(2, "TEAMBOT")
             self.player4 = Player(3, "BOT")
         self.players = [self.player1, self.player2, self.player3, self.player4]
         self.getState = "BETTING"
@@ -76,9 +72,7 @@ class Board():
         self.evalCurSuit = []
         self.currentTrickSuit = None
         self.set_up_players()
-        print("SET UP PLAYERS CALLED")
         self.cards_to_players()
-        print("CARDS TO PLAYERS CALLED")
 
     def checkBetting(self) -> bool:
         if len(self.bettingOrder) < 4: 
