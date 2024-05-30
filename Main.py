@@ -11,15 +11,16 @@ def main() -> None:
     board = Board()
 
     board.check_profile_name()
-    run = True
-    while run:
+    #run = True
+    while board.getState != "QUIT":
      for event in pygame.event.get():
           if board.getState == "MENU":
                Render.draw_menu_screen(board)
                print("Exited menu")
           if board.getState == "QUIT" or event.type == pygame.QUIT:
-               run = False
-          if (board.gameMode == "SINGLE" or board.gameMode == "MULTI"):
+               #run = False
+               board.getState = "QUIT"
+          if ((board.gameMode == "SINGLE" or board.gameMode == "MULTI") and board.getState != "QUIT"):
                board.reset_values()
                board.startBetting()
           if board.getState == "PLAYING": 
