@@ -32,7 +32,7 @@ The game is split into 2 parts
 ### The Game
 **Goal:** To fulfill your teams contract before the other team does
 
-**Order of Rank** 2, 3, 4, 5, 6, 7, 8, 9, 10, Jack, Queen, King, Ace (lowest to highest)
+**Order of Rank** 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10 -> Jack -> Queen -> King -> Ace (lowest to highest)
 1. The person who won the bet will have to play their card first
 2. The person who goes next (clockwise order) will have to pick a card from the same suit, unless they don't have any cards of that suit in which case they could choose any card from their deck
 3. After all players have drawn a card from their deck, the winner will start the next game
