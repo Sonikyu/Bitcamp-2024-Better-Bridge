@@ -75,6 +75,9 @@ The game is split into 2 parts
 
 ### Music
 backup_plan & pixel_sprinter_loop by [Zane Little Music](https://opengameart.org/users/zane-little-music)
+
 Casino Man by [Spring Spring](https://opengameart.org/users/spring-spring)
-Tri Tachyon: Jazzy Vibes #36 by [Tri-Tachyon](https://soundcloud.com/tri-tachyon/albums).
+
+Tri Tachyon: Jazzy Vibes #36 by [Tri-Tachyon](https://soundcloud.com/tri-tachyon/albums)
+
 SOUND AIRYLUVS by [ISAo](https://airyluvs.com/) = short_A_New World Order!! [Link](https://opengameart.org/content/swing-jazz-band-gothic-dance)
