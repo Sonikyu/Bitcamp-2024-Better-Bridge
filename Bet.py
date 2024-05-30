@@ -12,7 +12,7 @@ class Bet:
     def __str__(self) -> str:
         if(self.getID() == 42):
             return "PASS"
-        return self.suit.__str__() + str(self.level)
+        return f"{str(self.level)} of {str(self.suit)}"
     
     def getID(self) -> int:
         return self.ID

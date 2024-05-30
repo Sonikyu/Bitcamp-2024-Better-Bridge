@@ -17,7 +17,7 @@ class Board():
         self.gameMode: str = None
 
     def check_profile_name(self) -> str:
-        self.NAME_FILE = 'profile_name.txt'
+        self.NAME_FILE = 'User_Info/profile_name.txt'
         name = ''
 
         try:
@@ -84,10 +84,12 @@ class Board():
     
     def addBet(self, bet) -> bool:
         if bet.getID() > self.currentBetID:
+            
             self.bettingOrder.insert(0, bet)
             if(bet.getID() != 42):
                 self.currentBetID = bet.getID()
             self.inc_player()
+            time.sleep(2)
             return True
         print("Illegal Bet")
         return False
@@ -96,10 +98,19 @@ class Board():
         print("START BETTING CALLED")
         self.player1.sortHand()
         self.player1.update_card_positions()
-        while self.checkBetting() == False:
+        while self.checkBetting() == False and self.getState != "QUIT":
+            Render.draw_gameplay(self)
             for player in self.players:
-                self.addBet(player.chooseBet(self))
-                if self.checkBetting() == True: # == True is unnecessary
+                if self.getState == "QUIT":
+                    break
+                print(str(player))
+                if player.id != 0:
+                    self.addBet(player.chooseBet(self))
+                else:
+                    print("User Choosing Bets Played")
+                    Render.user_choose_bets(self)
+                Render.draw_gameplay(self)
+                if self.checkBetting() == True: # == True might be unnecessary
                     index = (player.id + 1) % 4
                     self.prioPlayer = self.players[index]
                     self.trumpSuit = self.bettingOrder[3].suit
@@ -108,16 +119,18 @@ class Board():
                     elif (player.id+1) % 2 == 1:
                         self.gamesToWin = 14-self.bettingOrder[3].level
                     break
-        counter = 0
-        self.bettingOrder.reverse()
-        lastBet = None
-        for bet in self.bettingOrder:
-            print(counter % 4, bet)
-            counter += 1
-            if (bet.getID() != 42):
-                lastBet = bet
-        print("done betting, final bet:", lastBet)
-        self.getState = "PLAYING"
+        print(self.getState)
+        if self.getState != "QUIT":
+            counter = 0
+            self.bettingOrder.reverse()
+            lastBet = None
+            for bet in self.bettingOrder:
+                print(counter % 4, bet)
+                counter += 1
+                if (bet.getID() != 42):
+                    lastBet = bet
+            print("done betting, final bet:", lastBet)
+            self.getState = "PLAYING"
 
     """""
     def startGame(self):

@@ -1,4 +1,6 @@
 import os, pygame, math, time
+from Bet import Bet
+from Bet import BetFactory
 from BetSuit import BetSuit
 from Suit import Suit
 from BetButton import BetButton
@@ -291,6 +293,7 @@ def draw_gameplay(board):
     elif board.getState == "BETTING":
         pygame.display.set_caption("Bridge Game [Betting...]")
         draw_bets(screen, board)
+        update_betting_board(board)
     elif board.getState == "GAME_OVER":
         pygame.display.set_caption("Bridge Game [LeaderBoard]")
         draw_game_over_screen(board)
@@ -428,7 +431,70 @@ def draw_your_turn(isYourTurn: bool):
     else:
          draw_title_text("Waiting...", font, white, (SCREEN_WIDTH-115, 30))
 
+def update_betting_board(board):
+    draw_current_bet(board.currentBetID)
+    #Add other player's bet choices later
+
+def draw_current_bet(currentBetID):
+    betFactory = BetFactory()
+    if currentBetID == -1:
+        currentBet = None
+    else:
+        currentBet = betFactory.getBet(currentBetID)
+    font = pygame.font.Font('freesansbold.ttf', 30)
+
+    draw_centered_Text(f"Current Bet: {currentBet}", font, white, (SCREEN_WIDTH//2, SCREEN_HEIGHT//20 * 5))
+    pygame.display.flip()
+    #player_positions = ((SCREEN_WIDTH//10, SCREEN_HEIGHT//2))
+    #for player in board.players:
+
+
+def user_choose_bets(board):
+    print("User Choose ")
+    betFactory = BetFactory()
+    if board.currentBetID == -1:
+        active_bet = Bet(BetSuit.LOW, 0)
+    else:
+        active_bet = betFactory.getBet(board.currentBetID)
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                board.getState = "QUIT"
+                running = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                #logic for handling player betting
+                #Player clicks on a button corresponding to some bet
+                #Then that bet is added using board.addBet
+                #addBet checks for validity
+                for button in size_bet_rects:
+                    if button.rect.collidepoint(event.pos):
+                        print("Size Button Clicked")
+                        new_bet = Bet(active_bet.suit, button.value)
+                        active_bet = new_bet
+                        print(active_bet)
+                for button in suit_bet_rects:
+                    if button.rect.collidepoint(event.pos):
+                        print("Suit Button Clicked")
+                        new_bet = Bet(button.betsuit, active_bet.level)
+                        active_bet = new_bet
+                        print(active_bet)
+                if submit_rect.collidepoint(event.pos):
+                    success = board.addBet(active_bet)
+                    if success:
+                        print("Yippee")
+                        running = False
+                    else:
+                        print("womp womp")
+                if pass_rect.collidepoint(event.pos):
+                    if board.currentBetID != -1:
+                        running = False
+                        print("Passed")
+                        board.addBet(Bet(None, None))
+                    else:
+                        print("Can't pass on first try")
 def draw_bets(screen, board):
+    print("Draw bets called")
     global size_bet_rects
     global suit_bet_rects
     size_bet_rects = []
@@ -573,7 +639,7 @@ class MenuButton:
         if left_click and buttonrect.collidepoint(mouse_pos()[0], mouse_pos()[1]) and self.enabled:
             self.draw(True)
             button_sound.play()
-            time.sleep(0.5)
+            time.sleep(0.8)
             return True
         else:
             self.draw(False)

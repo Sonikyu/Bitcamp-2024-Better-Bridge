@@ -31,7 +31,6 @@ class Player:
         for i in self.hand:
             if self.isValidCardMove(i, board) == True:
                 legalCards.append(i)
-      
         chosenCard = random.choice(legalCards)
         
         return chosenCard
