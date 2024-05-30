@@ -41,6 +41,8 @@ The game is split into 2 parts
 ## RoadMap
 - [X] Game Stage
 - [ ] Auction Stage
+  - [ ] Display current bet
+  - [ ] Display who has betted what
 - [X] Start Screen
   - [X] Multiplayer, Single Player, Settings, and Quit Button
 - [X] Proper End Screen
