@@ -4,6 +4,7 @@
 
 ## How It's Made
 **Tech Used:** Python, Pygame
+
 We chose python, because we wanted to implement a Reinforcement Learning algorithm interface from RLCard to improve our bot players.
 
 ## How to play
@@ -40,29 +41,40 @@ The game is split into 2 parts
 ## RoadMap
 - [X] Game Stage
 - [ ] Auction Stage
-- [ ] Start Screen
-  - [ ] Multiplayer, Single Player, Settings, and Quit Button
-- [ ] Proper End Screen
-  - [ ] Leaderboard
-  - [ ] Quit and Try Again Buttons
+  - [X] Display current bet
+  - [ ] Display who has betted what
+- [X] Start Screen
+  - [X] Multiplayer, Single Player, Settings, and Quit Button
+- [X] Proper End Screen
+  - [X] Leaderboard
+  - [X] Quit and Try Again Buttons
+- [X] Setting
+  - [X] Option to change music volume
+  - [X] Option to change sound volume
+  - [X] Option to change user name 
 - [ ] Multiplayer
   - [ ] 4-2 player mode
 - [ ] Proper Reinforcement Learning Interface Implementation 
 - [ ]  Quality of Life Improvements
-  - [ ] Show how many wins each team has to fulfill
-  - [ ] Show which team the player is on
+  - [X] Show how many wins each team has to fulfill
   - [ ] Animations
-  - [ ] An error box in response to the user clicking on a move they can't make
-  - [ ] Music
-  - [ ] Sound effects
-  - [ ] Logo + Title
+  - [ ] A red error border over card or box in response to the user clicking on a move they can't make
+  - [X] Music
+  - [X] Sound effects
+  - [ ] Profile pictures
 
 ## Credit
 ### Authors
 1. [Alex Tsai](https://github.com/Sonikyu) (Backend)
 2. [Andy Liao](https://github.com/AndyLiao1) (Backend & Front-end)
 3. [John Riganati](https://github.com/JPR3) (Front-end)
-5. [Max Park](https://github.com/Parkm465) (Backend)
+5. [Max Park](https://github.com/Parkm465) (Backend & Front-end)
 
 ### Acknowledgements
 [RLCard](https://rlcard.org/index.html)
+
+### Music
+backup_plan & pixel_sprinter_loop by [Zane Little Music](https://opengameart.org/users/zane-little-music)
+Casino Man by [Spring Spring](https://opengameart.org/users/spring-spring)
+Tri Tachyon: Jazzy Vibes #36 by [Tri-Tachyon](https://soundcloud.com/tri-tachyon/albums).
+SOUND AIRYLUVS by [ISAo](https://airyluvs.com/) = short_A_New World Order!! [Link](https://opengameart.org/content/swing-jazz-band-gothic-dance)

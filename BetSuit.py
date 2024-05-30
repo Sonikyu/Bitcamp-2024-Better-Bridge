@@ -7,3 +7,7 @@ class BetSuit(Enum):
     SPADES = 4
     HIGH = 5
 
+    def __str__(self) -> str:
+        return self.name
+        
+

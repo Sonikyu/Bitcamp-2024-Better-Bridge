@@ -3,10 +3,12 @@ from Bet import BetFactory
 import random
 import Render
 class Player:
-    def __init__(self, id):
+    def __init__(self, id: int, name: str):
         self.hand = []
         self.id = id
-
+        self.wins = 0
+        self.name = name
+    #Will replace for user or abstract method
     def chooseBet(self, Board):
         currentBetID = Board.currentBetID
         legalMoves = []
@@ -29,7 +31,6 @@ class Player:
         for i in self.hand:
             if self.isValidCardMove(i, board) == True:
                 legalCards.append(i)
-      
         chosenCard = random.choice(legalCards)
         
         return chosenCard
@@ -57,7 +58,7 @@ class Player:
         result = ""
         for card in self.hand:
             result += card.__str__() + " | "
-        print("[" + result + "]")
+        print(f"[{result}]")
 
     #Sorts hand based on id (suit * 13 + suit )
     def sortHand(self):
@@ -77,13 +78,16 @@ class Player:
         else:
             print("Input Different Value")
             return False
-    
-    
+    def inc_wins(self):
+        self.wins += 1
     def update_card_positions(self):
         loc_offset = 0
         for card in self.hand:
             card.x = ((Render.SCREEN_WIDTH - ((len(self.hand) + 1) * (Render.CARD_WIDTH * 2 / 3))) / 2) + loc_offset*Render.CARD_WIDTH * 2/3
             loc_offset += 1
 
-
+    def __str__(self) -> str:
+        return self.name
+    def __lt__ (self, otherPlayer):
+        return self.wins - otherPlayer.wins
     

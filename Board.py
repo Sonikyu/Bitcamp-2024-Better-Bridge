@@ -1,10 +1,8 @@
 from Deck import Deck
 from Player import Player
 from BetSuit import BetSuit
-import copy
-import pygame
-import Render
-import time
+from os import path
+import os, copy, pygame, Render, time
 
 class Board():
     #Globals
@@ -13,14 +11,53 @@ class Board():
     #Bet of the Game
     #Actions should be defined by 
 
-    def __init__(self):
+    def __init__(self) -> None:
+        #self.getState = "BETTING" #This is either 'betting' or 'playing'
+        self.getState = "MENU"
+        self.gameMode: str = None
+
+    def check_profile_name(self) -> str:
+        self.NAME_FILE = 'User_Info/profile_name.txt'
+        name = ''
+
+        try:
+            if os.stat(self.NAME_FILE).st_size == 0:
+                os.remove(self.NAME_FILE)
+            with open(self.NAME_FILE) as file:
+                name = file.read()
+        except FileNotFoundError:
+            with open(self.NAME_FILE, 'w') as file:
+                pygame.display.set_caption("Bridge Game [Input a Profile Name]")
+                name = Render.draw_get_name()
+                file.write(name)
+        self.name = name
+
+
+
+    
+    def set_up_players(self) -> None:
+        #ADD MULTIPLAYER LATER
+        if self.gameMode == "SINGLE":
+            self.player1 = Player(0, self.name)
+            self.player2 = Player(1, "BOT")
+            self.player3 = Player(2, "TEAMBOT")
+            self.player4 = Player(3, "BOT")
+        self.players = [self.player1, self.player2, self.player3, self.player4]
+        self.getState = "BETTING"
+
+    def cards_to_players(self) -> None:
+        deck = Deck()
+        for i in range(13):
+            for player in self.players:
+                card = deck.draw()
+                card.setOwner(player)
+                player.addCard(card)
+    def reset_values(self) -> None:
         self.trumpSuit = None #Includes HIGH and LOW
         self.gamesToWin = 7 #Make this always NS
 
         self.bettingOrder = []
         self.currentBetID = -1 
-        self.getState = "BETTING" #This is either 'betting' or 'playing'
-
         self.teamOneScore = 0
         self.teamTwoScore = 0
         self.winningTeam = 0
@@ -34,19 +71,10 @@ class Board():
         self.evalTrumpSuit = []
         self.evalCurSuit = []
         self.currentTrickSuit = None
-        self.player1 = Player(0)
-        self.player2 = Player(1)
-        self.player3 = Player(2)
-        self.player4 = Player(3)
-        self.players = [self.player1, self.player2, self.player3, self.player4]
-        deck = Deck()
-        for i in range(13):
-            for player in self.players:
-                card = deck.draw()
-                card.setOwner(player)
-                player.addCard(card)
-    
-    def checkBetting(self):
+        self.set_up_players()
+        self.cards_to_players()
+
+    def checkBetting(self) -> bool:
         if len(self.bettingOrder) < 4: 
             return False
         #ID for pass is 42
@@ -54,21 +82,35 @@ class Board():
             return True
         return False
     
-    def addBet(self, bet):
+    def addBet(self, bet) -> bool:
         if bet.getID() > self.currentBetID:
+            
             self.bettingOrder.insert(0, bet)
             if(bet.getID() != 42):
                 self.currentBetID = bet.getID()
             self.inc_player()
+            time.sleep(2)
             return True
         print("Illegal Bet")
         return False
 
     def startBetting(self):
-        while self.checkBetting() == False:
+        print("START BETTING CALLED")
+        self.player1.sortHand()
+        self.player1.update_card_positions()
+        while self.checkBetting() == False and self.getState != "QUIT":
+            Render.draw_gameplay(self)
             for player in self.players:
-                self.addBet(player.chooseBet(self))
-                if self.checkBetting() == True:
+                if self.getState == "QUIT":
+                    break
+                print(str(player))
+                if player.id != 0:
+                    self.addBet(player.chooseBet(self))
+                else:
+                    print("User Choosing Bets Played")
+                    Render.user_choose_bets(self)
+                Render.draw_gameplay(self)
+                if self.checkBetting() == True: # == True might be unnecessary
                     index = (player.id + 1) % 4
                     self.prioPlayer = self.players[index]
                     self.trumpSuit = self.bettingOrder[3].suit
@@ -77,18 +119,20 @@ class Board():
                     elif (player.id+1) % 2 == 1:
                         self.gamesToWin = 14-self.bettingOrder[3].level
                     break
-        counter = 0
-        self.bettingOrder.reverse()
-        lastBet = None
-        for bet in self.bettingOrder:
-            print(counter % 4, bet)
-            counter += 1
-            if (bet.getID() != 42):
-                lastBet = bet
-        print("done betting, final bet:", lastBet)
-        self.getState = "PLAYING"
+        print(self.getState)
+        if self.getState != "QUIT":
+            counter = 0
+            self.bettingOrder.reverse()
+            lastBet = None
+            for bet in self.bettingOrder:
+                print(counter % 4, bet)
+                counter += 1
+                if (bet.getID() != 42):
+                    lastBet = bet
+            print("done betting, final bet:", lastBet)
+            self.getState = "PLAYING"
 
-
+    """""
     def startGame(self):
         print("Started Game")
         for i in range(13):
@@ -104,7 +148,7 @@ class Board():
 
         self.getState = "GAME_OVER"
         print("Ended Game")
-
+    """""
     def startPlayerGame(self):
         self.player1.sortHand()
         self.player1.update_card_positions()
@@ -117,34 +161,20 @@ class Board():
                 if index != 0:
                     tempCard = self.players[index].chooseCard(self)
                 else:
-                    running = True
-                    while running:
-                        self.yourTurn = True
-                        for event in pygame.event.get():
-                            if event.type == pygame.QUIT:
-                                running = False
-                            if event.type == pygame.MOUSEBUTTONDOWN:
-                                #if board.getState == "PLAYING":
-                                for card in self.players[0].hand:
-                                    card_rect = pygame.Rect(card.x, Render.HAND_Y, Render.CARD_WIDTH *2 / 3, Render.CARD_HEIGHT)
-                                    if card_rect.collidepoint(event.pos) and self.player1.isValidCardMove(card, self):
-                                        print("Clicked on " + str(card))
-                                        #self.player1.playCard(card, self)
-                                        tempCard = card
-                                        running = False  
-                        Render.draw(self)
-                        self.yourTurn = False
+                    tempCard = Render.player_choosing_cards(self)
 
                 self.players[index].playCard(tempCard, self)
                 self.addToTrick(tempCard, self.players[index]) 
-                Render.draw(self)
-                time.sleep(1)
-            self.evaluateTrick()
+                Render.draw_gameplay(self)
+                if j != 3:
+                    Render.card_sound.play()
+                    time.sleep(1)
+            self.evaluateTrick(index)
 
         self.getState = "GAME_OVER"
-        Render.draw(self)
+
         
-        #Render.draw_game_over_screen(self.winningTeam)
+        Render.draw_game_over_screen(self)
         print("Ended player Game")
 
     #This method clears the old trick and adds it to pastTricks
@@ -177,13 +207,13 @@ class Board():
             self.evalCurSuit.append(card)
 
     #Game over function prints winner 
-    def gameOver(self, winner):
+    def gameOver(self, winner) -> None:
         self.gameWon = True
         print("Team", winner, "wins!")
 
     #Looks at the cards in the trick and see who wins! Then sets prioPlayer to the owner of that card
     #Also updates the score
-    def evaluateTrick(self):
+    def evaluateTrick(self, index):
         winner = None
         if self.trumpSuit != BetSuit.LOW:
             if (len(self.evalTrumpSuit) != 0):
@@ -198,7 +228,14 @@ class Board():
             winner = self.evalCurSuit[0]
 
         self.prioPlayer = winner.owner
-
+        self.prioPlayer.inc_wins()
+        
+        if self.prioPlayer == self.players[index]:
+            sound = Render.vine_boom
+        else:
+            sound = Render.card_sound
+        sound.play()
+        time.sleep(1)
         if (self.prioPlayer.id == 0 or self.prioPlayer.id == 2):
             self.teamOneScore += 1
             if (self.teamOneScore >= self.gamesToWin):

@@ -12,7 +12,7 @@ class Bet:
     def __str__(self) -> str:
         if(self.getID() == 42):
             return "PASS"
-        return self.suit.__str__() + str(self.level)
+        return f"{str(self.level)} of {str(self.suit)}"
     
     def getID(self) -> int:
         return self.ID
@@ -33,13 +33,13 @@ class BetFactory:
     def __str__(self):
         result = ""
         for bet in self.Bets:
-            result += bet.__str__() + "|"
+            result += f"{bet.__str__()}|"
         return result
     
     def asIDs(self):
         result = ""
         for bet in self.Bets:
-            result += str(bet.getID()) + "|"
+            result += f"{str(bet.getID())}|"
         return result
     
     def getBet(self, ID):

@@ -21,5 +21,5 @@ class Card:
         self.owner = owner
 
     def __str__(self):
-        return self.rank.name + " of " + self.suit.name
+        return f"{self.rank.name} of {self.suit.name}"
     
