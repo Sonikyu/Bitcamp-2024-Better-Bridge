@@ -80,4 +80,4 @@ Casino Man by [Spring Spring](https://opengameart.org/users/spring-spring)
 
 Tri Tachyon: Jazzy Vibes #36 by [Tri-Tachyon](https://soundcloud.com/tri-tachyon/albums)
 
-SOUND AIRYLUVS by [ISAo](https://airyluvs.com/) = short_A_New World Order!! [Link](https://opengameart.org/content/swing-jazz-band-gothic-dance)
+short_A_New World Order!! by SOUND AIRYLUVS [ISAo](https://airyluvs.com/) [Link](https://opengameart.org/content/swing-jazz-band-gothic-dance)
