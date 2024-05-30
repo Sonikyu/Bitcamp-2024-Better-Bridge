@@ -41,7 +41,7 @@ The game is split into 2 parts
 ## RoadMap
 - [X] Game Stage
 - [ ] Auction Stage
-  - [ ] Display current bet
+  - [X] Display current bet
   - [ ] Display who has betted what
 - [X] Start Screen
   - [X] Multiplayer, Single Player, Settings, and Quit Button
@@ -58,7 +58,7 @@ The game is split into 2 parts
 - [ ]  Quality of Life Improvements
   - [X] Show how many wins each team has to fulfill
   - [ ] Animations
-  - [ ] An error box in response to the user clicking on a move they can't make
+  - [ ] A red error border over card or box in response to the user clicking on a move they can't make
   - [X] Music
   - [X] Sound effects
   - [ ] Profile pictures
@@ -72,3 +72,9 @@ The game is split into 2 parts
 
 ### Acknowledgements
 [RLCard](https://rlcard.org/index.html)
+
+### Music
+backup_plan & pixel_sprinter_loop by [Zane Little Music](https://opengameart.org/users/zane-little-music)
+Casino Man by [Spring Spring](https://opengameart.org/users/spring-spring)
+Tri Tachyon: Jazzy Vibes #36 by [Tri-Tachyon](https://soundcloud.com/tri-tachyon/albums).
+SOUND AIRYLUVS by [ISAo](https://airyluvs.com/) = short_A_New World Order!! [Link](https://opengameart.org/content/swing-jazz-band-gothic-dance)
