@@ -297,10 +297,10 @@ def draw_gameplay(board):
     elif board.getState == "GAME_OVER":
         pygame.display.set_caption("Bridge Game [LeaderBoard]")
         draw_game_over_screen(board)
-    elif board.gameMode == "MULTI":
+    elif board.gameMode == "MULTI" and board.getState != "QUIT":
         pygame.display.set_caption("Bridge Game [Setting Team...]")
         #SETUP TEAM IN BOARD
-    elif board.gameMode == "SINGLE":
+    elif board.gameMode == "SINGLE" and board.getState != "QUIT":
         board.set_up_players()
     pygame.display.flip()
 
@@ -493,6 +493,7 @@ def user_choose_bets(board):
                         board.addBet(Bet(None, None))
                     else:
                         print("Can't pass on first try")
+    print("USER STATE AFTER while loop for CHOOSING", board.getState)
 def draw_bets(screen, board):
     print("Draw bets called")
     global size_bet_rects
@@ -560,7 +561,9 @@ def player_choosing_cards(board):
         board.yourTurn = True
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                board.getState = "QUIT"
                 running = False
+                tempCard = None
             if event.type == pygame.MOUSEBUTTONDOWN:
                 #if board.getState == "PLAYING":
                 for card in board.players[0].hand:
@@ -570,8 +573,9 @@ def player_choosing_cards(board):
                         #self.player1.playCard(card, self)
                         tempCard = card
                         running = False  
-        draw_gameplay(board)
-        board.yourTurn = False
+        if board.getState != "QUIT":
+            draw_gameplay(board)
+            board.yourTurn = False
     return tempCard
 #Helper Functions
 def draw_centered_Text(text: str, font, text_col: tuple, center: tuple):

@@ -95,7 +95,6 @@ class Board():
         return False
 
     def startBetting(self):
-        print("START BETTING CALLED")
         self.player1.sortHand()
         self.player1.update_card_positions()
         while self.checkBetting() == False and self.getState != "QUIT":
@@ -110,7 +109,7 @@ class Board():
                     print("User Choosing Bets Played")
                     Render.user_choose_bets(self)
                 Render.draw_gameplay(self)
-                if self.checkBetting() == True: # == True might be unnecessary
+                if self.checkBetting() == True and self.getState != "QUIT": # == True might be unnecessary
                     index = (player.id + 1) % 4
                     self.prioPlayer = self.players[index]
                     self.trumpSuit = self.bettingOrder[3].suit
@@ -119,7 +118,6 @@ class Board():
                     elif (player.id+1) % 2 == 1:
                         self.gamesToWin = 14-self.bettingOrder[3].level
                     break
-        print(self.getState)
         if self.getState != "QUIT":
             counter = 0
             self.bettingOrder.reverse()
@@ -162,19 +160,22 @@ class Board():
                     tempCard = self.players[index].chooseCard(self)
                 else:
                     tempCard = Render.player_choosing_cards(self)
-
-                self.players[index].playCard(tempCard, self)
-                self.addToTrick(tempCard, self.players[index]) 
-                Render.draw_gameplay(self)
-                if j != 3:
-                    Render.card_sound.play()
-                    time.sleep(1)
-            self.evaluateTrick(index)
-
-        self.getState = "GAME_OVER"
-
-        
-        Render.draw_game_over_screen(self)
+                if self.getState != "QUIT":
+                    self.players[index].playCard(tempCard, self)
+                    self.addToTrick(tempCard, self.players[index]) 
+                    Render.draw_gameplay(self)
+                    if j != 3:
+                        Render.card_sound.play()
+                        time.sleep(1)
+                else:
+                    break
+            if self.getState != "QUIT":
+                self.evaluateTrick(index)
+            else:
+                break
+        if self.getState != "QUIT":
+            self.getState = "GAME_OVER"
+            Render.draw_game_over_screen(self)
         print("Ended player Game")
 
     #This method clears the old trick and adds it to pastTricks
