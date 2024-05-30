@@ -8,7 +8,7 @@ class Player:
         self.id = id
         self.wins = 0
         self.name = name
-    #Will replace for user or abstract method
+    #todo Will replace for user or abstract method in order to make code run better
     def chooseBet(self, Board):
         currentBetID = Board.currentBetID
         legalMoves = []

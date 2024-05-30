@@ -12,6 +12,7 @@ CARD_HEIGHT = 145
 HAND_Y = SCREEN_HEIGHT - (CARD_HEIGHT + 20)
 
 screen = pygame.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
+clock = pygame.time.Clock()
 
 size_bet_rects = []
 suit_bet_rects = []
@@ -30,7 +31,7 @@ dark_red = (156, 33, 61)
 light_red = (200, 33, 61)
 rich_black = (1, 22, 39)
 
-icon = pygame.image.load("Misc_Images/poker-hand.png") #Lorc [https://lorcblog.blogspot.com/]
+icon = pygame.image.load("Misc_Images/poker-hand.png").convert() #Lorc [https://lorcblog.blogspot.com/]
 pygame.display.set_icon(icon)
 
 pygame.mixer.init()
@@ -281,7 +282,7 @@ def draw_gameplay(board):
     hand_offset = (SCREEN_WIDTH - ((len(board.player1.hand) + 1) * (CARD_WIDTH * 2 / 3))) / 2
     loc_offset = 0
     for card in board.player1.hand:       
-        screen.blit(card.image, (hand_offset + loc_offset*CARD_WIDTH * 2/3, HAND_Y))
+        screen.blit(card.image.convert(), (hand_offset + loc_offset*CARD_WIDTH * 2/3, HAND_Y))
         loc_offset += 1
     #Draw the pile
     draw_pile(screen, board.currentTrick)
@@ -339,7 +340,7 @@ def draw_pile(screen, pile):
 def get_glyph_from_suit(suit):
     glyph_name = suit.name.lower() + "_glyph.png"
     glyph_path = os.path.join("Cards", glyph_name)
-    img = pygame.image.load(glyph_path)
+    img = pygame.image.load(glyph_path).convert_alpha()
     return img
 
 def draw_trump(screen, suit):
