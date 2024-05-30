@@ -1,6 +1,6 @@
 # Modified Bridge Card Game
  A Python implementation of the popular card game [Bridge](https://en.wikipedia.org/wiki/Contract_bridge) with a few modifications to the rules. 
- Originally, built during the hackathon Bitcamp to make it easier for our team to play our version of bridge virtually during the Summer Break when we would be separated.
+ Originally, built during the 2024 Bitcamp Hackathon to make it easier for our team to play our version of bridge virtually during the Summer Break when we would be separated.
 
 ## How It's Made
 **Tech Used:** Python, Pygame
