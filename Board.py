@@ -84,7 +84,7 @@ class Board():
     
     def addBet(self, bet) -> bool:
         if bet.getID() > self.currentBetID:
-            
+            Render.stone_drop_sound.play()
             self.bettingOrder.insert(0, bet)
             if(bet.getID() != 42):
                 self.currentBetID = bet.getID()
@@ -106,8 +106,10 @@ class Board():
                 if player.id != 0:
                     self.addBet(player.chooseBet(self))
                 else:
-                    print("User Choosing Bets Played")
+                    self.yourTurn = True
+                    Render.draw_gameplay(self)
                     Render.user_choose_bets(self)
+                    self.yourTurn = False
                 Render.draw_gameplay(self)
                 if self.checkBetting() == True and self.getState != "QUIT": # == True might be unnecessary
                     index = (player.id + 1) % 4

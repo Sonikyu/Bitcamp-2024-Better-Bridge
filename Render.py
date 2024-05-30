@@ -35,11 +35,15 @@ pygame.display.set_icon(icon)
 
 pygame.mixer.init()
 
-button_sound = pygame.mixer.Sound("Sounds/menu-button.mp3")
+button_sound = pygame.mixer.Sound("Sounds/click.5.ogg")
 card_sound = pygame.mixer.Sound("Sounds/card.mp3")
 vine_boom = pygame.mixer.Sound("Sounds/boom.mp3")
 punch_sound = pygame.mixer.Sound("Sounds/Punch.wav")
-sound_list = (button_sound, card_sound, vine_boom, punch_sound)
+stone_drop_sound = pygame.mixer.Sound("Sounds/stone-dropping.mp3")
+coin_sound = pygame.mixer.Sound("Sounds/coin-dropped.mp3")
+buzz_sound = pygame.mixer.Sound("Sounds/bzzzt.wav")
+boing_sound = pygame.mixer.Sound("Sounds/boing.wav")
+sound_list = (button_sound, card_sound, vine_boom, punch_sound, stone_drop_sound, coin_sound, buzz_sound)
 list_of_songs = ("Jazzy Vibes #36 - Loop.mp3", "backup_plan.wav", "Casino Man.ogg", 
         "pixel_sprinter_loop.wav", "short_A New World Order!!.mp3")
 #Zane Little Music = backup_plan, pixel_sprinter_loop
@@ -284,7 +288,6 @@ def draw_gameplay(board):
     #Draw the trump suit
     draw_trump(screen, board.trumpSuit)
     #Draw the score (rounds won)
-    
     if board.getState == "PLAYING":
         pygame.display.set_caption("Bridge Game [Playing...]")
         draw_scores(screen, board.teamOneScore, board.teamTwoScore, board.gamesToWin)
@@ -294,6 +297,7 @@ def draw_gameplay(board):
         pygame.display.set_caption("Bridge Game [Betting...]")
         draw_bets(screen, board)
         update_betting_board(board)
+        draw_your_turn(board.yourTurn)
     elif board.getState == "GAME_OVER":
         pygame.display.set_caption("Bridge Game [LeaderBoard]")
         draw_game_over_screen(board)
@@ -430,6 +434,7 @@ def draw_your_turn(isYourTurn: bool):
          draw_title_text("Your Turn!", font, white, (SCREEN_WIDTH-115, 30))
     else:
          draw_title_text("Waiting...", font, white, (SCREEN_WIDTH-115, 30))
+    pygame.display.flip()
 
 def update_betting_board(board):
     draw_current_bet(board.currentBetID)
@@ -462,19 +467,21 @@ def user_choose_bets(board):
             if event.type == pygame.QUIT:
                 board.getState = "QUIT"
                 running = False
-            if event.type == pygame.MOUSEBUTTONDOWN:
+            elif event.type == pygame.MOUSEBUTTONDOWN:
                 #logic for handling player betting
                 #Player clicks on a button corresponding to some bet
                 #Then that bet is added using board.addBet
                 #addBet checks for validity
                 for button in size_bet_rects:
                     if button.rect.collidepoint(event.pos):
+                        coin_sound.play()
                         print("Size Button Clicked")
                         new_bet = Bet(active_bet.suit, button.value)
                         active_bet = new_bet
                         print(active_bet)
                 for button in suit_bet_rects:
                     if button.rect.collidepoint(event.pos):
+                        coin_sound.play()
                         print("Suit Button Clicked")
                         new_bet = Bet(button.betsuit, active_bet.level)
                         active_bet = new_bet
@@ -486,13 +493,15 @@ def user_choose_bets(board):
                         running = False
                     else:
                         print("womp womp")
+                        boing_sound.play()
+
                 if pass_rect.collidepoint(event.pos):
                     if board.currentBetID != -1:
                         running = False
                         print("Passed")
                         board.addBet(Bet(None, None))
                     else:
-                        print("Can't pass on first try")
+                        boing_sound.play()
     print("USER STATE AFTER while loop for CHOOSING", board.getState)
 def draw_bets(screen, board):
     print("Draw bets called")
@@ -568,11 +577,13 @@ def player_choosing_cards(board):
                 #if board.getState == "PLAYING":
                 for card in board.players[0].hand:
                     card_rect = pygame.Rect(card.x, HAND_Y, CARD_WIDTH *2 / 3, CARD_HEIGHT)
+                    if card_rect.collidepoint(event.pos) and not board.player1.isValidCardMove(card, board):
+                        buzz_sound.play()
                     if card_rect.collidepoint(event.pos) and board.player1.isValidCardMove(card, board):
                         print(f"Clicked on  {str(card)}")
                         #self.player1.playCard(card, self)
                         tempCard = card
-                        running = False  
+                        running = False
         if board.getState != "QUIT":
             draw_gameplay(board)
             board.yourTurn = False
@@ -591,6 +602,10 @@ def draw_title_text(text: str, font, text_col: tuple, center: tuple):
     draw_centered_Text(text, font, black, (center[0] + 4, center[1] + 4))
     draw_centered_Text(text, font, gray, (center[0] + 2, center[1] + 2))
     draw_centered_Text(text, font, text_col, center)
+
+def draw_error_outline(image_rect: tuple, isInner: bool):
+    pygame.draw.rect(screen, light_red, image_rect, 1)
+
 '''
 def draw_menu_button(text: str, font, text_col: tuple, center: tuple):
     (width, height) = font.size(text)
