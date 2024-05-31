@@ -5,6 +5,7 @@ from BetSuit import BetSuit
 from Suit import Suit
 from BetButton import BetButton
 
+
 SCREEN_WIDTH = 1200
 SCREEN_HEIGHT = 750
 CARD_WIDTH = 100
@@ -18,6 +19,16 @@ size_bet_rects = []
 suit_bet_rects = []
 pass_rect = pygame.Rect(820, 315, 100, 100)
 submit_rect = pygame.Rect(730, 405, 190, 75)
+
+#Fonts
+pygame.font.init()
+DEFAULT_TITLE_TEXT_SIZE = 100
+title_font = pygame.font.SysFont("silom", DEFAULT_TITLE_TEXT_SIZE)
+big_font = pygame.font.SysFont("silom", 75) 
+medium_font = pygame.font.SysFont("silom", 60) 
+small_font = pygame.font.SysFont("silom", 30)
+stat_font = pygame.font.SysFont("silom", 40)
+
 
 #Colors
 black = (0,0,0)
@@ -87,36 +98,31 @@ def draw_setting(board) -> None:
     song_index = 0
     while run:
         screen.fill(rich_black)
-        font = pygame.font.Font('freesansbold.ttf', 80)
-        font.set_underline(True)
-        draw_title_text("SETTINGS", font, white, (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 15))
-        font = pygame.font.Font('freesansbold.ttf', 50)
+        draw_title_text("SETTINGS", title_font, white, (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 15))
         
-        back_button = MenuButton("Back", font, (SCREEN_WIDTH//3, SCREEN_HEIGHT//10 * 9), True)
-        reset_name_button = MenuButton("Reset Name", font, (SCREEN_WIDTH//3 * 2, SCREEN_HEIGHT//10 * 9), True)
+        back_button = MenuButton("Back", medium_font, (SCREEN_WIDTH//3, SCREEN_HEIGHT//10 * 9), True)
+        reset_name_button = MenuButton("Reset Name", medium_font, (SCREEN_WIDTH//3 * 2, SCREEN_HEIGHT//10 * 9), True)
         #Music Setting Buttons
-        draw_title_text("Music:", font, white, (SCREEN_WIDTH//10, SCREEN_HEIGHT//5))
+        draw_title_text("Music:", medium_font, white, (SCREEN_WIDTH//10, SCREEN_HEIGHT//5))
         isMusicPlaying = pygame.mixer.music.get_busy()
         text = "Stop Music"  if isMusicPlaying else "Play Music"
-        play_or_stop_button = MenuButton(text, font, (SCREEN_WIDTH//10 * 4 - 50, SCREEN_HEIGHT // 5), True)
-        draw_title_text(f"Volume: {int(pygame.mixer.music.get_volume() * 100)}", font, white, (SCREEN_WIDTH//10 * 7 - 50, SCREEN_HEIGHT // 5) )
-        increase_music_volume_button = MenuButton("+", font, (SCREEN_WIDTH//10 * 9 + 50, SCREEN_HEIGHT // 5), True)
-        decrease_music_volume_button = MenuButton("-", font, (SCREEN_WIDTH//10 * 9 - 50, SCREEN_HEIGHT // 5), True)
+        play_or_stop_button = MenuButton(text, small_font, (SCREEN_WIDTH//10 * 3, SCREEN_HEIGHT // 5), True)
+        draw_title_text(f"Volume: {int(pygame.mixer.music.get_volume() * 100)}", medium_font, white, (SCREEN_WIDTH//10 * 7 - 50, SCREEN_HEIGHT // 5) )
+        increase_music_volume_button = MenuButton("+", small_font, (SCREEN_WIDTH//10 * 9 + 50, SCREEN_HEIGHT // 5), True)
+        decrease_music_volume_button = MenuButton("-", small_font, (SCREEN_WIDTH//10 * 9 - 50, SCREEN_HEIGHT // 5), True)
         #Sound Settinig Buttons
-        draw_title_text("Sound Effects:", font, white, (SCREEN_WIDTH//10 * 2 - 20, SCREEN_HEIGHT//10 * 4 - 50))
-        draw_title_text(f"Volume: {int(button_sound.get_volume() * 100)}", font, white, (SCREEN_WIDTH//10 * 7 - 50, SCREEN_HEIGHT // 10 * 4 - 50))
-        increase_sound_volume_button = MenuButton("+", font, (SCREEN_WIDTH//10 * 9 + 50, SCREEN_HEIGHT // 10 * 4 - 50), True)
-        decrease_sound_volume_button = MenuButton("-", font, (SCREEN_WIDTH//10 * 9 - 50, SCREEN_HEIGHT // 10 * 4 - 50), True)
+        draw_title_text("Sound Effects:", medium_font, white, (SCREEN_WIDTH//10 * 2 + 5, SCREEN_HEIGHT//10 * 4 - 50))
+        draw_title_text(f"Volume: {int(button_sound.get_volume() * 100)}", medium_font, white, (SCREEN_WIDTH//10 * 7 - 50, SCREEN_HEIGHT // 10 * 4 - 50))
+        increase_sound_volume_button = MenuButton("+", small_font, (SCREEN_WIDTH//10 * 9 + 50, SCREEN_HEIGHT // 10 * 4 - 50), True)
+        decrease_sound_volume_button = MenuButton("-", small_font, (SCREEN_WIDTH//10 * 9 - 50, SCREEN_HEIGHT // 10 * 4 - 50), True)
         #Loading Songs Settings
-        draw_title_text("Load Songs:", font, white, (SCREEN_WIDTH//10 * 2 - 40, SCREEN_HEIGHT//10 * 4 + 50))
-        song1_button = MenuButton("1", font, (SCREEN_WIDTH//10 * 4 - 50, SCREEN_HEIGHT // 10 * 4 + 50), True)
-        song2_button = MenuButton("2", font, (SCREEN_WIDTH//10 * 5 - 50, SCREEN_HEIGHT // 10 * 4 + 50), True)
-        song3_button = MenuButton("3", font, (SCREEN_WIDTH//10 * 6 - 50, SCREEN_HEIGHT // 10 * 4 + 50), True)
-        song4_button = MenuButton("4", font, (SCREEN_WIDTH//10 * 7 - 50, SCREEN_HEIGHT // 10 * 4 + 50), True)
-        song5_button = MenuButton("5", font, (SCREEN_WIDTH//10 * 8 - 50, SCREEN_HEIGHT // 10 * 4 + 50), True)
-        song_name_font = pygame.font.Font('freesansbold.ttf', 30)
-        draw_title_text(f"Current Song: {list_of_songs[song_index]}", song_name_font, white, (SCREEN_WIDTH//2, SCREEN_HEIGHT//10 * 6))
-        draw_title_text(f"Your Name Is: {board.name}", font, white, (SCREEN_WIDTH//2, SCREEN_HEIGHT // 10 * 8 - 50))
+        draw_title_text("Load Songs:", medium_font, white, (SCREEN_WIDTH//10 * 2 - 30, SCREEN_HEIGHT//10 * 4 + 50))
+        song_button_list = []
+        for index in range(1, 6):
+            song_button = MenuButton(str(index), small_font, (SCREEN_WIDTH//10 * (4 + index) - 50, SCREEN_HEIGHT // 10 * 4 + 50), True)
+            song_button_list.append(song_button)
+        draw_title_text(f"Current Song: {list_of_songs[song_index]}", small_font, white, (SCREEN_WIDTH//2, SCREEN_HEIGHT//10 * 6))
+        draw_title_text(f"Your Name Is: {board.name}", medium_font, white, (SCREEN_WIDTH//2, SCREEN_HEIGHT // 10 * 8 - 50))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 board.getType = "QUIT"
@@ -134,22 +140,11 @@ def draw_setting(board) -> None:
                     pygame.mixer.music.fadeout(1000)
                 else:
                     pygame.mixer.music.play(-1)
-            elif song1_button.check_click():
-                song_index = 0
-                set_music(song_index)
-            elif song2_button.check_click():
-                song_index = 1
-                set_music(song_index)
-            elif song3_button.check_click():
-                song_index = 2
-                set_music(song_index)
-            elif song4_button.check_click():
-                song_index = 3
-                set_music(song_index)
-            elif song5_button.check_click():
-                song_index = 4
-                set_music(song_index)
-            elif increase_music_volume_button.check_click():
+            for index, song_button in enumerate(song_button_list):
+                if song_button.check_click():
+                    song_index = index
+                    set_music(song_index)
+            if increase_music_volume_button.check_click():
                 set_music_vol(0.05)
             elif decrease_music_volume_button.check_click():
                 set_music_vol(-0.05)
@@ -162,10 +157,6 @@ def draw_setting(board) -> None:
 def draw_get_name() -> str:
     text_box_x = SCREEN_WIDTH//2
     text_box_y = SCREEN_HEIGHT//2 * 1.5
-    color_active = white
-    color_passive = black
-    color = color_passive
-    active = False
     user_name = ''
     input_rectangle = pygame.Rect(0,0, 90, 90)
     run = True
@@ -174,17 +165,10 @@ def draw_get_name() -> str:
             if event.type == pygame.QUIT:
                 pygame.quit()
                 run = False
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if input_rectangle.collidepoint(event.pos):
-                    active = True
-                    color = color_active
-                else:
-                    active = False
-                    color = color_passive
-            if event.type == pygame.KEYDOWN and not event.key == pygame.K_SPACE and active:
+            if event.type == pygame.KEYDOWN:
                 isBackSpace = event.key == pygame.K_DELETE or event.key == pygame.K_BACKSPACE
                 isReturn = event.key == pygame.K_RETURN
-                isWithinRange = len(user_name) <= 8
+                isWithinRange = len(user_name) < 8
                 if isBackSpace:
                     user_name = user_name[0:-1]
                 if isReturn:
@@ -193,18 +177,11 @@ def draw_get_name() -> str:
                     user_name += event.unicode
         
         screen.fill(green)
-        font = pygame.font.Font('freesansbold.ttf', 100)
-        font.set_underline(True)
-        draw_title_text("Input a Profile Name", font, white, (SCREEN_WIDTH//2, SCREEN_HEIGHT // 10))
-        font = pygame.font.Font('freesansbold.ttf', 80)
-        draw_title_text("Requirements:", font, white, (SCREEN_WIDTH//2, SCREEN_HEIGHT // 5 + 50))
-        font = pygame.font.Font('freesansbold.ttf', 50)
-        draw_centered_Text("- Less than or equal to 8 characters", font, white, (SCREEN_WIDTH//2, SCREEN_HEIGHT // 5 + 130))
-        draw_centered_Text("- No Spaces", font, white, (SCREEN_WIDTH//2, SCREEN_HEIGHT // 5 + 180))
-        font = pygame.font.Font('freesansbold.ttf', 100)
+        draw_title_text("Input a Profile Name", title_font, white, (SCREEN_WIDTH//2, SCREEN_HEIGHT // 10))
+        draw_title_text("Requirements:", medium_font, white, (SCREEN_WIDTH//2, SCREEN_HEIGHT // 5 + 50))
+        draw_centered_Text("- Less than or equal to 8 characters", small_font, white, (SCREEN_WIDTH//2, SCREEN_HEIGHT // 5 + 130))
         input_rectangle.center = (text_box_x,text_box_y)
-        text_surface = font.render(user_name, True, white)
-        pygame.draw.rect(screen, color, input_rectangle, 2)
+        text_surface = title_font.render(user_name, True, white)
         input_rectangle.w = text_surface.get_width() + 5
  
         screen.blit(text_surface, input_rectangle)
@@ -224,22 +201,14 @@ def draw_menu_screen(board) -> None:
     run = True
     while run:
         screen.fill(green)
-        font = pygame.font.Font('freesansbold.ttf', 100)
-        font.set_underline(True)
-        #draw_centered_Text('Better Bridge Game!', font, white, (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 10))
-        draw_title_text('Better Bridge Game!', font, white, (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 10))
+        draw_title_text('Better Bridge Game!', title_font, white, (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 10))
         border = submit_rect        
         #Text
-        font = pygame.font.Font('freesansbold.ttf', 80)
-        #draw_menu_button("MULTIPLAYER", font, white, (SCREEN_WIDTH//2, SCREEN_HEIGHT//3))
-        multi_button = MenuButton("MULTIPLAYER", font, (SCREEN_WIDTH//2, SCREEN_HEIGHT//3), True)
-        #draw_menu_button("SINGLE PLAYER", font, white, (SCREEN_WIDTH//2, SCREEN_HEIGHT//2))
-        single_button = MenuButton("SINGLE PLAYER", font, (SCREEN_WIDTH//2, SCREEN_HEIGHT//2), True)
-        #draw_menu_button("SETTINGS", font, white, (SCREEN_WIDTH//2, SCREEN_HEIGHT//2 + SCREEN_HEIGHT//6))
-        setting_button = MenuButton("SETTINGS", font, (SCREEN_WIDTH//2, SCREEN_HEIGHT//2 + SCREEN_HEIGHT//6), True)
-        #draw_menu_button("QUIT", font, white, (SCREEN_WIDTH//2, SCREEN_HEIGHT//2 + SCREEN_HEIGHT//3))
-        quit_button = MenuButton("QUIT", font, (SCREEN_WIDTH//2, SCREEN_HEIGHT//2 + SCREEN_HEIGHT//3), True)
-        mouse_Pos = pygame.mouse.get_pos
+        multi_button = MenuButton("MULTIPLAYER", big_font, (SCREEN_WIDTH//2, SCREEN_HEIGHT//3), True)
+        single_button = MenuButton("SINGLE PLAYER", big_font, (SCREEN_WIDTH//2, SCREEN_HEIGHT//2), True)
+        setting_button = MenuButton("SETTINGS", big_font, (SCREEN_WIDTH//2, SCREEN_HEIGHT//2 + SCREEN_HEIGHT//6), True)
+        quit_button = MenuButton("QUIT", big_font, (SCREEN_WIDTH//2, SCREEN_HEIGHT//2 + SCREEN_HEIGHT//3), True)
+        #mouse_Pos = pygame.mouse.get_pos
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 print("QUIT")
@@ -354,12 +323,13 @@ def draw_trump(screen, suit):
     pygame.draw.rect(screen, black, border_r)
     pygame.draw.rect(screen, black, border_b)
     #Text
-    font = pygame.font.Font('freesansbold.ttf', 20)
-    draw_centered_Text(f"Trump: {suit.name}", font, black, (105, 30))
+    draw_centered_Text(f"Trump:", small_font, black, (105, 20))
     #Glyph
     if (suit != BetSuit.LOW and suit != BetSuit.HIGH):
         img = get_glyph_from_suit(suit)
         draw_centered_Element(img, (105, 80))
+    else:
+        draw_centered_Text(f"{suit.name}", small_font, black, (105, 80))
         
 
 def draw_scores(screen, score_1, score_2, team_1_to_win):
@@ -380,31 +350,27 @@ def draw_scores(screen, score_1, score_2, team_1_to_win):
     pygame.draw.rect(screen, black, border_b, 5)
     pygame.draw.rect(screen, black, border_m, 5)
     #Text
-    font = pygame.font.Font('freesansbold.ttf', 30)
-    draw_centered_Text(f"{str(score_1)} / {str(team_1_to_win)}" , font, black, (272, 60)) #Text1
-    draw_centered_Text(f"{str(score_2)} / {str(team_2_to_win)}", font, black, (378, 60)) #Text2
+    draw_centered_Text(f"{str(score_1)} / {str(team_1_to_win)}" , small_font, black, (272, 60)) #Text1
+    draw_centered_Text(f"{str(score_2)} / {str(team_2_to_win)}", small_font, black, (378, 60)) #Text2
 
 def draw_game_over_screen(board):
    screen.fill(dark_red)
-   font = pygame.font.SysFont('georgia', 100)
+   font = title_font
    font.set_underline(True)
-   #draw_centered_Text("Game Over", font, white, (SCREEN_WIDTH/2, SCREEN_HEIGHT//14))
    draw_title_text("Game Over", font, white, (SCREEN_WIDTH/2, SCREEN_HEIGHT//14))
-   font = pygame.font.SysFont('georgia', 70)
-   #draw_centered_Text(f"Team {str(board.winningTeam)} Wins!", font, white, (SCREEN_WIDTH/2, SCREEN_HEIGHT//5))
-   draw_title_text(f"Team {str(board.winningTeam)} Wins!", font, white, (SCREEN_WIDTH/2, SCREEN_HEIGHT//5))
-   font = pygame.font.SysFont('georgia', 60)
+   draw_title_text(f"Team {str(board.winningTeam)} Wins!", big_font, white, (SCREEN_WIDTH/2, SCREEN_HEIGHT//5))
+ 
+   font = medium_font
    font.set_underline(True)
-   #draw_centered_Text("LeaderBoard:", font, white, (SCREEN_WIDTH/2, SCREEN_HEIGHT//3))
+
    draw_title_text("LeaderBoard:", font, white, (SCREEN_WIDTH/2, SCREEN_HEIGHT//3))
-   font = pygame.font.SysFont('georgia', 50)
+   font.set_underline(False)
    leaderboard = sorted(board.players,key=lambda x: x.wins, reverse=True)
    time.sleep(0.5)
    space:int = 80
    num = 1
    for player in leaderboard:
-       #draw_centered_Text(f"{str(num)}. {str(player)}, SCORE: {str(player.wins)}", font, white, (SCREEN_WIDTH/2, SCREEN_HEIGHT//3 + space))
-       draw_title_text(f"{str(num)}. {str(player)}, SCORE: {str(player.wins)}", font, white, (SCREEN_WIDTH/2, SCREEN_HEIGHT//3 + space))
+       draw_title_text(f"{str(num)}. {str(player)}, SCORE: {str(player.wins)}", stat_font, white, (SCREEN_WIDTH/2, SCREEN_HEIGHT//3 + space))
        punch_sound.play()
        pygame.display.update()
        space += 80
@@ -412,8 +378,8 @@ def draw_game_over_screen(board):
        time.sleep(0.2)
    running = True
    while running:
-       try_again_button = MenuButton("TRY AGAIN", font, (SCREEN_WIDTH-160, SCREEN_HEIGHT-170), True)
-       menu_button = MenuButton("MENU", font, (SCREEN_WIDTH-160, SCREEN_HEIGHT-80), True)
+       try_again_button = MenuButton("TRY AGAIN", medium_font, (SCREEN_WIDTH//3, SCREEN_HEIGHT-80), True)
+       menu_button = MenuButton("MENU", medium_font, (SCREEN_WIDTH//3 * 2, SCREEN_HEIGHT-80), True)
        pygame.display.update()
        for event in pygame.event.get():
             if try_again_button.check_click():
@@ -436,12 +402,11 @@ def draw_your_turn(isYourTurn: bool):
     Args:
         isYourTurn (bool): True if it's the player's turn, False otherwise.
     """
-    font = pygame.font.SysFont('georgia', 40)  # Choose a font and size
 
     if isYourTurn:
-        draw_title_text("Your Turn!", font, white, (SCREEN_WIDTH-115, 30))  # Draw "Your Turn!"
+        draw_title_text("Your Turn!", small_font, white, (SCREEN_WIDTH-115, 30))  # Draw "Your Turn!"
     else:
-        draw_title_text("Waiting...", font, white, (SCREEN_WIDTH-115, 30))   # Draw "Waiting..."
+        draw_title_text("Waiting...", small_font, white, (SCREEN_WIDTH-115, 30))   # Draw "Waiting..."
 
     pygame.display.flip()  # Update the entire display to show the new text
 
@@ -455,9 +420,8 @@ def draw_current_bet(currentBetID):
         currentBet = None
     else:
         currentBet = betFactory.getBet(currentBetID)
-    font = pygame.font.Font('freesansbold.ttf', 30)
 
-    draw_centered_Text(f"Current Bet: {currentBet}", font, white, (SCREEN_WIDTH//2, SCREEN_HEIGHT//20 * 5))
+    draw_centered_Text(f"Current Bet: {currentBet}", small_font, white, (SCREEN_WIDTH//2, SCREEN_HEIGHT//20 * 5))
     pygame.display.flip()
     #player_positions = ((SCREEN_WIDTH//10, SCREEN_HEIGHT//2))
     #for player in board.players:
@@ -535,16 +499,14 @@ def draw_bets(screen, board):
     pygame.draw.rect(screen, black, border)
     pygame.draw.rect(screen, light_green, bgnd)
     #Text
-    font = pygame.font.Font('freesansbold.ttf', 30)
-    draw_centered_Text("PASS", font, black, (870,365))
+    draw_centered_Text("PASS", small_font, black, (870,365))
     #Draw submit button
     border = submit_rect
     bgnd = pygame.Rect(740, 415, 170, 55)
     pygame.draw.rect(screen, black, border)
     pygame.draw.rect(screen, dark_red, bgnd)
     #Text
-    font = pygame.font.Font('freesansbold.ttf', 30)
-    draw_centered_Text("SUBMIT", font, black, (825,442.5))
+    draw_centered_Text("SUBMIT", small_font, black, (825,442.5))
 
 def draw_size_bet_box(screen, size, x, y):
     #Background
@@ -553,8 +515,7 @@ def draw_size_bet_box(screen, size, x, y):
     pygame.draw.rect(screen, black, border)
     pygame.draw.rect(screen, gray, bgnd)
     #Text
-    font = pygame.font.Font('freesansbold.ttf', 40)
-    draw_centered_Text(str(size), font, black, (x+50,y+50))
+    draw_centered_Text(str(size), small_font, black, (x+50,y+50))
     return BetButton(border, size, None)
 
 def draw_suit_bet_box(screen, betsuit, x, y):
@@ -564,15 +525,15 @@ def draw_suit_bet_box(screen, betsuit, x, y):
     pygame.draw.rect(screen, black, border)
     pygame.draw.rect(screen, gray, bgnd)
     #Contents
-    font = pygame.font.Font('freesansbold.ttf', 30)
     if betsuit.value == 0:
-        draw_centered_Text("LOW", font, black, (x+50,y+50))
+        draw_centered_Text("LOW", small_font, black, (x+50,y+50))
     elif betsuit.value == 5:
-        draw_centered_Text("HIGH", font, black,(x+50,y+50))
+        draw_centered_Text("HIGH", small_font, black,(x+50,y+50))
     else:
         img = get_glyph_from_suit(Suit(betsuit.value))
         draw_centered_Element(img, (x+50, y+50))
     return BetButton(border, None, betsuit)
+
 def player_choosing_cards(board):
     running = True
     while running:
