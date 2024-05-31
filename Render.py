@@ -430,12 +430,20 @@ def draw_game_over_screen(board):
                 running = False
 
 def draw_your_turn(isYourTurn: bool):
-    font = pygame.font.SysFont('georgia', 40)
+    """
+    Draws a message on the screen indicating whether it's the player's turn or they are waiting.
+
+    Args:
+        isYourTurn (bool): True if it's the player's turn, False otherwise.
+    """
+    font = pygame.font.SysFont('georgia', 40)  # Choose a font and size
+
     if isYourTurn:
-         draw_title_text("Your Turn!", font, white, (SCREEN_WIDTH-115, 30))
+        draw_title_text("Your Turn!", font, white, (SCREEN_WIDTH-115, 30))  # Draw "Your Turn!"
     else:
-         draw_title_text("Waiting...", font, white, (SCREEN_WIDTH-115, 30))
-    pygame.display.flip()
+        draw_title_text("Waiting...", font, white, (SCREEN_WIDTH-115, 30))   # Draw "Waiting..."
+
+    pygame.display.flip()  # Update the entire display to show the new text
 
 def update_betting_board(board):
     draw_current_bet(board.currentBetID)
