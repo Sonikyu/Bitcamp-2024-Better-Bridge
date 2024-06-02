@@ -10,10 +10,14 @@ SCREEN_WIDTH = 1200
 SCREEN_HEIGHT = 750
 CARD_WIDTH = 100
 CARD_HEIGHT = 145
-HAND_Y = SCREEN_HEIGHT - (CARD_HEIGHT + 20)
+HAND_Y =  SCREEN_HEIGHT - (CARD_HEIGHT//2)#SCREEN_HEIGHT - (CARD_HEIGHT + 20)
 
 screen = pygame.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
+pygame.event.set_allowed([pygame.MOUSEBUTTONDOWN, pygame.MOUSEBUTTONUP, pygame.QUIT, pygame.K_ESCAPE])
+
 clock = pygame.time.Clock()
+FRAMES_PER_SECOND = 60
+
 
 size_bet_rects = []
 suit_bet_rects = []
@@ -72,7 +76,9 @@ def set_music(index: int) -> None:
     :return: None
     '''
     pygame.mixer.music.load(f"Music/{list_of_songs[index]}")
+    pygame.mixer.music.set_volume(-1)
     pygame.mixer.music.play(-1) 
+
 def set_music_vol(change: int) -> None:
     '''
     Sets the volume of the music
@@ -98,35 +104,34 @@ def draw_setting(board) -> None:
     song_index = 0
     while run:
         screen.fill(rich_black)
-        draw_title_text("SETTINGS", title_font, white, (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 15))
+        draw_centered_title_text("SETTINGS", title_font, white, (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 15))
         
         back_button = MenuButton("Back", medium_font, (SCREEN_WIDTH//3, SCREEN_HEIGHT//10 * 9), True)
         reset_name_button = MenuButton("Reset Name", medium_font, (SCREEN_WIDTH//3 * 2, SCREEN_HEIGHT//10 * 9), True)
         #Music Setting Buttons
-        draw_title_text("Music:", medium_font, white, (SCREEN_WIDTH//10, SCREEN_HEIGHT//5))
+        draw_left_aligned_title_text("Music:", medium_font, white, (SCREEN_WIDTH//30, SCREEN_HEIGHT//5))
         isMusicPlaying = pygame.mixer.music.get_busy()
         text = "Stop Music"  if isMusicPlaying else "Play Music"
         play_or_stop_button = MenuButton(text, small_font, (SCREEN_WIDTH//10 * 3, SCREEN_HEIGHT // 5), True)
-        draw_title_text(f"Volume: {int(pygame.mixer.music.get_volume() * 100)}", medium_font, white, (SCREEN_WIDTH//10 * 7 - 50, SCREEN_HEIGHT // 5) )
+        draw_centered_title_text(f"Volume: {int(pygame.mixer.music.get_volume() * 100)}", medium_font, white, (SCREEN_WIDTH//10 * 7 - 50, SCREEN_HEIGHT // 5) )
         increase_music_volume_button = MenuButton("+", small_font, (SCREEN_WIDTH//10 * 9 + 50, SCREEN_HEIGHT // 5), True)
         decrease_music_volume_button = MenuButton("-", small_font, (SCREEN_WIDTH//10 * 9 - 50, SCREEN_HEIGHT // 5), True)
         #Sound Settinig Buttons
-        draw_title_text("Sound Effects:", medium_font, white, (SCREEN_WIDTH//10 * 2 + 5, SCREEN_HEIGHT//10 * 4 - 50))
-        draw_title_text(f"Volume: {int(button_sound.get_volume() * 100)}", medium_font, white, (SCREEN_WIDTH//10 * 7 - 50, SCREEN_HEIGHT // 10 * 4 - 50))
+        draw_left_aligned_title_text("Sound Effects:", medium_font, white, (SCREEN_WIDTH//30, SCREEN_HEIGHT//10 * 4 - 50))
+        draw_centered_title_text(f"Volume: {int(button_sound.get_volume() * 100)}", medium_font, white, (SCREEN_WIDTH//10 * 7 - 50, SCREEN_HEIGHT // 10 * 4 - 50))
         increase_sound_volume_button = MenuButton("+", small_font, (SCREEN_WIDTH//10 * 9 + 50, SCREEN_HEIGHT // 10 * 4 - 50), True)
         decrease_sound_volume_button = MenuButton("-", small_font, (SCREEN_WIDTH//10 * 9 - 50, SCREEN_HEIGHT // 10 * 4 - 50), True)
         #Loading Songs Settings
-        draw_title_text("Load Songs:", medium_font, white, (SCREEN_WIDTH//10 * 2 - 30, SCREEN_HEIGHT//10 * 4 + 50))
+        draw_left_aligned_title_text("Load Songs:", medium_font, white, (SCREEN_WIDTH//30, SCREEN_HEIGHT//10 * 4 + 50))
         song_button_list = []
         for index in range(1, 6):
             song_button = MenuButton(str(index), small_font, (SCREEN_WIDTH//10 * (4 + index) - 50, SCREEN_HEIGHT // 10 * 4 + 50), True)
             song_button_list.append(song_button)
-        draw_title_text(f"Current Song: {list_of_songs[song_index]}", small_font, white, (SCREEN_WIDTH//2, SCREEN_HEIGHT//10 * 6))
-        draw_title_text(f"Your Name Is: {board.name}", medium_font, white, (SCREEN_WIDTH//2, SCREEN_HEIGHT // 10 * 8 - 50))
+        draw_centered_title_text(f"Current Song: {list_of_songs[song_index]}", small_font, white, (SCREEN_WIDTH//2, SCREEN_HEIGHT//10 * 6))
+        draw_centered_title_text(f"Your Name Is: {board.name}", medium_font, white, (SCREEN_WIDTH//2, SCREEN_HEIGHT // 10 * 8 - 50))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 board.getType = "QUIT"
-                pygame.quit()
                 run = False
             elif back_button.check_click():
                 run = False
@@ -140,11 +145,7 @@ def draw_setting(board) -> None:
                     pygame.mixer.music.fadeout(1000)
                 else:
                     pygame.mixer.music.play(-1)
-            for index, song_button in enumerate(song_button_list):
-                if song_button.check_click():
-                    song_index = index
-                    set_music(song_index)
-            if increase_music_volume_button.check_click():
+            elif increase_music_volume_button.check_click():
                 set_music_vol(0.05)
             elif decrease_music_volume_button.check_click():
                 set_music_vol(-0.05)
@@ -152,6 +153,11 @@ def draw_setting(board) -> None:
                 set_sound_vol(0.05)
             elif decrease_sound_volume_button.check_click():
                 set_sound_vol(-0.05)
+            else:
+                for index, song_button in enumerate(song_button_list):
+                    if song_button.check_click():
+                        song_index = index
+                        set_music(song_index)
         pygame.display.flip()
 
 def draw_get_name() -> str:
@@ -177,8 +183,8 @@ def draw_get_name() -> str:
                     user_name += event.unicode
         
         screen.fill(green)
-        draw_title_text("Input a Profile Name", title_font, white, (SCREEN_WIDTH//2, SCREEN_HEIGHT // 10))
-        draw_title_text("Requirements:", medium_font, white, (SCREEN_WIDTH//2, SCREEN_HEIGHT // 5 + 50))
+        draw_centered_title_text("Input a Profile Name", title_font, white, (SCREEN_WIDTH//2, SCREEN_HEIGHT // 10))
+        draw_centered_title_text("Requirements:", medium_font, white, (SCREEN_WIDTH//2, SCREEN_HEIGHT // 5 + 50))
         draw_centered_Text("- Less than or equal to 8 characters", small_font, white, (SCREEN_WIDTH//2, SCREEN_HEIGHT // 5 + 130))
         input_rectangle.center = (text_box_x,text_box_y)
         text_surface = title_font.render(user_name, True, white)
@@ -187,8 +193,6 @@ def draw_get_name() -> str:
         screen.blit(text_surface, input_rectangle)
         pygame.display.flip()
     return user_name
-
-
 
 def draw_menu_screen(board) -> None:
     """
@@ -201,16 +205,14 @@ def draw_menu_screen(board) -> None:
     run = True
     while run:
         screen.fill(green)
-        draw_title_text('Better Bridge Game!', title_font, white, (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 10))
-        border = submit_rect        
-        #Text
+        draw_centered_title_text('Better Bridge Game!', title_font, white, (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 10))
+
         multi_button = MenuButton("MULTIPLAYER", big_font, (SCREEN_WIDTH//2, SCREEN_HEIGHT//3), True)
         single_button = MenuButton("SINGLE PLAYER", big_font, (SCREEN_WIDTH//2, SCREEN_HEIGHT//2), True)
         setting_button = MenuButton("SETTINGS", big_font, (SCREEN_WIDTH//2, SCREEN_HEIGHT//2 + SCREEN_HEIGHT//6), True)
         quit_button = MenuButton("QUIT", big_font, (SCREEN_WIDTH//2, SCREEN_HEIGHT//2 + SCREEN_HEIGHT//3), True)
-        #mouse_Pos = pygame.mouse.get_pos
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+            if event.type == pygame.QUIT or quit_button.check_click():
                 print("QUIT")
                 board.getState = "QUIT"
                 run = False
@@ -227,10 +229,6 @@ def draw_menu_screen(board) -> None:
             elif setting_button.check_click():
                 print("SETTINGS CLICKED")
                 draw_setting(board)
-            elif quit_button.check_click():
-                print("QUIT CLICKED")
-                board.getState = "QUIT"
-                run = False
             pygame.display.flip()
     if board.getState == "QUIT":
         print("pygame quitted")
@@ -238,11 +236,22 @@ def draw_menu_screen(board) -> None:
         pygame.quit()
     print("MENU CLOSED")
 
-#Might delete
-def draw_out_of_game(board):
-    screen.fill(green)
-    if board.getState == "MENU":
-        draw_menu_screen()
+gravity_time = 20
+update_gravity = pygame.event.custom_type() + 1
+def create_moving_cards(board):
+
+    pygame.time.set_timer(update_gravity, gravity_time)
+
+    hand_offset = (SCREEN_WIDTH - ((len(board.player1.hand) + 1) * (CARD_WIDTH * 2/3))) / 2
+    loc_offset = 0
+    for card in board.player1.hand:
+        card.rect.x = (hand_offset + loc_offset*CARD_WIDTH * 2/3)
+        card.rect = card.rect.inflate(0, HAND_Y)
+        loc_offset += 1
+def check_if_cards_move(event, board):
+    for card in board.player1.hand:  
+        if event.type == update_gravity:
+            card.gravity_update()
 
 def draw_gameplay(board):
     #Draw the background
@@ -251,8 +260,9 @@ def draw_gameplay(board):
     hand_offset = (SCREEN_WIDTH - ((len(board.player1.hand) + 1) * (CARD_WIDTH * 2 / 3))) / 2
     loc_offset = 0
     for card in board.player1.hand:       
-        screen.blit(card.image.convert(), (hand_offset + loc_offset*CARD_WIDTH * 2/3, HAND_Y))
+        card.rect = screen.blit(card.image, (hand_offset + loc_offset*CARD_WIDTH * 2/3, HAND_Y))
         loc_offset += 1
+    create_moving_cards(board)
     #Draw the pile
     draw_pile(screen, board.currentTrick)
     #Draw the trump suit
@@ -329,9 +339,9 @@ def draw_trump(screen, suit):
         img = get_glyph_from_suit(suit)
         draw_centered_Element(img, (105, 80))
     else:
-        draw_centered_Text(f"{suit.name}", small_font, black, (105, 80))
+        draw_centered_Text(f"{suit.name}", stat_font, black, (105, 80))
         
-
+# todo increase border size so that team 1 and 2 can fit inside
 def draw_scores(screen, score_1, score_2, team_1_to_win):
     if team_1_to_win == 13:
         team_2_to_win = 1
@@ -352,29 +362,29 @@ def draw_scores(screen, score_1, score_2, team_1_to_win):
     #Text
     draw_centered_Text(f"{str(score_1)} / {str(team_1_to_win)}" , small_font, black, (272, 60)) #Text1
     draw_centered_Text(f"{str(score_2)} / {str(team_2_to_win)}", small_font, black, (378, 60)) #Text2
+    draw_centered_Text("Team 1", small_font, black, (272, 20)) #Text1
+    draw_centered_Text("Team 2", small_font, black, (378, 20)) #Text2
 
 def draw_game_over_screen(board):
    screen.fill(dark_red)
    font = title_font
    font.set_underline(True)
-   draw_title_text("Game Over", font, white, (SCREEN_WIDTH/2, SCREEN_HEIGHT//14))
-   draw_title_text(f"Team {str(board.winningTeam)} Wins!", big_font, white, (SCREEN_WIDTH/2, SCREEN_HEIGHT//5))
+   draw_centered_title_text("Game Over", font, white, (SCREEN_WIDTH/2, SCREEN_HEIGHT//14))
+   draw_centered_title_text(f"Team {str(board.winningTeam)} Wins!", big_font, white, (SCREEN_WIDTH/2, SCREEN_HEIGHT//5))
  
    font = medium_font
    font.set_underline(True)
 
-   draw_title_text("LeaderBoard:", font, white, (SCREEN_WIDTH/2, SCREEN_HEIGHT//3))
+   draw_centered_title_text("LeaderBoard:", font, white, (SCREEN_WIDTH/2, SCREEN_HEIGHT//3))
    font.set_underline(False)
    leaderboard = sorted(board.players,key=lambda x: x.wins, reverse=True)
    time.sleep(0.5)
-   space:int = 80
-   num = 1
-   for player in leaderboard:
-       draw_title_text(f"{str(num)}. {str(player)}, SCORE: {str(player.wins)}", stat_font, white, (SCREEN_WIDTH/2, SCREEN_HEIGHT//3 + space))
+   buffer:int = 80
+   for index, player in enumerate(leaderboard):
+       draw_left_aligned_title_text(f"{str(index + 1)}. Team {1 if index % 2 == 0 else 2} - {str(player)}, SCORE: {str(player.wins)}", stat_font, white, (SCREEN_WIDTH//10 * 3, SCREEN_HEIGHT//3 + buffer))
        punch_sound.play()
        pygame.display.update()
-       space += 80
-       num += 1
+       buffer += 80
        time.sleep(0.2)
    running = True
    while running:
@@ -384,7 +394,6 @@ def draw_game_over_screen(board):
        for event in pygame.event.get():
             if try_again_button.check_click():
                 print("TRY AGAIN PRESSED")
-                #board.reset_values()
                 running = False
             elif menu_button.check_click():
                 print("MENU CLICKED")
@@ -394,7 +403,7 @@ def draw_game_over_screen(board):
                 board.getState = "QUIT"
                 print("QUIT")
                 running = False
-
+#todo ensure that the indicator isn't updating when it doesn't need to
 def draw_your_turn(isYourTurn: bool):
     """
     Draws a message on the screen indicating whether it's the player's turn or they are waiting.
@@ -403,16 +412,13 @@ def draw_your_turn(isYourTurn: bool):
         isYourTurn (bool): True if it's the player's turn, False otherwise.
     """
 
-    if isYourTurn:
-        draw_title_text("Your Turn!", small_font, white, (SCREEN_WIDTH-115, 30))  # Draw "Your Turn!"
-    else:
-        draw_title_text("Waiting...", small_font, white, (SCREEN_WIDTH-115, 30))   # Draw "Waiting..."
-
-    pygame.display.flip()  # Update the entire display to show the new text
+    text = "Your Turn!" if isYourTurn else "Waiting..."
+    draw_centered_title_text(text, small_font, white, (SCREEN_WIDTH-115, 30))
+    pygame.display.update()  # Update the entire display to show the new text
 
 def update_betting_board(board):
     draw_current_bet(board.currentBetID)
-    #Add other player's bet choices later
+    # todo Add other player's bet choices later
 
 def draw_current_bet(currentBetID):
     betFactory = BetFactory()
@@ -421,7 +427,7 @@ def draw_current_bet(currentBetID):
     else:
         currentBet = betFactory.getBet(currentBetID)
 
-    draw_centered_Text(f"Current Bet: {currentBet}", small_font, white, (SCREEN_WIDTH//2, SCREEN_HEIGHT//20 * 5))
+    draw_centered_title_text(f"Current Bet: {currentBet}", small_font, white, (SCREEN_WIDTH//2, SCREEN_HEIGHT//20 * 5))
     pygame.display.flip()
     #player_positions = ((SCREEN_WIDTH//10, SCREEN_HEIGHT//2))
     #for player in board.players:
@@ -475,7 +481,9 @@ def user_choose_bets(board):
                         board.addBet(Bet(None, None))
                     else:
                         boing_sound.play()
+        draw_gameplay(board)
     print("USER STATE AFTER while loop for CHOOSING", board.getState)
+#todo make a box class so that when the mouse clicks on one it gets hight
 def draw_bets(screen, board):
     print("Draw bets called")
     global size_bet_rects
@@ -561,49 +569,40 @@ def player_choosing_cards(board):
 #Helper Functions
 def draw_centered_Text(text: str, font, text_col: tuple, center: tuple):
     img = font.render(text, True, text_col)
-    img_rect = img.get_rect()
-    img_rect.center = center
+    img_rect = img.get_rect(center = center)
     screen.blit(img, img_rect)
+
 def draw_centered_Element(img, center: tuple):
-    img_rect = img.get_rect()
-    img_rect.center = center
+    img_rect = img.get_rect(center= center)
     screen.blit(img, img_rect)
-def draw_title_text(text: str, font, text_col: tuple, center: tuple):
+
+def draw_left_aligned_text(text: str, font, text_col: tuple, left: tuple):
+    img = font.render(text, True, text_col)
+    img_rect = img.get_rect(midleft = left)
+    screen.blit(img, img_rect)
+
+def draw_centered_title_text(text: str, font, text_col: tuple, center: tuple):
     draw_centered_Text(text, font, black, (center[0] + 4, center[1] + 4))
     draw_centered_Text(text, font, gray, (center[0] + 2, center[1] + 2))
     draw_centered_Text(text, font, text_col, center)
 
+def draw_left_aligned_title_text(text: str, font, text_col: tuple, left: tuple):
+    draw_left_aligned_text(text, font, black, (left[0] + 4, left[1] + 4))
+    draw_left_aligned_text(text, font, gray, (left[0] + 2, left[1] + 2))
+    draw_left_aligned_text(text, font, text_col, left)
+#todo Have it so that when players click on an illegal move. The outline appears with the sound effect
 def draw_error_outline(image_rect: tuple, isInner: bool):
     pygame.draw.rect(screen, light_red, image_rect, 1)
 
-'''
-def draw_menu_button(text: str, font, text_col: tuple, center: tuple):
-    (width, height) = font.size(text)
-    inner_button = pygame.Rect(0,0, width + 20, height + 20)
-    shade_button = pygame.Rect(0, 0, width + 10, height + 10)
-    outline = pygame.Rect(0,0, width + 22, height + 22)
-    inner_button.center = center
-    outline.center = center
-    shade_button.center = center
-    #shading background
-    backgrnd_shade = pygame.Rect(0, 0, width + 22, height + 22)
-    (x,y) = center
-    backgrnd_shade.center = (x+5, y+ 5)
-    pygame.draw.rect(screen, dark_green, backgrnd_shade, 0, 15, 15, 15, 15, 15)
-    pygame.draw.rect(screen, dark_red, inner_button, 0, 15, 15, 15, 15, 15)
-    pygame.draw.rect(screen, light_red, shade_button, 0, 15, 15, 15, 15, 15)
-    pygame.draw.rect(screen, black, outline, 2, 15, 15, 15, 15, 15)
-    draw_centered_Text(text, font, text_col, center)
-'''
 class MenuButton:
     def __init__(self, text: str, font, center: tuple, enabled: bool) -> None:
         self.text = text
         self.font = font
         self.center = center
-        self.enabled = enabled
         self.rect = self.draw(False)
     def draw(self, clicked: bool):
         (width, height) = self.font.size(self.text)
+
         self.inner_button = pygame.Rect(0,0, width + 20, height + 20)
         self.shade_button = pygame.Rect(0, 0, width + 10, height + 10)
         self.outline = pygame.Rect(0,0, width + 22, height + 22)
@@ -620,12 +619,12 @@ class MenuButton:
         if not clicked:
             pygame.draw.rect(screen, light_red, self.shade_button, 0, 15, 15, 15, 15, 15)
         pygame.draw.rect(screen, black, self.outline, 2, 15, 15, 15, 15, 15)
-        draw_title_text(self.text, self.font, white, self.center)
+        draw_centered_title_text(self.text, self.font, white, self.center)
     def check_click(self):
-        mouse_pos = pygame.mouse.get_pos
+        mouse_pos = pygame.mouse.get_pos()
         left_click = pygame.mouse.get_pressed()[0]
         buttonrect = self.outline
-        if left_click and buttonrect.collidepoint(mouse_pos()[0], mouse_pos()[1]) and self.enabled:
+        if left_click and buttonrect.collidepoint(mouse_pos):
             self.draw(True)
             button_sound.play()
             time.sleep(0.8)

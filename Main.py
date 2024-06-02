@@ -36,7 +36,7 @@ def main() -> None:
                 board.startPlayerGame()  
                 print("Try AGAIN?")  # Debugging output - could be removed later
                 print(f"{board.getState}")  # Debugging output - could be removed later
-
+        Render.clock.tick(Render.FRAMES_PER_SECOND)
     # Clean Up (after the game loop)
     pygame.display.quit()  # Uninitialize the display module
     pygame.quit()  # Uninitialize Pygame completely

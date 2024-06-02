@@ -12,10 +12,10 @@ class Board():
     #Actions should be defined by 
 
     def __init__(self) -> None:
-        #self.getState = "BETTING" #This is either 'betting' or 'playing'
         self.getState = "MENU"
         self.gameMode: str = None
 
+    #todo make it so information is held like Setting volume
     def check_profile_name(self) -> str:
         self.NAME_FILE = 'User_Info/profile_name.txt'
         name = ''
@@ -32,11 +32,8 @@ class Board():
                 file.write(name)
         self.name = name
 
-
-
-    
+    #todo ADD MULTIPLAYER LATER
     def set_up_players(self) -> None:
-        #ADD MULTIPLAYER LATER
         if self.gameMode == "SINGLE":
             self.player1 = Player(0, self.name)
             self.player2 = Player(1, "BOT")
@@ -52,7 +49,11 @@ class Board():
                 card = deck.draw()
                 card.setOwner(player)
                 player.addCard(card)
+    
     def reset_values(self) -> None:
+        '''
+        Should only be initialized if gamemode is initialized with single or multiplayer
+        '''
         self.trumpSuit = None #Includes HIGH and LOW
         self.gamesToWin = 7 #Make this always NS
 
@@ -75,6 +76,9 @@ class Board():
         self.cards_to_players()
 
     def checkBetting(self) -> bool:
+        '''
+        Checks if betting should continue. False if Yes, True if no
+        '''
         if len(self.bettingOrder) < 4: 
             return False
         #ID for pass is 42
@@ -83,6 +87,10 @@ class Board():
         return False
     
     def addBet(self, bet) -> bool:
+        '''
+        Sets current bet if bet isn't pass and inserts bet into bettingOrder.
+        Returns True if bet is higher than the current bet, else False
+        '''
         if bet.getID() > self.currentBetID:
             Render.stone_drop_sound.play()
             self.bettingOrder.insert(0, bet)
@@ -97,8 +105,9 @@ class Board():
     def startBetting(self):
         self.player1.sortHand()
         self.player1.update_card_positions()
+        Render.create_moving_cards(self)
         while self.checkBetting() == False and self.getState != "QUIT":
-            Render.draw_gameplay(self)
+            #Render.draw_gameplay(self)
             for player in self.players:
                 if self.getState == "QUIT":
                     break
@@ -107,10 +116,9 @@ class Board():
                     self.addBet(player.chooseBet(self))
                 else:
                     self.yourTurn = True
-                    Render.draw_gameplay(self)
                     Render.user_choose_bets(self)
                     self.yourTurn = False
-                Render.draw_gameplay(self)
+                #Render.draw_gameplay(self)
                 if self.checkBetting() == True and self.getState != "QUIT": # == True might be unnecessary
                     index = (player.id + 1) % 4
                     self.prioPlayer = self.players[index]
@@ -180,9 +188,10 @@ class Board():
             Render.draw_game_over_screen(self)
         print("Ended player Game")
 
-    #This method clears the old trick and adds it to pastTricks
     def startTrick(self):
-        
+        '''
+        Clears the old trick and adds it to pastTricks
+        '''
         #save old trick
         if len(self.currentTrick) != 0:
             self.pastTricks.append(self.currentTrick)
@@ -196,6 +205,11 @@ class Board():
     #Errors if the currentTrick.len() is 4 or more
     #Sets currentTrickSuit to the first card in the CurrentTrickSuit
     def addToTrick(self, card, player):
+        '''
+        Meant to be called in driver/main like board.addToTrick(board.player.playCard()).
+        Errors if the currentTrick.len() is 4 or more.
+        Sets currentTrickSuit to the first card in the CurrentTrickSuit.
+        '''
         #set current trick suit if card is the first played
         if (self.currentTrickSuit == None):
             self.currentTrickSuit = card.suit
@@ -209,11 +223,13 @@ class Board():
         if (card.suit == self.currentTrickSuit):
             self.evalCurSuit.append(card)
 
+    '''
     #Game over function prints winner 
     def gameOver(self, winner) -> None:
         self.gameWon = True
         print("Team", winner, "wins!")
-
+    '''
+    #todo find a way to make it so the vine boom only plays after the last player wins over the opponents not the other teammate
     #Looks at the cards in the trick and see who wins! Then sets prioPlayer to the owner of that card
     #Also updates the score
     def evaluateTrick(self, index):
@@ -242,12 +258,12 @@ class Board():
         if (self.prioPlayer.id == 0 or self.prioPlayer.id == 2):
             self.teamOneScore += 1
             if (self.teamOneScore >= self.gamesToWin):
-                self.gameOver(1)
+                #self.gameOver(1)
                 self.winningTeam = 1
         elif (self.prioPlayer.id == 1 or self.prioPlayer.id == 3):
             self.teamTwoScore += 1
             if (self.teamTwoScore >= 14-self.gamesToWin):
-                self.gameOver(2)
+                #self.gameOver(2)
                 self.winningTeam = 2
         print("Player", self.prioPlayer.id, "wins the trick")
         print("1:", self.teamOneScore, " 2:", self.teamTwoScore, "\n")
