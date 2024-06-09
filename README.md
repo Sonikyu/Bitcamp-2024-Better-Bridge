@@ -55,14 +55,10 @@ The game is split into 2 parts
   - [X] Option to change user name 
 - [ ] Multiplayer
   - [ ] 4-2 player mode
-- [ ] Proper Reinforcement Learning Interface Implementation 
-- [ ]  Quality of Life Improvements
+- [X]  Quality of Life Improvements
   - [X] Show how many wins each team has to fulfill
-  - [ ] Animations that moves cards forward
-  - [ ] A red error border over card or box in response to the user clicking on a move they can't make
   - [X] Music
   - [X] Sound effects
-  - [ ] Allows userst to upload Profile pictures
 
 ## Credit
 ### Authors
