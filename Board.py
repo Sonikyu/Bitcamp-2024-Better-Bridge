@@ -1,8 +1,8 @@
-from Deck import Deck
+from Assets.Card_Related.Deck import Deck
 from Player import Player
-from BetSuit import BetSuit
+from Assets.Bet_Related.BetSuit import BetSuit
 from os import path
-import os, copy, pygame, Render, time
+import os, copy, pygame, Render, time, random
 
 class Board():
     #Globals
@@ -12,29 +12,16 @@ class Board():
     #Actions should be defined by 
 
     def __init__(self) -> None:
-        self.getState = "MENU"
+        self.getState = None
         self.gameMode: str = None
 
-    #todo make it so information is held like Setting volume
-    def check_profile_name(self) -> str:
-        self.NAME_FILE = 'User_Info/profile_name.txt'
-        name = ''
 
-        try:
-            if os.stat(self.NAME_FILE).st_size == 0:
-                os.remove(self.NAME_FILE)
-            with open(self.NAME_FILE) as file:
-                name = file.read()
-        except FileNotFoundError:
-            with open(self.NAME_FILE, 'w') as file:
-                pygame.display.set_caption("Bridge Game [Input a Profile Name]")
-                name = Render.draw_get_name()
-                file.write(name)
-        self.name = name
-
-    #todo ADD MULTIPLAYER LATER
+    #todo ADD MULTIPLAYER LATER. Include a page where users can choose which team (position) they want to join
     def set_up_players(self) -> None:
+        self.players = [None, None, None, None]
+        
         if self.gameMode == "SINGLE":
+            self.user_index = 0 
             self.player1 = Player(0, self.name)
             self.player2 = Player(1, "BOT")
             self.player3 = Player(2, "TEAMBOT")
@@ -55,7 +42,8 @@ class Board():
         Should only be initialized if gamemode is initialized with single or multiplayer
         '''
         self.trumpSuit = None #Includes HIGH and LOW
-        self.gamesToWin = 7 #Make this always NS
+        self.team_1_to_win = 7 #Make this always NS
+        self.team_2_to_win = 7
 
         self.bettingOrder = []
         self.currentBetID = -1 
@@ -65,7 +53,6 @@ class Board():
 
         self.yourTurn = False
 
-        self.activePlayer = 0
         self.prioPlayer = None
         self.currentTrick = [None, None, None, None]
         self.pastTricks = []
@@ -101,33 +88,73 @@ class Board():
             return True
         print("Illegal Bet")
         return False
+    def pick_random_priority_player(self):
+         self.prioPlayer = random.choice(self.players)
 
-    def startBetting(self):
-        self.player1.sortHand()
-        self.player1.update_card_positions()
-        Render.create_moving_cards(self)
-        while self.checkBetting() == False and self.getState != "QUIT":
-            #Render.draw_gameplay(self)
-            for player in self.players:
-                if self.getState == "QUIT":
-                    break
-                print(str(player))
-                if player.id != 0:
-                    self.addBet(player.chooseBet(self))
-                else:
-                    self.yourTurn = True
-                    Render.user_choose_bets(self)
-                    self.yourTurn = False
-                #Render.draw_gameplay(self)
-                if self.checkBetting() == True and self.getState != "QUIT": # == True might be unnecessary
-                    index = (player.id + 1) % 4
-                    self.prioPlayer = self.players[index]
-                    self.trumpSuit = self.bettingOrder[3].suit
-                    if (player.id+1) % 2 == 0:
-                        self.gamesToWin = self.bettingOrder[3].level
-                    elif (player.id+1) % 2 == 1:
-                        self.gamesToWin = 14-self.bettingOrder[3].level
-                    break
+    def sort_user_hand(self):
+        self.players[self.user_index].sortHand()
+
+    def calculate_games_to_win(self, wins: int, did_team_1_win: bool):
+        if did_team_1_win == True:
+            self.team_1_to_win = self.bettingOrder[3].level
+            self.team_2_to_win = 14-self.bettingOrder[3].level
+        else:
+            self.team_1_to_win = 14-self.bettingOrder[3].level
+            self.team_2_to_win = self.bettingOrder[3].level
+
+    def bettings_process(self):
+        '''
+        Returns whether betting loop should be broken or not
+        '''
+        if self.prioPlayer.id != 0:
+            self.addBet(self.players[self.active_player_index].chooseBet(self))
+        else:
+            self.yourTurn = True
+            Render.user_choose_bets(self)
+            self.yourTurn = False
+        if self.checkBetting() == True and self.getState != "QUIT":
+            player = self.prioPlayer
+            index = (player.id + 1) % 4
+            self.prioPlayer = self.players[index]
+            self.trumpSuit = self.bettingOrder[3].suit
+            if (player.id+1) % 2 == 0:
+                did_team_1_win = True
+            elif (player.id+1) % 2 == 1:
+                did_team_1_win = False
+                
+            self.calculate_games_to_win(self.bettingOrder[3].level, did_team_1_win)
+            #return True
+        self.inc_player()
+        return False
+
+    
+    # def startBetting(self):
+    #     self.player1.sortHand()
+    #     self.player1.update_card_positions() #! move these to game
+    #     Render.create_moving_cards(self)
+    #     while self.checkBetting() == False and self.getState != "QUIT":
+    #         #Render.draw_gameplay(self)
+    #         for player in self.players: #todo have it so a random player is picked first
+    #             if self.getState == "QUIT":
+    #                 break
+    #             if player.id != 0:
+    #                 self.addBet(player.chooseBet(self))
+    #             else:
+    #                 self.yourTurn = True
+    #                 Render.user_choose_bets(self)
+    #                 self.yourTurn = False
+    #             #Render.draw_gameplay(self)
+    #             if self.checkBetting() == True and self.getState != "QUIT": # == True might be unnecessary
+    #                 index = (player.id + 1) % 4
+    #                 self.prioPlayer = self.players[index]
+    #                 self.trumpSuit = self.bettingOrder[3].suit
+    #                 if (player.id+1) % 2 == 0:
+    #                     did_team_1_win = True
+    #                 elif (player.id+1) % 2 == 1:
+    #                     did_team_1_win = False
+                        
+    #                 self.calculate_games_to_win(self.bettingOrder[3].level, did_team_1_win)
+    #                 break
         if self.getState != "QUIT":
             counter = 0
             self.bettingOrder.reverse()
@@ -257,18 +284,18 @@ class Board():
         time.sleep(1)
         if (self.prioPlayer.id == 0 or self.prioPlayer.id == 2):
             self.teamOneScore += 1
-            if (self.teamOneScore >= self.gamesToWin):
+            if (self.teamOneScore >= self.team_1_to_win):
                 #self.gameOver(1)
                 self.winningTeam = 1
         elif (self.prioPlayer.id == 1 or self.prioPlayer.id == 3):
             self.teamTwoScore += 1
-            if (self.teamTwoScore >= 14-self.gamesToWin):
+            if (self.teamTwoScore >= 14-self.team_1_to_win):
                 #self.gameOver(2)
                 self.winningTeam = 2
         print("Player", self.prioPlayer.id, "wins the trick")
         print("1:", self.teamOneScore, " 2:", self.teamTwoScore, "\n")
         
     def inc_player(self):
-        self.activePlayer += 1
-        if self.activePlayer > 3:
-            self.activePlayer = 0
+        self.active_player_index += 1
+        if self.active_player_index > 3:
+            self.active_player_index = 0

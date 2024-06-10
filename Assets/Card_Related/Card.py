@@ -31,13 +31,13 @@ class Card:
     def player_hover(self):
         isColliding = self.rect.collidepoint(pygame.mouse.get_pos())
         if isColliding:
-            self.gravity -= 2
+            self.gravity -= 5
             # self.canSlideDown = False
         else:
             #self.gravity += 2
             # self.canSlideDown = True
         # if self.canSlideDown == True:
-            self.gravity += 2
+            self.gravity += 5
 
     def gravity_update(self):
         self.player_hover()

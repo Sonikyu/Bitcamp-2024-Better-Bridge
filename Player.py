@@ -1,5 +1,5 @@
-from Deck import Deck
-from Bet import BetFactory
+from Assets.Card_Related.Deck import Deck
+from Assets.Bet_Related.Bet import BetFactory
 import random
 import Render
 class Player:

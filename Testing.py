@@ -27,8 +27,8 @@ SCREEN_HEIGHT = 750
 pass_rect = pygame.Rect(820, 315, 100, 100)
 screen = pygame.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
 
-player_positions = ((SCREEN_WIDTH//15, SCREEN_HEIGHT//2), (SCREEN_WIDTH//2, SCREEN_HEIGHT//25), 
-                    (SCREEN_WIDTH//15 * 14, SCREEN_HEIGHT//2), (SCREEN_WIDTH//2, SCREEN_HEIGHT//25 * 20))
+player_positions = ((SCREEN_WIDTH//20 * 2, SCREEN_HEIGHT//2), (SCREEN_WIDTH//2, SCREEN_HEIGHT//25), 
+                    (SCREEN_WIDTH//20 * 18, SCREEN_HEIGHT//2), (SCREEN_WIDTH//2, SCREEN_HEIGHT//25 * 20))
 player_bets = {
     0 : None,
     1 : None,
@@ -48,7 +48,7 @@ HAND_Y = SCREEN_HEIGHT - (CARD_HEIGHT//2)
 
 run = True
 
-pygame.event.set_allowed([pygame.MOUSEBUTTONDOWN, pygame.MOUSEBUTTONUP, pygame.QUIT])
+pygame.event.set_allowed([pygame.MOUSEBUTTONDOWN, pygame.MOUSEBUTTONUP, pygame.QUIT, pygame.K_ESCAPE])
 font = pygame.font.SysFont("silom", 40)
 board = Board()
 board.name = "Cool"
@@ -68,8 +68,11 @@ screen.fill(green)
 #     card.rect.x = (hand_offset + loc_offset*CARD_WIDTH * 2/3)
 #     card.rect = card.rect.inflate(0, HAND_Y)
 #     loc_offset += 1
+import random
 gravity_time = 20
 update_gravity = pygame.event.custom_type() + 1
+particles = []
+toUpdate = []
 def create_moving_cards():
 
     pygame.time.set_timer(update_gravity, gravity_time)
@@ -79,42 +82,66 @@ def create_moving_cards():
     for card in board.player1.hand:
         card.rect.x = (hand_offset + loc_offset*CARD_WIDTH * 2/3)
         card.rect = card.rect.inflate(0, HAND_Y)
+        rect = screen.blit(card.image, card.rect)
         loc_offset += 1
+        toUpdate.append(rect)
 def check_if_cards_move(event):
     for card in board.player1.hand:  
-            if event.type == update_gravity:
-                card.gravity_update()
+        if event.type == update_gravity:
+            card.gravity_update()
 create_moving_cards()
 
+screen_shake = 0
+x, y = 20, 20
+
+
+button = Render.Button("TEST", 100, (SCREEN_WIDTH//2, SCREEN_HEIGHT//2))
+
+text_to_draw = [button]
+for i in range(0,4):
+        player_text = Render.Title_Text(f"Player {i+1}", 40, player_positions[i])
+        text_to_draw.append(player_text)
+text_to_draw.append(Render.Text("Testing Text", 40, white, (SCREEN_WIDTH//2, SCREEN_HEIGHT//5)))
+#title_text = Render.Title_Text("TITLE TEXT", 100, (SCREEN_WIDTH//2, SCREEN_HEIGHT//2))
 while run:
     screen.fill(green)
     for card in board.player1.hand:
         screen.blit(card.image, card.rect)
 
-    Render.draw_centered_Text("Testing Text", font, white, (SCREEN_WIDTH//2, SCREEN_HEIGHT//5))
-    for i in range(0,4):
-        Render.draw_centered_title_text(f"Player {i+1}", font, white, player_positions[i])
+    # particles.append([[SCREEN_WIDTH//2, SCREEN_HEIGHT//2], [random.randint(0,20)/10 -1, -2], random.randint(0, 5)])
+    # for particle in particles:
+    #     particle[0][0] += particle[1][0]
+    #     particle[0][1] += particle[1][1]
+    #     particle[2] -= 0.1
+    #     pygame.draw.circle(screen, white, particle[0], particle[2])
+    #     if particle[2] <= 0:
+    #         particles.remove(particle)
+    
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                run = False
+        
+        pygame.event.pump()
         check_if_cards_move(event)
-        # for card in board.player1.hand:  
-        #     if event.type == update_gravity:
-        #         card.gravity_update()
-       
-    pygame.display.update()
+        for card in board.player1.hand:  
+            if event.type == update_gravity:
+                card.gravity_update()
+    for text in text_to_draw:
+        text.draw()
     clock.tick(frame_rate_per_second)
-
+    pygame.display.flip()
 
 pygame.quit()
 
-
-#Better Title Text -> hoeflertext, plantagenetcherokee, ヒラキノ明朝pron
-#Untitled Text -> bodoni72smallcapsbook
-#Leadership Board Text -> silom
-
-#Readable: applemyungjo, [times, courier, georgia,] kefa
-#Thin Readable: euphemiacas, ヒラキノ角コシックw2, hiraginosansgb, sfnsmono, optima, palatino, sukhumvitset
-#Fancy: hoeflertext, plantagenetcherokee, newyork (probably looks better without shadow), ヒラキノ明朝pron, bodoni72smallcapsbook, 
-#Cursive/unreadable: brushscript, zapfino
-#Bold and clear: arialblack, ヒラキノ角コシックw8, ヒラキノ角コシックw9, rockwell, silom
+class Particle:
+    def __init__(self, x_pos, y_pos, radius, time_limit):
+        self.x_pos = x_pos
+        self.y_pos = y_pos
+        self.radius_limit = radius
+        self.time_limit = time_limit
+    # def update():
+    #     self.x_limit += 
+        

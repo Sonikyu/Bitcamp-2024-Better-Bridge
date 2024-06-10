@@ -1,7 +1,7 @@
 import random
-from Card import Card
+from Assets.Card_Related.Card import Card
 from Rank import Rank
-from Suit import Suit
+from Assets.Card_Related.Suit import Suit
 
 class Deck:
     #Deck initializes list of cards and shuffles it

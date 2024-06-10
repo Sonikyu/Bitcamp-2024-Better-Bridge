@@ -1,4 +1,4 @@
-from BetSuit import BetSuit
+from Assets.Bet_Related.BetSuit import BetSuit
 class Bet:
     
     def __init__(self, suit, level):
